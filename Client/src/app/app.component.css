@@ -1,0 +1,16 @@
+header .navbar .container-header h1 {
+    color: #fff;
+    margin: 0px;
+}
+
+header .navbar .container-header {
+    display: flex;
+    align-items: center;
+}
+
+header .navbar .container-header img {
+    width: 100%;
+    max-width: 60px;
+    margin-right: 15px;
+    padding: 5px 0px;
+}
