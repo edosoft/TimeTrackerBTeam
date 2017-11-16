@@ -7,6 +7,10 @@
     box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
 }
 
+.container-login .input-group-addon {
+    min-width: 40px;
+}
+
 .container-login .button-login {
     display: flex;
     justify-content: flex-end;
