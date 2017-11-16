@@ -28,6 +28,31 @@ export class LoginComponent implements OnInit {
     // The ID token you need to pass to your backend:
     var id_token = googleUser.getAuthResponse().id_token;
     console.log("ID Token: " + id_token);
+
+    this.postToken(id_token);
+    
+    // POST the token to the server
+    /* var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'URL');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+      console.log('Signed in as: ' + xhr.responseText);
+    };
+    xhr.send('idtoken=' + id_token);
+    */
   };
+
+  postToken(token) {
+    
+    fetch('URL', {
+      method: 'POST',
+      headers : new Headers({'Content-Type': 'application/x-www-form-urlencoded'}),
+      body: JSON.stringify({
+        idtoken: token
+      })
+    }).then((res) => res.json())
+    .then((data) =>  console.log(data))
+    .catch((err)=>console.log(err))
+  }
 
 }

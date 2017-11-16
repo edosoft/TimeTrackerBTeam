@@ -25,14 +25,15 @@ header .navbar .container-header img {
         font-size: 36px;
     }
     .container-general {
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        margin: 0px;
     }
-    .container-app-login {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .app-login {
+        position: relative;
+    }
+    .component-login {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 }
