@@ -6,7 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { CheckinComponent } from './checkin/checkin.component';
-import { CheckoutComponent } from './checkout/checkout.component';
+import { CheckComponent } from './check/check.component';
+
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { CheckoutComponent } from './checkout/checkout.component';
     AppComponent,
     LoginComponent,
     CheckinComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    CheckComponent
   ],
   imports: [
     BrowserModule,
