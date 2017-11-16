@@ -1,4 +1,4 @@
-.container-login {
+.component-login {
     padding: 15px;
     width: 500px;
     max-width: 100%;
@@ -7,11 +7,20 @@
     box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
 }
 
-.container-login .input-group-addon {
+.component-login .input-group-addon {
     min-width: 40px;
 }
 
-.container-login .button-login {
+.component-login .button-login {
     display: flex;
     justify-content: flex-end;
+}
+
+@media (min-width: 768px) {
+    .component-login {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }
