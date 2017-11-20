@@ -3,7 +3,8 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 
-
+declare const urllocal: "http://localhost:8080/_ah/api";
+declare const urlglobal: "http://timetracking-186111.appspot.com";
 declare const gapi: any;
 
 @Injectable()
