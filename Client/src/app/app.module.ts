@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ServerProvider } from "./provider/server.provider";
 
 
 import { AppComponent } from './app.component';
@@ -19,7 +20,7 @@ import { CheckComponent } from './check/check.component';
     BrowserModule,
     FormsModule
   ],
-  providers: [],
+  providers: [ServerProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
