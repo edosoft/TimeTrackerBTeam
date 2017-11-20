@@ -1,23 +1,57 @@
 import { Component, OnInit } from '@angular/core';
 
+declare const gapi: any;
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
 
-  user: string;
-  pass: string;
 
-  constructor() { }
+export class LoginComponent{
+  
+  /*user: string;
+  pass: string;*/
 
-  ngOnInit() {
+  public auth2: any;
+  public api: any =null;
+  public googleInit() {
+    gapi.load('client:auth2', () => {
+      this.auth2 = gapi.auth2.init({
+        client_id: '953775827463-qnn5h5i227iaule8b9r575sgck494jbc.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin',
+        scope: 'profile email'
+      });
+      this.attachGSuite(document.getElementById('googleBtn'));
+    });
   }
 
-  onSignIn(googleUser) {
+  public callback() {
+    console.log("gapi loaded");
+  }
+
+  public attachGSuite(element) {
+
+    gapi.client.load('timetrackerApi', "v1",this.callback, "http://localhost:4200")
+    this.auth2.attachClickHandler(element, {},
+      (googleUser) => {
+
+        let profile = googleUser.getBasicProfile();
+        console.log('Token || ' + googleUser.getAuthResponse().id_token);
+        console.log('ID: ' + profile.getId());
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail());
+        //YOUR CODE HERE
+
+      }, (error) => {
+        alert(JSON.stringify(error, undefined, 2));
+      });
+
+
     // Useful data for your client-side scripts:
-    var profile = googleUser.getBasicProfile();
+    /*var profile = googleUser.getBasicProfile();
     console.log("ID: " + profile.getId()); // Don't send this directly to your server!
     console.log('Full Name: ' + profile.getName());
     console.log('Given Name: ' + profile.getGivenName());
@@ -29,7 +63,7 @@ export class LoginComponent implements OnInit {
     var id_token = googleUser.getAuthResponse().id_token;
     console.log("ID Token: " + id_token);
 
-    this.postToken(id_token);
+    this.postToken(id_token);*/
     
     // POST the token to the server
     /* var xhr = new XMLHttpRequest();
@@ -40,9 +74,13 @@ export class LoginComponent implements OnInit {
     };
     xhr.send('idtoken=' + id_token);
     */
-  };
+  }
 
-  postToken(token) {
+  ngAfterViewInit(){
+    this.googleInit();
+  }
+
+  /*postToken(token) {
     
     fetch('URL', {
       method: 'POST',
@@ -53,6 +91,6 @@ export class LoginComponent implements OnInit {
     }).then((res) => res.json())
     .then((data) =>  console.log(data))
     .catch((err)=>console.log(err))
-  }
+  }*/
 
 }
