@@ -65,14 +65,16 @@ class MainPage(remote.Service):
                     name = 'createUser')
     def createUser(self, request):
         user = endpoints.get_current_user()
-        auth = User(email=user.email())
-        auth.put()
-        return LoginResponseMessage(email = user.email(), response_code = 200)
+        if user is None:
+            return LoginResponseMessage(email="You have not logged in yet", response_code=400)
+        else:
+            query = User.query(User.email == user.email()).get()
+            if query is None:
+                auth = User(email=user.email())
+                auth.put()
+                return LoginResponseMessage(email= "User not found: Created", response_code=200)
+            else:
+                return LoginResponseMessage(email = "User: " + user.email(), response_code = 200)
+            
 
 app = endpoints.api_server([MainPage], restricted = False)
-
-'''
-app = webapp2.WSGIApplication([
-    ('/', MainPage),
-], debug=True)
-'''
