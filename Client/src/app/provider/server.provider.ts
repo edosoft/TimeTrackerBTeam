@@ -27,7 +27,7 @@ export class ServerProvider{
     }
 
     public attachGSuite(element) {
-        gapi.client.load('timetrackerApi', "v1",this.callback, "https://guestbook7-184809.appspot.com/_ah/api")
+        gapi.client.load('timetrackerApi', "v1",this.callback, "http://localhost:8080/_ah/api")
         this.auth2.attachClickHandler(element, {},
             (googleUser) => {
                 let profile = googleUser.getBasicProfile();
