@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright 2016 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,13 +28,28 @@ import json
 
 # [START greeting]
 class User(ndb.Model):
-    """Sub model for representing an author."""
+    """Sub model to represent an employee's login."""
     email = ndb.StringProperty(indexed=True)
 
+class Workday(ndb.Model):
+    """ Model to represent the workday of an employee."""
+    employeeid = ndb.StructuredProperty(User)
+    date = ndb.DateTimeProperty(indexed=True)
+    checkin = ndb.DateTimeProperty()
+    checkout = ndb.DateTimeProperty()
+    total = ndb.IntegerProperty()
 
+'''
+class Workday():
+    def __init__(self):
+        self.employeeid = ""
+        self.date = datetime.date(1970, 1, 1)
+        self.checkin = datetime.date(1970, 1, 1)
+        self.checkout = datetime.date(1970, 1, 1)
+        self.total = 0'''
 
 #v1 will be deprecated by Aug-2018, but it can be used for educational purposes
-@endpoints.api(name='timetrackerApi', version='v1', allowed_client_ids=["953775827463-qnn5h5i227iaule8b9r575sgck494jbc.apps.googleusercontent.com"], scopes=[endpoints.EMAIL_SCOPE])
+@endpoints.api(name='timetrackerApi', version='v1', allowed_client_ids=["953775827463-phpb8caafp8iceclntam7mpqaou3as8v.apps.googleusercontent.com"], scopes=[endpoints.EMAIL_SCOPE])
 class MainPage(remote.Service):
     @endpoints.method(message_types.VoidMessage, LoginResponseMessage, path = 'login', http_method='POST',
                     name = 'login')
@@ -51,6 +67,9 @@ class MainPage(remote.Service):
                 return LoginResponseMessage(email= "Not found in DB", response_code=300)
             else:
                 #De aqui irias a checkin/checkout
+
+
+                
                 return LoginResponseMessage(email = user.email(), response_code = 200)
             
         #query = Author.query(user.user_id == request.user_id).get()
