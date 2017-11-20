@@ -25,6 +25,9 @@ export class LoginComponent{
     this.server.doSomething();
   }
 
+  createUser(){
+    this.server.createUser();
+  }
 
 
   /*postToken(token) {

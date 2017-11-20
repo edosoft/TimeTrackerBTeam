@@ -27,7 +27,7 @@ export class ServerProvider{
     }
 
     public attachGSuite(element) {
-        gapi.client.load('timetrackerApi', "v1",this.callback, "http://localhost:8080/_ah/api")
+        gapi.client.load('timetrackerApi', "v1",this.callback, "https://guestbook7-184809.appspot.com/_ah/api")
         this.auth2.attachClickHandler(element, {},
             (googleUser) => {
                 let profile = googleUser.getBasicProfile();
@@ -63,7 +63,7 @@ export class ServerProvider{
             xhr.open('POST', 'URL');
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
-              console.log('Signed in as: ' + xhr.responseText);
+            console.log('Signed in as: ' + xhr.responseText);
             };
             xhr.send('idtoken=' + id_token);
             */
@@ -75,9 +75,21 @@ export class ServerProvider{
                 console.log(response.error)
             }
             else {
-              console.log(JSON.stringify(response.result));
+                console.log(JSON.stringify(response.result));
             }
-          }
+        }
+        );
+    }
+
+    createUser() {
+        gapi.client.timetrackerApi.createUser().execute((response: any) => {
+            if (response.error) {
+                console.log(response.error)
+            }
+            else {
+                console.log(JSON.stringify(response.result));
+            }
+        }
         );
     }
         
