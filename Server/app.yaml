@@ -4,7 +4,7 @@ threadsafe: true
 
 # [START handlers]
 handlers:
-- url: /.*
+- url: /_ah/spi/.*
   script: main.app
 
 - url: /bootstrap

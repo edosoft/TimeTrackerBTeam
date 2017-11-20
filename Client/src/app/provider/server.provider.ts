@@ -3,13 +3,18 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Rx';
 import { Subject } from 'rxjs/Subject';
 
-declare const urllocal: "http://localhost:8080/_ah/api";
-declare const urlglobal: "http://timetracking-186111.appspot.com";
+
 declare const gapi: any;
 
 @Injectable()
 export class ServerProvider{
 
+    //Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
+
+    L: string = "http://localhost:8080/_ah/api";
+    P: string =  "http://timetracking-186111.appspot.com";
+    url: string = this.L;
+    
     public auth2: any;
     public api: any =null;
     public googleInit() {
@@ -28,7 +33,7 @@ export class ServerProvider{
     }
 
     public attachGSuite(element) {
-        gapi.client.load('timetrackerApi', "v1",this.callback, "https://timetracking-186111.appspot.com/_ah/api")
+        gapi.client.load('timetrackerApi', "v1",this.callback, this.url)
         this.auth2.attachClickHandler(element, {},
             (googleUser) => {
                 let profile = googleUser.getBasicProfile();
