@@ -15,7 +15,7 @@ export class ServerProvider{
     public googleInit() {
         gapi.load('client:auth2', () => {
             this.auth2 = gapi.auth2.init({
-                client_id: '953775827463-qnn5h5i227iaule8b9r575sgck494jbc.apps.googleusercontent.com',
+                client_id: '953775827463-phpb8caafp8iceclntam7mpqaou3as8v.apps.googleusercontent.com',
                 cookiepolicy: 'single_host_origin',
                 scope: 'profile email'
             });
@@ -28,7 +28,7 @@ export class ServerProvider{
     }
 
     public attachGSuite(element) {
-        gapi.client.load('timetrackerApi', "v1",this.callback, "https://localhost:8000/_ah/api")
+        gapi.client.load('timetrackerApi', "v1",this.callback, "http://localhost:8080/_ah/api")
         this.auth2.attachClickHandler(element, {},
             (googleUser) => {
                 let profile = googleUser.getBasicProfile();
