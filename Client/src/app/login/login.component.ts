@@ -33,7 +33,7 @@ export class LoginComponent{
 
   public attachGSuite(element) {
 
-    gapi.client.load('timetrackerApi', "v1",this.callback, "http://localhost:4200")
+    gapi.client.load('timetrackerApi', "v1",this.callback, "http://localhost:8080/_ah/api/")
     this.auth2.attachClickHandler(element, {},
       (googleUser) => {
 
