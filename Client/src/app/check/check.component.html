@@ -1,4 +1,4 @@
 <div class="checkbtns container">  
   <button (click)="check=true" type="button" class="btn btn-primary btn-lg" [disabled]="check">Checkin</button>
-  <button (click)="check=false" type="button" class="btn btn-primary btn-lg" [disabled]="!check">Checkout</button>
+  <button routerLink='/' routerLinkActive="active" (click)="check=false" type="button" class="btn btn-primary btn-lg" [disabled]="!check">Checkout</button>
 </div>
