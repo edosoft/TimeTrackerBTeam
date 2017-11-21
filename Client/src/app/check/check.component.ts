@@ -7,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CheckComponent implements OnInit {
 
+  check = false;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  checkIn() {
+    this.check = true;
+  }
+
+  checkOut() {
+    this.check = false;
   }
 
 }
