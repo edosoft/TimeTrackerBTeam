@@ -19,8 +19,4 @@ export class LoginComponent implements AfterViewInit {
     this.server.googleInit();
   }
 
-  createUser() {
-    this.server.createUser();
-  }
-
 }
