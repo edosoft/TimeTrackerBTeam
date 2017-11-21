@@ -11,8 +11,22 @@ from protorpc import messages
 #Otro campo: repeated. Se vuelve un array, en este caso de StringFields.
 
 
+class LoginResponseMessage(messages.Message):
+    response_code = messages.IntegerField(1, required=True)
+    text = messages.StringField(3)
+    #email = messages.StringField(2)
+
+
+class WorkdayResponseMessage(messages.Message):
+    response_code = messages.IntegerField(1, required=True)
+    employeeid = messages.StringField(2)
+    date = messages.StringField(3)
+    checkin = messages.StringField(4)
+    checkout = messages.StringField(6)
+    total = messages.IntegerField(7)
+    text = messages.StringField(5)
+
 class CheckinResponseMessage(messages.Message):
     response_code = messages.IntegerField(1)
     email = messages.StringField(3)
     #email = messages.StringField(2)
-
