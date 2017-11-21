@@ -15,15 +15,11 @@ export class LoginComponent implements AfterViewInit {
 
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.server.googleInit();
   }
 
-  doSomething() {
-    this.server.doSomething();
-  }
-
-  createUser(){
+  createUser() {
     this.server.createUser();
   }
 
