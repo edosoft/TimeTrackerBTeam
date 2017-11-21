@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ServerProvider } from '../provider/server.provider';
+import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-login',
@@ -8,15 +9,15 @@ import { ServerProvider } from '../provider/server.provider';
 })
 
 
-export class LoginComponent{
-  
+export class LoginComponent implements AfterViewInit {
+
   /*user: string;
   pass: string;*/
 
   constructor(private server: ServerProvider) { 
-    
+
   }
- 
+
   ngAfterViewInit(){
     this.server.googleInit();
   }
@@ -28,19 +29,5 @@ export class LoginComponent{
   createUser(){
     this.server.createUser();
   }
-
-
-  /*postToken(token) {
-    
-    fetch('URL', {
-      method: 'POST',
-      headers : new Headers({'Content-Type': 'application/x-www-form-urlencoded'}),
-      body: JSON.stringify({
-        idtoken: token
-      })
-    }).then((res) => res.json())
-    .then((data) =>  console.log(data))
-    .catch((err)=>console.log(err))
-  }*/
 
 }
