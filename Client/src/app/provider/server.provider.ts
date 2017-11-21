@@ -11,7 +11,7 @@ export class ServerProvider {
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
   L: string = 'http://localhost:8080/_ah/api';
-  P: string =  'https://timetrackerbteam.appspot.com';
+  P: string =  'https://timetrackerbteam.appspot.com/_ah/api/';
 
   url: string = this.P;
 
