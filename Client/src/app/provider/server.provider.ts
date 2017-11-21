@@ -10,8 +10,11 @@ declare const gapi: any;
 export class ServerProvider {
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
+<<<<<<< Updated upstream
   L = 'http://localhost:8080/_ah/api';
   P =  'https://timetrackerbteam.appspot.com/_ah/api/';
+=======
+>>>>>>> Stashed changes
 
   url: string = this.P;
 
