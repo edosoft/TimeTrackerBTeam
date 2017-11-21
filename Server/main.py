@@ -50,7 +50,7 @@ class Workday():
 
 #v1 will be deprecated by Aug-2018, but it can be used for educational purposes 
 @endpoints.api(name='timetrackerApi', version='v1', 
-allowed_client_ids=["953775827463-phpb8caafp8iceclntam7mpqaou3as8v.apps.googleusercontent.com"], scopes=[endpoints.EMAIL_SCOPE])
+allowed_client_ids=["368116371345-ott8mvobq0aqcd8dvpu40b5n2fdjgs8v.apps.googleusercontent.com"], scopes=[endpoints.EMAIL_SCOPE])
 class MainPage(remote.Service):
     @endpoints.method(message_types.VoidMessage, LoginResponseMessage, path = 'login', http_method='POST',
                     name = 'login')
