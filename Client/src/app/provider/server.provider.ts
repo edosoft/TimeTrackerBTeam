@@ -11,16 +11,16 @@ export class ServerProvider {
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
   L: string = 'http://localhost:8080/_ah/api';
-  P: string =  'http://timetracking-186111.appspot.com';
+  P: string =  'https://timetrackerbteam.appspot.com';
 
-  url: string = this.L;
+  url: string = this.P;
 
   public auth2: any;
   public api: any = null;
   public googleInit() {
     gapi.load('client:auth2', () => {
       this.auth2 = gapi.auth2.init({
-        client_id: '953775827463-phpb8caafp8iceclntam7mpqaou3as8v.apps.googleusercontent.com',
+        client_id: '368116371345-ott8mvobq0aqcd8dvpu40b5n2fdjgs8v.apps.googleusercontent.com',
         cookiepolicy: 'single_host_origin',
         scope: 'profile email'
       });
