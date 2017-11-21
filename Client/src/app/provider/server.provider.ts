@@ -1,22 +1,22 @@
 import { HttpClient, HttpHeaders} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Rx';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
 
 declare const gapi: any;
 
 @Injectable()
-export class ServerProvider{
+export class ServerProvider {
 
-    //Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
+    // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
 
     L: string = "http://localhost:8080/_ah/api";
     P: string =  "http://timetracking-186111.appspot.com";
     url: string = this.L;
-    
+
     public auth2: any;
-    public api: any =null;
+    public api: any = null;
     public googleInit() {
         gapi.load('client:auth2', () => {
             this.auth2 = gapi.auth2.init({
@@ -36,7 +36,7 @@ export class ServerProvider{
         gapi.client.load('timetrackerApi', "v1",this.callback, this.url)
         this.auth2.attachClickHandler(element, {},
             (googleUser) => {
-                let profile = googleUser.getBasicProfile();
+                const profile = googleUser.getBasicProfile();
                 console.log('Token: ' + googleUser.getAuthResponse().id_token);
                 console.log('ID: ' + profile.getId());
                 console.log('Name: ' + profile.getName());
@@ -47,40 +47,14 @@ export class ServerProvider{
             }, (error) => {
                 alert(JSON.stringify(error, undefined, 2));
             });
-        
-        
-            // Useful data for your client-side scripts:
-            /*var profile = googleUser.getBasicProfile();
-            console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-            console.log('Full Name: ' + profile.getName());
-            console.log('Given Name: ' + profile.getGivenName());
-            console.log('Family Name: ' + profile.getFamilyName());
-            console.log("Image URL: " + profile.getImageUrl());
-            console.log("Email: " + profile.getEmail());
-        
-            // The ID token you need to pass to your backend:
-            var id_token = googleUser.getAuthResponse().id_token;
-            console.log("ID Token: " + id_token);
-        
-            this.postToken(id_token);*/
-            
-            // POST the token to the server
-            /* var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'URL');
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onload = function() {
-            console.log('Signed in as: ' + xhr.responseText);
-            };
-            xhr.send('idtoken=' + id_token);
-            */
+
     }
 
     doSomething() {
         gapi.client.timetrackerApi.login().execute((response: any) => {
             if (response.error) {
                 console.log(response.error)
-            }
-            else {
+            } else {
                 console.log(JSON.stringify(response.result));
             }
         }
@@ -91,13 +65,9 @@ export class ServerProvider{
         gapi.client.timetrackerApi.createUser().execute((response: any) => {
             if (response.error) {
                 console.log(response.error)
-            }
-            else {
+            } else {
                 console.log(JSON.stringify(response.result));
             }
-        }
-        );
+        });
     }
-        
-
 }
