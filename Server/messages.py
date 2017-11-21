@@ -12,21 +12,24 @@ from protorpc import messages
 
 
 class LoginResponseMessage(messages.Message):
-    response_code = messages.IntegerField(1, required=True)
-    text = messages.StringField(3)
+    response_code = messages.IntegerField(2, required=True)
+    text = messages.StringField(1)
     #email = messages.StringField(2)
 
 
 class WorkdayResponseMessage(messages.Message):
-    response_code = messages.IntegerField(1, required=True)
-    employeeid = messages.StringField(2)
-    date = messages.StringField(3)
-    checkin = messages.StringField(4)
+    response_code = messages.IntegerField(2, required=True)
+    employeeid = messages.StringField(3)
+    date = messages.StringField(4)
+    checkin = messages.StringField(5)
     checkout = messages.StringField(6)
     total = messages.IntegerField(7)
-    text = messages.StringField(5)
+    text = messages.StringField(1)
 
 class CheckinResponseMessage(messages.Message):
-    response_code = messages.IntegerField(1)
-    email = messages.StringField(3)
-    #email = messages.StringField(2)
+    response_code = messages.IntegerField(2)
+    text = messages.StringField(1)
+
+class CheckoutResponseMessage(messages.Message):
+    response_code = messages.IntegerField(2)
+    text = messages.StringField(1)
