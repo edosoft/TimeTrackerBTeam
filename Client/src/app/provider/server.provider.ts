@@ -10,13 +10,14 @@ declare const gapi: any;
 export class ServerProvider {
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
-  L: string = 'http://localhost:8080/_ah/api';
-  P: string =  'https://timetrackerbteam.appspot.com/_ah/api/';
+  L = 'http://localhost:8080/_ah/api';
+  P =  'https://timetrackerbteam.appspot.com/_ah/api/';
 
   url: string = this.P;
 
   public auth2: any;
   public api: any = null;
+
   public googleInit() {
     gapi.load('client:auth2', () => {
       this.auth2 = gapi.auth2.init({
@@ -50,7 +51,8 @@ export class ServerProvider {
 
   }
 
-  doSomething() {
+  // Check that user exists in datastore
+  apiLogin() {
     gapi.client.timetrackerApi.login().execute((response: any) => {
       if (response.error) {
         console.log(response.error);
@@ -60,8 +62,9 @@ export class ServerProvider {
     });
   }
 
+  // Testing: create users in datastore
   createUser() {
-    gapi.client.timetrackerApi.createUser().execute((response: any) => {
+    gapi.client.timetrackerApi.createuser().execute((response: any) => {
       if (response.error) {
         console.log(response.error);
       } else {
