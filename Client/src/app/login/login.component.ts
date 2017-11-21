@@ -11,10 +11,7 @@ import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
 export class LoginComponent implements AfterViewInit {
 
-  /*user: string;
-  pass: string;*/
-
-  constructor(private server: ServerProvider) { 
+  constructor(private server: ServerProvider) {
 
   }
 

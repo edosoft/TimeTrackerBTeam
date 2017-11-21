@@ -11,8 +11,8 @@ export class ServerProvider {
 
     // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
 
-    L: string = "http://localhost:8080/_ah/api";
-    P: string =  "http://timetracking-186111.appspot.com";
+    L: string = 'http://localhost:8080/_ah/api';
+    P: string =  'http://timetracking-186111.appspot.com';
     url: string = this.L;
 
     public auth2: any;
@@ -29,11 +29,11 @@ export class ServerProvider {
     }
 
     public callback() {
-        console.log("gapi loaded");
+        console.log('gapi loaded');
     }
 
     public attachGSuite(element) {
-        gapi.client.load('timetrackerApi', "v1",this.callback, this.url)
+        gapi.client.load('timetrackerApi', 'v1', this.callback, this.url);
         this.auth2.attachClickHandler(element, {},
             (googleUser) => {
                 const profile = googleUser.getBasicProfile();
@@ -43,7 +43,7 @@ export class ServerProvider {
                 console.log('Image URL: ' + profile.getImageUrl());
                 console.log('Email: ' + profile.getEmail());
 
-                //YOUR CODE HERE
+                // YOUR CODE HERE
             }, (error) => {
                 alert(JSON.stringify(error, undefined, 2));
             });
@@ -53,7 +53,7 @@ export class ServerProvider {
     doSomething() {
         gapi.client.timetrackerApi.login().execute((response: any) => {
             if (response.error) {
-                console.log(response.error)
+                console.log(response.error);
             } else {
                 console.log(JSON.stringify(response.result));
             }
@@ -64,7 +64,7 @@ export class ServerProvider {
     createUser() {
         gapi.client.timetrackerApi.createUser().execute((response: any) => {
             if (response.error) {
-                console.log(response.error)
+                console.log(response.error);
             } else {
                 console.log(JSON.stringify(response.result));
             }
