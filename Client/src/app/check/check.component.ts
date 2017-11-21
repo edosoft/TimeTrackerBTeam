@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ServerProvider } from '../provider/server.provider';
 
 @Component({
   selector: 'app-check',
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CheckComponent implements OnInit {
 
-  constructor() { }
+  check = false;
+
+  constructor(private server: ServerProvider) { }
 
   ngOnInit() {
+  }
+
+  checkIn() {
+    this.check = true;
+    this.server.checkIn();
+  }
+
+  checkOut() {
+    this.check = false;
+    this.server.checkOut();
   }
 
 }
