@@ -11,7 +11,7 @@ export class ServerProvider {
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
   L = 'http://localhost:8080/_ah/api';
-  P =  'https://timetrackerbteam.appspot.com/_ah/api/';
+  P = 'https://timetrackerbteam.appspot.com/_ah/api/';
 
   url: string = this.P;
 
@@ -45,6 +45,9 @@ export class ServerProvider {
         console.log('Email: ' + profile.getEmail());
 
         // YOUR CODE HERE
+
+        this.apiLogin();
+
       }, (error) => {
         alert(JSON.stringify(error, undefined, 2));
       });
@@ -64,7 +67,7 @@ export class ServerProvider {
 
   // Testing: create users in datastore
   createUser() {
-    gapi.client.timetrackerApi.createuser().execute((response: any) => {
+    gapi.client.timetrackerApi.createUser().execute((response: any) => {
       if (response.error) {
         console.log(response.error);
       } else {
