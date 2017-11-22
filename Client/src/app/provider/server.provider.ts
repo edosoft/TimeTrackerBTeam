@@ -2,8 +2,6 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { setTimeout } from 'timers';
-
 
 declare const gapi: any;
 
