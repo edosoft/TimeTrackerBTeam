@@ -140,21 +140,22 @@ class MainPage(remote.Service):
                                                checkout=str(querycheckout.checkout),
                                                total=querycheckout.total)
             else:
-                if now > checknoon: #If you go out after 15:00, a hour is substracted from the total
-                    querycheckout.total = querycheckout.total -60              
+                if now > checknoon:  # If you go out after 15:00, a hour is substracted from the total
+                    querycheckout.total = querycheckout.total - 60
 
                 if now < checkmax:
                     querycheckout.put()
-                    return CheckoutResponseMessage(response_code=200, \
+                    return CheckoutResponseMessage(response_code=200,
                                                    text="Checkout Ok. Have a nice day :)",
-                                                   checkout=str(querycheckout.checkout), \
+                                                   checkout=str(querycheckout.checkout),
                                                    total=querycheckout.total)
                 else:
                     querycheckout.checkout = checkmax
                     querycheckout.put()
                     return CheckoutResponseMessage(response_code=200,
                                                    text="Check out out of time",
-                                                   checkout=str(querycheckout.checkout), \
+                                                   checkout=str(querycheckout.checkout),
                                                    total=querycheckout.total)
+
 
 app = endpoints.api_server([MainPage], restricted=False)
