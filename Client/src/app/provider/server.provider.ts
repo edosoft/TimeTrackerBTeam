@@ -72,12 +72,25 @@ export class ServerProvider {
     });
   }
 
+  // Ojo con esto
   checkIn() {
-    // Work in progress
+    gapi.client.timetrackerApi.checkin().execute((response: any) => {
+      if (response.error) {
+        console.log(response.error);
+      } else {
+        console.log(JSON.stringify(response.result));
+      }
+    });
   }
 
   checkOut() {
-    // Work in progress
+    gapi.client.timetrackerApi.checkout().execute((response: any) => {
+      if (response.error) {
+        console.log(response.error);
+      } else {
+        console.log(JSON.stringify(response.result));
+      }
+    });
   }
 
   
