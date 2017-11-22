@@ -4,6 +4,7 @@ import unittest
 import datetime
 from reports import dataStore, WeekEmployeeData, WeekReport
 
+
 class TestReport(unittest.TestCase):
     '''Class to test the different cases of report'''
     '''
@@ -42,7 +43,7 @@ class TestReport(unittest.TestCase):
         data.addReport(week_report)
         result = data.get_weekly_report(wrong_number)
         self.assertEqual(result, "There are not registers in the selected week")
-        #self.assertEqual(result.data.employee, "Ernesto", "No data found")
+        # self.assertEqual(result.data.employee, "Ernesto", "No data found")
 
     def test_total_hours_worked_over(self):
         """Analyzing the weekdays and filtering the vacation ones"""
@@ -53,6 +54,7 @@ class TestReport(unittest.TestCase):
         """Analyzing the weekdays and filtering the vacation ones"""
         emp = WeekEmployeeData("Ernesto", 8, 8, 8, 8, 6, 0, 0)
         self.assertEqual(emp.validationTotal(), 1)
+
 
 if __name__ == '__main__':
     unittest.main()

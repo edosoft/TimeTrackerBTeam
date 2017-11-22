@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-#from google.appengine.api.taskqueue import taskqueue
-#from google.appengine.ext import ndb
-#from protorpc import message_types
-#from protorpc import remote
+# from google.appengine.api.taskqueue import taskqueue
+# from google.appengine.ext import ndb
+# from protorpc import message_types
+# from protorpc import remote
 
-#TODO
+# TODO
 
 import calendar
 import datetime
@@ -28,6 +28,8 @@ class WeekReport(ndb.Model):
     report = ndb.StructuredProperty(WeekEmployeeData)
 
 '''
+
+
 class dataStore():
     def __init__(self):
         self.report = []
@@ -65,7 +67,7 @@ class dataStore():
             return "No data found in that week"
         else:
             correct_result = self.formatDataByWeek(rawresult)
-            #correct_result = (rawresult)
+            # correct_result = (rawresult)
         return correct_result
         
     def formatDataByWeek(self, input):
@@ -106,30 +108,29 @@ class WeekEmployeeData():
         self.sunday = 0
         self.total = 0
 
-    def setMonday (self, monday):
+    def setMonday(self, monday):
         self.monday = monday
 
-    def setTuesday (self, tuesday):
+    def setTuesday(self, tuesday):
         self.tuesday = tuesday
 
-    def setWednesday (self, wednesday):
+    def setWednesday(self, wednesday):
         self.wednesday = wednesday
 
-    def setThursday (self, thursday):
+    def setThursday(self, thursday):
         self.thursday = thursday
 
-    def setFriday (self, friday):
+    def setFriday(self, friday):
         self.friday = friday
 
-    def setSaturday (self, saturday):
+    def setSaturday(self, saturday):
         self.saturday = saturday
 
-    def setSunday (self, sunday):
+    def setSunday(self, sunday):
         self.sunday = sunday
 
     def setTotal(self):
         self.total = self.monday + self.tuesday + self.wednesday + self.thursday + self.friday + self.saturday + self.sunday
-
 
     def validationTotal(self):
         """If 2, +40 hours worked. If 1, -40 hours worked. If 0, okay"""
@@ -164,15 +165,15 @@ class Workday():
     def getTotal(self):
         return self.total
 
-    def setEmployee (self, employeeid):
+    def setEmployee(self, employeeid):
         self.employeeid = employeeid
 
-    def setDate (self, date):
+    def setDate(self, date):
         self.date = date
 
-    def setCheckin (self, checkin):
+    def setCheckin(self, checkin):
         self.checkin = checkin
 
-    def setCheckout (self, checkout):
+    def setCheckout(self, checkout):
         self.checkout = checkout
-        self.total = (self.checkout - self.checkin).seconds/3600
+        self.total = (self.checkout - self.checkin).seconds / 3600
