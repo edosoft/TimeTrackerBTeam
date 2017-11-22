@@ -80,14 +80,5 @@ export class ServerProvider {
     // Work in progress
   }
 
-  // Testing: create users in datastore
-  createUser() {
-    gapi.client.timetrackerApi.createUser().execute((response: any) => {
-      if (response.error) {
-        console.log(response.error);
-      } else {
-        console.log(JSON.stringify(response.result));
-      }
-    });
-  }
+  
 }
