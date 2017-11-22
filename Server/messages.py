@@ -30,8 +30,11 @@ class WorkdayResponseMessage(messages.Message):
 class CheckinResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
     text = messages.StringField(1)
+    checkin = messages.StringField(3)
 
 
 class CheckoutResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
     text = messages.StringField(1)
+    checkout = messages.StringField(3)
+    total = messages.IntegerField(4)

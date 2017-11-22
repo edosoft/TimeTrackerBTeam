@@ -87,7 +87,7 @@ class MainPage(remote.Service):
         if querycheckin.checkin is None:
             querycheckin.checkin = datetime.datetime.now()
             querycheckin.put()
-            return CheckinResponseMessage(response_code=200, text="Initializing Check in")
+            return CheckinResponseMessage(response_code=200, text="Initializing Check in", checkin = str(querycheckin.checkin))
         else:
             return CheckinResponseMessage(response_code=400, text="You can't check in again today")
 
@@ -108,8 +108,9 @@ class MainPage(remote.Service):
             querycheckout.checkout = datetime.datetime.now()
             querycheckout.total = (querycheckout.checkout - querycheckout.checkin).seconds / 3600
             querycheckout.put()
-            return CheckoutResponseMessage(response_code=200,
-                                           text="Checkout Ok. Have a nice day")
+            return CheckoutResponseMessage(response_code=200, \
+        text="Checkout Ok. Have a nice day :)", checkout=str(querycheckout.checkout), \
+        total=querycheckout.total)
 
 
 app = endpoints.api_server([MainPage], restricted=False)
