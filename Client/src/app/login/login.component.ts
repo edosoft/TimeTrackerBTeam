@@ -23,4 +23,8 @@ export class LoginComponent implements AfterViewInit {
     this.server.createUser();
   }
 
+  logOut() {
+    this.server.logOut();
+  }
+
 }

@@ -16,6 +16,10 @@
     justify-content: flex-end;
 }
 
+.component-login .btn_createUser {
+    margin-left: 10px;
+}
+
 .g-signin2 {
     margin-right: 10px;
 }
