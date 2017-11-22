@@ -10,7 +10,7 @@ const appRoutes: Routes = [{
     path: 'check',
     component: CheckComponent
 }, {
-    path: 'login',
+    path: '',
     component: LoginComponent
 }, {
     path: '**',

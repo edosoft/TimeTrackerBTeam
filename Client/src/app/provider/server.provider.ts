@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { setTimeout } from 'timers';
 
 
 declare const gapi: any;
@@ -70,6 +71,8 @@ export class ServerProvider {
     auth2.signOut().then(function () {
       console.log('User signed out.');
     });
+    window.location.reload();
+    console.log('reload page');
   }
 
   // Ojo con esto
