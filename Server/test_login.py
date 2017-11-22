@@ -55,6 +55,5 @@ class TestReport(unittest.TestCase):
         emp = WeekEmployeeData("Ernesto", 8, 8, 8, 8, 6, 0, 0)
         self.assertEqual(emp.validationTotal(), 1)
 
-
 if __name__ == '__main__':
     unittest.main()

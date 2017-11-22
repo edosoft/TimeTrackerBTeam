@@ -10,9 +10,6 @@ const appRoutes: Routes = [{
     path: 'check',
     component: CheckComponent
 }, {
-    path: '',
-    component: LoginComponent
-}, {
     path: '**',
     redirectTo: ''
 }];
