@@ -15,7 +15,6 @@ export class ServerProvider {
   url: string = this.L;
 
   public auth2: any;
-  public api: any = null;
 
   public googleInit() {
     gapi.load('client:auth2', () => {
