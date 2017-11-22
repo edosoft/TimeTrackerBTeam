@@ -8,8 +8,7 @@ from google.appengine.ext import ndb
 from protorpc import message_types
 from protorpc import remote
 
-from messages import WorkdayResponseMessage, \
-    CheckinResponseMessage, CheckoutResponseMessage
+from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
 
 
 # [START greeting]
@@ -41,7 +40,7 @@ class MainPage(remote.Service):
         user = endpoints.get_current_user()
 
         if user is None:
-            # If you try to sign in without succesfully loggin in:
+            # Error - Logging without authenticating with Google
             return WorkdayResponseMessage(text="Error: Invalid Data", response_code=400)
         else:
             query = User.query(User.email == user.email()).get()
@@ -62,13 +61,14 @@ class MainPage(remote.Service):
                 work.total = 0
                 work.put()
 
+                # Ok - Creating workday
                 return WorkdayResponseMessage(text="Creating Workday", employeeid=work.employeeid,
                                               date=str(work.date), checkin=str(work.checkin),
                                               checkout=str(work.checkout), total=work.total,
                                               response_code=200)
             else:
                 work = queryworkday
-                # If it exists, it is returned.
+                # Ok - Returning existent
                 return WorkdayResponseMessage(text="Returning Workday", employeeid=work.employeeid,
                                               date=str(work.date), checkin=str(work.checkin),
                                               checkout=str(work.checkout), total=work.total,
@@ -90,6 +90,7 @@ class MainPage(remote.Service):
             checkmax = now.replace(hour=9, minute=00, second=59, microsecond=0)
 
             if now < checkmin:
+                # Error - Check in too soon
                 return CheckinResponseMessage(response_code=400,
                                               text="You can't check in before 7:30 am")
             else:
@@ -97,14 +98,17 @@ class MainPage(remote.Service):
                 querycheckin.put()
 
                 if now < checkmax:
+                    # Ok
                     return CheckinResponseMessage(response_code=200,
                                                   text="Successful Check in",
                                                   checkin=str(querycheckin.checkin))
                 else:
+                    # Issue - Check in too late.
                     return CheckinResponseMessage(response_code=200,
                                                   text="Check in out of time",
                                                   checkin=str(querycheckin.checkin))
         else:
+            # Error - Check in after check in
             return CheckinResponseMessage(response_code=400, text="You can't check in again today")
 
     @endpoints.method(message_types.VoidMessage, CheckoutResponseMessage,
@@ -116,12 +120,14 @@ class MainPage(remote.Service):
         querycheckout = Workday.query(Workday.employeeid == user.email(),
                                       Workday.date == datetime.datetime.now()).get()
 
-        if querycheckout.checkout is not None:
+        if not querycheckout.checkout is None:
+            # Error - Check out after check out
             return CheckoutResponseMessage(response_code=400,
                                            text="You can't check out if you checked out already")
 
-        # Querywork has the Workday of the employee in the proper day.
+        
         if querycheckout.checkin is None:
+            # Error - Check out without check in
             return CheckoutResponseMessage(response_code=400,
                                            text="You can't check out without checking in")
         else:
@@ -135,6 +141,7 @@ class MainPage(remote.Service):
 
             if now < checkmin:
                 querycheckout.put()
+                # Issue - Check out too soon
                 return CheckoutResponseMessage(response_code=400,
                                                text="You checked out too early",
                                                checkout=str(querycheckout.checkout),
@@ -145,13 +152,15 @@ class MainPage(remote.Service):
 
                 if now < checkmax:
                     querycheckout.put()
-                    return CheckoutResponseMessage(response_code=200,
+                    # OK
+                    return CheckoutResponseMessage(response_code=200, \
                                                    text="Checkout Ok. Have a nice day :)",
                                                    checkout=str(querycheckout.checkout),
                                                    total=querycheckout.total)
                 else:
                     querycheckout.checkout = checkmax
                     querycheckout.put()
+                    # Issue - Check out too late.
                     return CheckoutResponseMessage(response_code=200,
                                                    text="Check out out of time",
                                                    checkout=str(querycheckout.checkout),
