@@ -8,7 +8,7 @@ from google.appengine.ext import ndb
 from protorpc import message_types
 from protorpc import remote
 
-from messages import LoginResponseMessage, WorkdayResponseMessage, \
+from messages import WorkdayResponseMessage, \
     CheckinResponseMessage, CheckoutResponseMessage
 
 
@@ -116,7 +116,7 @@ class MainPage(remote.Service):
         querycheckout = Workday.query(Workday.employeeid == user.email(),
                                       Workday.date == datetime.datetime.now()).get()
 
-        if not querycheckout.checkout is None: 
+        if querycheckout.checkout is not None:
             return CheckoutResponseMessage(response_code=400,
                                            text="You can't check out if you checked out already")
 
