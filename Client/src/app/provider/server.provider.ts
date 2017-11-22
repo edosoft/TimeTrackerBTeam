@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { Router } from '@angular/router';
 declare const gapi: any;
 
 @Injectable()
@@ -28,7 +27,6 @@ export class ServerProvider {
       this.attachGSuite(document.getElementById('googleBtn'));
     });
   }
-  constructor (private router: Router) {}
 
   public callback() {
     console.log('gapi loaded');
@@ -46,7 +44,6 @@ export class ServerProvider {
         console.log('Email: ' + profile.getEmail());
 
         // YOUR CODE HERE
-        this.router.navigateByUrl('/check');
         this.apiLogin();
         this.logged = true;
         console.log('server logged:' + this.logged);
@@ -95,7 +92,6 @@ export class ServerProvider {
         console.log(response.error);
       } else {
         console.log(JSON.stringify(response.result));
-        this.router.navigateByUrl('');
       }
     });
   }
