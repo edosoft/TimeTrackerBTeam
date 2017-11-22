@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
-
 declare const gapi: any;
 
 @Injectable()
@@ -70,14 +69,29 @@ export class ServerProvider {
     auth2.signOut().then(function () {
       console.log('User signed out.');
     });
+    window.location.reload();
+    console.log('reload page');
   }
 
+  // Ojo con esto
   checkIn() {
-    // Work in progress
+    gapi.client.timetrackerApi.checkin().execute((response: any) => {
+      if (response.error) {
+        console.log(response.error);
+      } else {
+        console.log(JSON.stringify(response.result));
+      }
+    });
   }
 
   checkOut() {
-    // Work in progress
+    gapi.client.timetrackerApi.checkout().execute((response: any) => {
+      if (response.error) {
+        console.log(response.error);
+      } else {
+        console.log(JSON.stringify(response.result));
+      }
+    });
   }
 
   

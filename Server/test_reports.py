@@ -5,6 +5,7 @@ import datetime
 import calendar
 from reports import dataStore, Workday
 
+
 class TestReport(unittest.TestCase):
     '''Class to test the different cases of report'''
     '''
@@ -20,7 +21,7 @@ class TestReport(unittest.TestCase):
     Given a HRM accessing a valid week:
     The system returns the previous weekly report, in order to not show empty data.
     '''
-    
+
     def setUp(self):
         self.data = dataStore()
         self.date = datetime.date(2017, 10, 25)
@@ -83,7 +84,7 @@ class TestReport(unittest.TestCase):
         """Testing trying an object from a week, but giving an error"""
         wrong_number = -15
         self.assertEqual(self.data.get_weekly_report(wrong_number), "There are not registers in the selected week")
-        #self.assertEqual(result.data.employee, "Ernesto", "No data found")
+        # self.assertEqual(result.data.employee, "Ernesto", "No data found")
 
     def test_get_report_from_employee(self):
         """Test getting an object from a certain week"""
@@ -96,11 +97,12 @@ class TestReport(unittest.TestCase):
         self.assertEqual(result.wednesday, 7)
         self.assertEqual(result.total, 21, "No data found")
 
-
     def test_insert_duplicate_data(self):
         employee6 = self.employee1
 
         self.assertEqual(self.data.add(employee6), "Duplicate workday")
+
+
 '''
     def test_total_hours_worked_over(self):
         """Analyzing the weekdays and filtering the vacation ones"""
@@ -112,5 +114,6 @@ class TestReport(unittest.TestCase):
         
         self.assertEqual(emp.validationTotal(), 1)
 '''
+
 if __name__ == '__main__':
     unittest.main()
