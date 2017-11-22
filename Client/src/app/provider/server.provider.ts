@@ -14,6 +14,8 @@ export class ServerProvider {
 
   url: string = this.L;
 
+  logged: boolean = false;
+
   public auth2: any;
 
   public googleInit() {
@@ -46,6 +48,8 @@ export class ServerProvider {
         // YOUR CODE HERE
         this.router.navigateByUrl('/check');
         this.apiLogin();
+        this.logged = true;
+        console.log('server logged:' + this.logged);
 
       }, (error) => {
         alert(JSON.stringify(error, undefined, 2));
@@ -65,6 +69,7 @@ export class ServerProvider {
   }
 
   logOut() {
+    this.logged = false;
     this.auth2 = gapi.auth2.getAuthInstance();
     this.auth2.signOut().then(function () {
       console.log('User signed out.');
@@ -94,4 +99,5 @@ export class ServerProvider {
       }
     });
   }
+
 }

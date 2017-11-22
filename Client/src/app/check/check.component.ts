@@ -13,6 +13,7 @@ export class CheckComponent implements OnInit {
   constructor(private server: ServerProvider) { }
 
   ngOnInit() {
+    
   }
 
   checkIn() {
