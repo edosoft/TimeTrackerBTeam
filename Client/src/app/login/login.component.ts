@@ -5,7 +5,7 @@ import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 
 
