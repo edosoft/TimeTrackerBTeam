@@ -94,7 +94,7 @@ export class ServerProvider {
   }
 
   checkIn() {
-    return new Promise((resolve, reject) => {
+    return new Promise<boolean>((resolve, reject) => {
       gapi.client.timetrackerApi.checkin().execute((response: any) => {
         if (response.error) {
           console.log(response.error);
@@ -109,7 +109,7 @@ export class ServerProvider {
   }
 
   checkOut() {
-    return new Promise((resolve, reject) => {
+    return new Promise<boolean>((resolve, reject) => {
       gapi.client.timetrackerApi.checkout().execute((response: any) => {
         if (response.error) {
           console.log(response.error);

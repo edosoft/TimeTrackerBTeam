@@ -16,12 +16,14 @@ export class CheckComponent implements OnInit {
 
   }
 
-  checkIn() {
-    this.server.checkIn().then((check) => this.check = check).then(() => console.log(`check: ${this.check}`));
+  async checkIn() {
+    this.check = await this.server.checkIn();
+    console.log(`check: ${this.check}`);
   }
 
-  checkOut() {
-    this.server.checkOut().then((check) => this.check = check).then(() => console.log(`check: ${this.check}`));
+  async checkOut() {
+    this.check = await this.server.checkOut();
+    console.log(`check: ${this.check}`);
   }
 
 }
