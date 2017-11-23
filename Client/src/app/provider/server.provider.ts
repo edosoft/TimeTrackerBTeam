@@ -1,14 +1,18 @@
 import { HttpClient, HttpHeaders} from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { User} from '../provider/model';
+import { Router } from '@angular/router';
+
 declare const gapi: any;
 
 
-
+@Injectable()
 export class ServerProvider {
 
+  constructor (private router: Router, private zone: NgZone) {
+  }
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
   L = 'http://localhost:8080/_ah/api';
   P = 'https://timetrackerbteam.appspot.com/_ah/api/';
@@ -54,7 +58,6 @@ export class ServerProvider {
         // YOUR CODE HERE
         this.user = new User();
         this.user.name = profile.getName();
-
         this.logIn();
 
       }, (error) => {
@@ -75,9 +78,11 @@ export class ServerProvider {
         this.user.checkout = response.result.checkout;
         this.user.id = response.result.employeeid;
         this.user.total = response.result.total;
-
         this.logged = true;
         console.log('server logged:' + this.logged);
+        this.zone.run(() => {
+          this.router.navigate(['/check']);
+        });
       }
     });
   }

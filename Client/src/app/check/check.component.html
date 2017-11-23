@@ -1,29 +1,31 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="list-log-checks">
-                <div class="title-date">
-                    <h2>Lunes, 20 Noviembre de 2017</h2>
-                </div>
-                <div class="list-log">
-                    <div class="content-list-log">
-                        <div *ngIf="checkedin" class="time-check-inout">
-                            <p><i class="fa fa-sign-in" aria-hidden="true"></i> Hour:</p>
-                            <p>{{currentC.checkin}}</p>
-                        </div>
-                        <div *ngIf="checkedout" class="time-check-inout">
-                            <p><i class="fa fa-sign-out" aria-hidden="true"></i> Hour:</p>
-                            <p>{{currentC.checkout}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="container-general-check-buttons">
-                    <div class="checkbtns">
-                        <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg btn-success" [disabled]="check">Check In</button>
-                        <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg btn-warning" [disabled]="!check">Check Out</button>
-                    </div>
-                </div>
-            </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="list-log-checks">
+        <div class="title-date">
+          <h2>Lunes, 20 Noviembre de 2017</h2>
         </div>
+        <div class="list-log">
+          <div class="content-list-log">
+            <div *ngIf="checkedin" class="time-check-inout">
+              <p>
+                <i class="fa fa-sign-in" aria-hidden="true"></i> Hour:</p>
+              <p>{{currentC.checkin}}</p>
+            </div>
+            <div *ngIf="checkedout" class="time-check-inout">
+              <p>
+                <i class="fa fa-sign-out" aria-hidden="true"></i> Hour:</p>
+              <p>{{currentC.checkout}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="container-general-check-buttons">
+          <div class="checkbtns">
+            <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg btn-success" [disabled]="check">Check In</button>
+            <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg btn-warning" [disabled]="!check">Check Out</button>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

@@ -1,20 +1,21 @@
 <div class="component-login">
-    <h2>Sign in</h2>
-    <br>
-    <p class="text-primary">Email</p>
-    <div class="input-group">
-        <span class="input-group-addon">@</span>
-        <input [(ngModel)]="user" type="email" class="form-control" placeholder="User" aria-label="User" aria-describedby="basic-addon1">
+  <h2>Sign in</h2>
+  <br>
+  <p class="text-primary">Email</p>
+  <div class="input-group">
+    <span class="input-group-addon">@</span>
+    <input [(ngModel)]="user" type="email" class="form-control" placeholder="User" aria-label="User" aria-describedby="basic-addon1">
+  </div>
+  <br>
+  <p class="text-primary">Password</p>
+  <div class="input-group">
+    <span class="input-group-addon">#</span>
+    <input [(ngModel)]="pass" type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
+  </div>
+  <br>
+  <div class="button-login">
+    <div id="googleBtn" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">
     </div>
-    <br>
-    <p class="text-primary">Password</p>
-    <div class="input-group">
-        <span class="input-group-addon">#</span>
-        <input [(ngModel)]="pass" type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
-    </div>
-    <br>
-    <div class="button-login">
-        <div routerLink="/check" id="googleBtn" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-        <button  (click)="logOut()" class="btn btn-outline-secondary glyphicon glyphicon-user" type="submit"></button>
-    </div>
+    <button (click)="logOut()" class="btn btn-outline-secondary glyphicon glyphicon-user" type="submit"></button>
+  </div>
 </div>
