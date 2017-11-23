@@ -56,8 +56,6 @@ export class ServerProvider {
         this.user.name = profile.getName();
 
         this.logIn();
-        this.logged = true;
-        console.log('server logged:' + this.logged);
 
       }, (error) => {
         alert(JSON.stringify(error, undefined, 2));
@@ -77,6 +75,9 @@ export class ServerProvider {
         this.user.checkout = response.result.checkout;
         this.user.id = response.result.employeeid;
         this.user.total = response.result.total;
+
+        this.logged = true;
+        console.log('server logged:' + this.logged);
       }
     });
   }

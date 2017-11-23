@@ -7,20 +7,20 @@
                 </div>
                 <div class="list-log">
                     <div class="content-list-log">
-                        <div class="time-check-inout">
+                        <div *ngIf="checkedin" class="time-check-inout">
                             <p><i class="fa fa-sign-in" aria-hidden="true"></i> Hour:</p>
-                            <p>15:00</p>
+                            <p>{{currentC.checkin}}</p>
                         </div>
-                        <div class="time-check-inout">
+                        <div *ngIf="checkedout" class="time-check-inout">
                             <p><i class="fa fa-sign-out" aria-hidden="true"></i> Hour:</p>
-                            <p>19:00</p>
+                            <p>{{currentC.checkout}}</p>
                         </div>
                     </div>
                 </div>
                 <div class="container-general-check-buttons">
                     <div class="checkbtns">
                         <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg btn-success" [disabled]="check">Check In</button>
-                        <button routerLink="/" (click)="checkOut()" type="button" class="btn btn-primary btn-lg btn-warning" [disabled]="!check">Check Out</button>
+                        <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg btn-warning" [disabled]="!check">Check Out</button>
                     </div>
                 </div>
             </div>
