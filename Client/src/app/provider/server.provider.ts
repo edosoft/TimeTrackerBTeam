@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 
 declare const gapi: any;
 
-
 @Injectable()
 export class ServerProvider {
 

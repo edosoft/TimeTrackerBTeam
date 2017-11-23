@@ -9,19 +9,16 @@ import {Observable} from 'rxjs/Observable';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-
-
 export class AppComponent implements DoCheck {
   title_header = 'Time Tracking';
   is_logged: any;
 
   constructor(private server: ServerProvider) {
-   
+
   }
 
-  ngDoCheck(){
+  ngDoCheck() {
     this.is_logged = this.server.logged;
-    console.log("is logged:" + this.is_logged)
   }
 
 }

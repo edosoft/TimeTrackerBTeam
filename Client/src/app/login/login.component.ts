@@ -7,8 +7,6 @@ import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-
-
 export class LoginComponent implements AfterViewInit {
 
   constructor(private server: ServerProvider) {
