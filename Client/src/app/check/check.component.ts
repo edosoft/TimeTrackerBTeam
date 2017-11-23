@@ -13,17 +13,15 @@ export class CheckComponent implements OnInit {
   constructor(private server: ServerProvider) { }
 
   ngOnInit() {
-    
+
   }
 
   checkIn() {
-    this.check = true;
-    this.server.checkIn();
+    this.server.checkIn().then((check) => this.check = check).then(() => console.log(`check: ${this.check}`));
   }
 
   checkOut() {
-    this.check = false;
-    this.server.checkOut();
+    this.server.checkOut().then((check) => this.check = check).then(() => console.log(`check: ${this.check}`));
   }
 
 }

@@ -21,7 +21,7 @@ export class ServerProvider {
 
   public user: User;
 
-  getUser(){
+  getUser() {
     return this.user;
   }
 
@@ -55,7 +55,7 @@ export class ServerProvider {
         this.user = new User();
         this.user.name = profile.getName();
 
-        this.apiLogin();
+        this.logIn();
         this.logged = true;
         console.log('server logged:' + this.logged);
 
@@ -66,7 +66,7 @@ export class ServerProvider {
   }
 
   // Check that user exists in datastore
-  apiLogin() {
+  logIn() {
     gapi.client.timetrackerApi.login().execute((response: any) => {
       if (response.error) {
         console.log(response.error);
@@ -93,27 +93,31 @@ export class ServerProvider {
     console.log('reload page');
   }
 
-  // Ojo con esto
   checkIn() {
-    gapi.client.timetrackerApi.checkin().execute((response: any) => {
-      if (response.error) {
-        console.log(response.error);
-      } else {
-        console.log(JSON.stringify(response.result));
-        this.user.checkin = response.result.checkin;
-      }
+    return new Promise((resolve, reject) => {
+      gapi.client.timetrackerApi.checkin().execute((response: any) => {
+        if (response.error) {
+          console.log(response.error);
+          resolve(false);
+        } else {
+          console.log(JSON.stringify(response.result));
+          resolve(true);
+        }
+      });
     });
   }
 
   checkOut() {
-    gapi.client.timetrackerApi.checkout().execute((response: any) => {
-      if (response.error) {
-        console.log(response.error);
-      } else {
-        console.log(JSON.stringify(response.result));
-        this.user.checkout = response.result.checkout;
-        this.user.total = response.result.total;
-      }
+    return new Promise((resolve, reject) => {
+      gapi.client.timetrackerApi.checkout().execute((response: any) => {
+        if (response.error) {
+          console.log(response.error);
+          resolve(true);
+        } else {
+          console.log(JSON.stringify(response.result));
+          resolve(false);
+        }
+      });
     });
   }
 
