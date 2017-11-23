@@ -1,6 +1,7 @@
 @import '~sass/variables';
 @import '~sass/mixins';
 header {
+    background-color: #000;
     .navbar {
         .container-header {
             @include display-flex();
@@ -57,7 +58,9 @@ header {
 
 .container-general {
     margin: 35px 0px;
+    height: 100vh;
     @media (min-width: 768px) {
-        margin: 0px;
+        margin: 0px 0px 0px -15px;
+
     }
 }
