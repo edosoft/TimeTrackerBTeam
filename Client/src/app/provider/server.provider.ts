@@ -134,6 +134,10 @@ export class ServerProvider {
       return "None";
     }
     var d = new Date(date);
+    
+    if (d.getMinutes() < 10){ 
+      return d.getHours() +":0"+ d.getMinutes();
+    }
     return d.getHours() +":"+ d.getMinutes();
   }
 

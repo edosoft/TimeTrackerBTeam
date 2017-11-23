@@ -89,11 +89,14 @@ class MainPage(remote.Service):
             now = datetime.datetime.now()
             checkmin = now.replace(hour=7, minute=30, second=59, microsecond=0)
             checkmax = now.replace(hour=9, minute=00, second=59, microsecond=0)
-
+            checkoutmax = now.replace(hour=19, minute=00, second=0, microsecond=0)
             if now < checkmin:
                 # Error - Check in too soon
                 return CheckinResponseMessage(response_code=400,
                                               text="You can't check in before 7:30 am")
+            elif now >= checkoutmax:
+                return CheckinResponseMessage(response_code=400,
+                                              text="You can't check in after 19:00 pm")
             else:
                 querycheckin.checkin = now
                 querycheckin.put()
