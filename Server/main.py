@@ -141,7 +141,7 @@ class MainPage(remote.Service):
             if now < checkmin:
                 querycheckout.put()
                 # Issue - Check out too soon
-                return CheckoutResponseMessage(response_code=400,
+                return CheckoutResponseMessage(response_code=200,
                                                text="You checked out too early",
                                                checkout=str(querycheckout.checkout),
                                                total=querycheckout.total)

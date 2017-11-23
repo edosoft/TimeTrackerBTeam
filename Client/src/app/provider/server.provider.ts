@@ -2,9 +2,11 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { User} from '../provider/model';
 declare const gapi: any;
 
-@Injectable()
+
+
 export class ServerProvider {
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
@@ -16,6 +18,12 @@ export class ServerProvider {
   logged = false;
 
   public auth2: any;
+
+  public user: User;
+
+  getUser(){
+    return this.user;
+  }
 
   public googleInit() {
     gapi.load('client:auth2', () => {
@@ -44,6 +52,9 @@ export class ServerProvider {
         console.log('Email: ' + profile.getEmail());
 
         // YOUR CODE HERE
+        this.user = new User();
+        this.user.name = profile.getName();
+
         this.apiLogin();
         this.logged = true;
         console.log('server logged:' + this.logged);
@@ -61,9 +72,16 @@ export class ServerProvider {
         console.log(response.error);
       } else {
         console.log(JSON.stringify(response.result));
+        this.user.date = response.result.date;
+        this.user.checkin = response.result.checkin;
+        this.user.checkout = response.result.checkout;
+        this.user.id = response.result.employeeid;
+        this.user.total = response.result.total;
       }
     });
   }
+
+
 
   logOut() {
     this.logged = false;
@@ -82,6 +100,7 @@ export class ServerProvider {
         console.log(response.error);
       } else {
         console.log(JSON.stringify(response.result));
+        this.user.checkin = response.result.checkin;
       }
     });
   }
@@ -92,6 +111,8 @@ export class ServerProvider {
         console.log(response.error);
       } else {
         console.log(JSON.stringify(response.result));
+        this.user.checkout = response.result.checkout;
+        this.user.total = response.result.total;
       }
     });
   }
