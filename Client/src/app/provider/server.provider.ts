@@ -101,6 +101,7 @@ export class ServerProvider {
           resolve(false);
         } else {
           console.log(JSON.stringify(response.result));
+          this.user.checkin = response.result.checkin;
           resolve(true);
         }
       });
@@ -115,6 +116,8 @@ export class ServerProvider {
           resolve(true);
         } else {
           console.log(JSON.stringify(response.result));
+          this.user.checkout = response.result.checkout;
+          this.user.total = response.result.total;
           resolve(false);
         }
       });
