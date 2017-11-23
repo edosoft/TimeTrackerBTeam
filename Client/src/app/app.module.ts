@@ -7,6 +7,7 @@ import {AppRoutingModule} from './provider/router.provider';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { CheckComponent } from './check/check.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 
 
@@ -14,7 +15,8 @@ import { CheckComponent } from './check/check.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    CheckComponent
+    CheckComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
