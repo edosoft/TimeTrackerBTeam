@@ -14,6 +14,7 @@ class WorkdayResponseMessage(messages.Message):
     total = messages.IntegerField(7)
     text = messages.StringField(1)
 
+
 class CheckinResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
     text = messages.StringField(1)

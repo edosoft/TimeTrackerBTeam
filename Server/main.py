@@ -120,12 +120,11 @@ class MainPage(remote.Service):
         querycheckout = Workday.query(Workday.employeeid == user.email(),
                                       Workday.date == datetime.datetime.now()).get()
 
-        if not querycheckout.checkout is None:
+        if querycheckout.checkout is not None:
             # Error - Check out after check out
             return CheckoutResponseMessage(response_code=400,
                                            text="You can't check out if you checked out already")
 
-        
         if querycheckout.checkin is None:
             # Error - Check out without check in
             return CheckoutResponseMessage(response_code=400,
@@ -153,7 +152,7 @@ class MainPage(remote.Service):
                 if now < checkmax:
                     querycheckout.put()
                     # OK
-                    return CheckoutResponseMessage(response_code=200, \
+                    return CheckoutResponseMessage(response_code=200,
                                                    text="Checkout Ok. Have a nice day :)",
                                                    checkout=str(querycheckout.checkout),
                                                    total=querycheckout.total)

@@ -54,7 +54,7 @@ class dataStore():
         if len(result) == 0:
             return "There are not registers in the selected week"
         return result
-    
+
     def get_weekly_data_by_employee(self, employee, year, week):
         rawresult = []
         for element in self.report:
@@ -69,7 +69,7 @@ class dataStore():
             correct_result = self.formatDataByWeek(rawresult)
             # correct_result = (rawresult)
         return correct_result
-        
+
     def formatDataByWeek(self, input):
         result = WeekEmployeeData()
         result.employeeid = input[0].employeeid
