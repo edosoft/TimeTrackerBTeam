@@ -11,7 +11,7 @@ from protorpc import remote
 from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
 
 
-# [START greeting]
+# [START Models]
 class User(ndb.Model):
     """Model to store an employee's valid login."""
     email = ndb.StringProperty(indexed=True)
@@ -25,6 +25,7 @@ class Workday(ndb.Model):
     checkout = ndb.DateTimeProperty()
     total = ndb.IntegerProperty()
 
+# [END Models]
 # v1 will be deprecated by Aug-2018, but it can be used for educational purposes
 
 
@@ -68,10 +69,15 @@ class MainPage(remote.Service):
                                               response_code=200)
             else:
                 work = queryworkday
+
+                str_checkin = "%s:%s" % (work.checkin.hour, work.checkin.minute)
+                str_checkout = "%s:%s" % (work.checkout.hour, work.checkout.minute)
+
+
                 # Ok - Returning existent
                 return WorkdayResponseMessage(text="Returning Workday", employeeid=work.employeeid,
-                                              date=str(work.date), checkin=str(work.checkin),
-                                              checkout=str(work.checkout), total=work.total,
+                                              date=str(work.date), checkin=str_checkin,
+                                              checkout=str_checkout, total=work.total,
                                               response_code=200)
 
     @endpoints.method(message_types.VoidMessage, CheckinResponseMessage, path='checkin',
@@ -96,17 +102,17 @@ class MainPage(remote.Service):
             else:
                 querycheckin.checkin = now
                 querycheckin.put()
-
+                str_checkin = "%s:%s" % (querycheckin.checkin.hour, querycheckin.checkin.minute)
                 if now < checkmax:
                     # Ok
                     return CheckinResponseMessage(response_code=200,
                                                   text="Successful Check in",
-                                                  checkin=str(querycheckin.checkin))
+                                                  checkin=str_checkin)
                 else:
                     # Issue - Check in too late.
                     return CheckinResponseMessage(response_code=200,
                                                   text="Check in out of time",
-                                                  checkin=str(querycheckin.checkin))
+                                                  checkin=str_checkin)
         else:
             # Error - Check in after check in
             return CheckinResponseMessage(response_code=400, text="You can't check in again today")
@@ -137,13 +143,13 @@ class MainPage(remote.Service):
 
             querycheckout.checkout = datetime.datetime.now()
             querycheckout.total = (querycheckout.checkout - querycheckout.checkin).seconds / 60
-
+            str_checkout = "%s:%s" % (querycheckout.checkout.hour, querycheckout.checkout.minute)
             if now < checkmin:
                 querycheckout.put()
                 # Issue - Check out too soon
                 return CheckoutResponseMessage(response_code=200,
                                                text="You checked out too early",
-                                               checkout=str(querycheckout.checkout),
+                                               checkout=str_checkout,
                                                total=querycheckout.total)
             else:
                 if now > checknoon:  # If you go out after 15:00, a hour is substracted from the total
@@ -154,15 +160,16 @@ class MainPage(remote.Service):
                     # OK
                     return CheckoutResponseMessage(response_code=200,
                                                    text="Checkout Ok. Have a nice day :)",
-                                                   checkout=str(querycheckout.checkout),
+                                                   checkout=str_checkout,
                                                    total=querycheckout.total)
                 else:
                     querycheckout.checkout = checkmax
                     querycheckout.put()
+                    str_checkout = "%s:%s" % (querycheckout.checkout.hour, querycheckout.checkout.minute)
                     # Issue - Check out too late.
                     return CheckoutResponseMessage(response_code=200,
                                                    text="Check out out of time",
-                                                   checkout=str(querycheckout.checkout),
+                                                   checkout=str_checkout,
                                                    total=querycheckout.total)
 
 
