@@ -1,58 +1,49 @@
+@import '~sass/variables';
+@import '~sass/mixins';
 .list-log-checks {
     margin-top: 200px;
     background-color: #fff;
     border-radius: 3px;
     box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
-}
-
-.list-log-checks .title-date {
-    padding: 15px;
-    background-color: #424b63;
-}
-
-.list-log-checks .title-date h2 {
-    margin: 0px;
-    font-size: 22px;
-    color: #fff;
-}
-
-.list-log-checks .list-log {
-    padding: 15px;
-}
-
-.list-log-checks .list-log .content-list-log {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.content-list-log .time-check-inout {
-    width: 50%;
-    display: flex;
-    justify-content: center;
-}
-
-.content-list-log .time-check-inout p {
-    margin: 0px;
-    font-size: 21px;
-}
-
-.content-list-log .time-check-inout p:first-child {
-    margin-right: 5px;
-}
-
-.container-general-check-buttons {
-    padding: 15px;
-}
-
-.container-general-check-buttons .checkbtns {
-    display: flex;
-}
-
-.container-general-check-buttons .checkbtns button {
-    width: 50%;
-}
-
-.container-general-check-buttons .checkbtns button:first-child {
-    margin-right: 15px;
+    .title-date {
+        padding: 15px;
+        background-color: $color_1;
+        h2 {
+            margin: 0px;
+            font-size: 22px;
+            color: #fff;
+        }
+    }
+    .list-log {
+        padding: 15px;
+        .content-list-log {
+            @include display-flex();
+            @include align-items(center);
+            @include justify-content(space-between);
+            .time-check-inout {
+                width: 50%;
+                display: flex;
+                justify-content: center;
+                p {
+                    margin: 0px;
+                    font-size: 21px;
+                    &:first-child {
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+    }
+    .container-general-check-buttons {
+        padding: 15px;
+        .checkbtns {
+            display: flex;
+            button {
+                width: 50%;
+                &:first-child {
+                    margin-right: 15px;
+                }
+            }
+        }
+    }
 }

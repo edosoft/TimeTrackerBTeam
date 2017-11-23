@@ -1,0 +1,86 @@
+// - - - - - - - - - - - - - - - - - - - - - align-content
+@mixin align-content($align) {
+    -webkit-align-content: $align;
+    align-content: $align;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - align-items
+@mixin align-items($align) {
+    -webkit-align-items: $align;
+    align-items: $align;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - display-flex
+@mixin display-flex($important:false) {
+    $text: '';
+    @if (true==$important) {
+        $text: ' !important';
+    }
+    display: -webkit-box#{$text};
+    display: -moz-box#{$text};
+    display: -ms-flexbox#{$text};
+    display: -webkit-flex#{$text};
+    display: flex#{$text};
+}
+
+// - - - - - - - - - - - - - - - - - - - - - flex-centered
+@mixin flex-centered() {
+    @include justify-content(center);
+    @include align-items(center);
+}
+
+// - - - - - - - - - - - - - - - - - - - - - flex-direction
+@mixin flex-direction($direction) {
+    @if 'column'==$direction {
+        -webkit-box-orient: vertical;
+        -moz-box-orient: normal;
+    }
+    @else if 'column-reverse'==$direction {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: reverse;
+    }
+    @else if 'inherit'==$direction {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+    }
+    @else if 'initial'==$direction {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+    }
+    @else if 'row'==$direction {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+    }
+    @else if 'row-reverse'==$direction {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: reverse;
+    }
+    -webkit-flex-direction: $direction;
+    -ms-flex-direction: $direction;
+    flex-direction: $direction;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - flex-grow
+@mixin flex-grow($grow) {
+    flex-grow: $grow;
+    -webkit-flex-grow: $grow;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - flex-vertial-center
+@mixin flex-vertical-center() {
+    @include display_flex();
+    @include flex-direction(row);
+    @include align-items(center);
+}
+
+// - - - - - - - - - - - - - - - - - - - - - flex-wrap
+@mixin flex-wrap($wrap) {
+    flex-wrap: $wrap;
+    -webkit-flex-wrap: $wrap;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - justify-content
+@mixin justify-content($type) {
+    justify-content: $type;
+    -webkit-justify-content: $type;
+}
