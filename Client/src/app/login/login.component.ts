@@ -17,8 +17,4 @@ export class LoginComponent implements AfterViewInit {
     this.server.googleInit();
   }
 
-  logOut() {
-    this.server.logOut();
-  }
-
 }

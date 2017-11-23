@@ -21,4 +21,8 @@ export class AppComponent implements DoCheck {
     this.is_logged = this.server.logged;
   }
 
+  logOut() {
+    this.server.logOut();
+  }
+
 }
