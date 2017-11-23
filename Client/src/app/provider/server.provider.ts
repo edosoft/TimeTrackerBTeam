@@ -74,8 +74,8 @@ export class ServerProvider {
       } else {
         console.log(JSON.stringify(response.result));
         this.user.date = response.result.date;
-        this.user.checkin = response.result.checkin;
-        this.user.checkout = response.result.checkout;
+        this.user.checkin = this.returnDate(response.result.checkin);
+        this.user.checkout = this.returnDate(response.result.checkout);
         this.user.id = response.result.employeeid;
         this.user.total = response.result.total;
         this.logged = true;
@@ -107,7 +107,7 @@ export class ServerProvider {
           resolve(false);
         } else {
           console.log(JSON.stringify(response.result));
-          this.user.checkin = response.result.checkin;
+          this.user.checkin = this.returnDate(response.result.checkin);;
           resolve(true);
         }
       });
@@ -122,12 +122,20 @@ export class ServerProvider {
           resolve(true);
         } else {
           console.log(JSON.stringify(response.result));
-          this.user.checkout = response.result.checkout;
+          this.user.checkout = this.returnDate(response.result.checkout);;
           this.user.total = response.result.total;
           resolve(false);
         }
       });
     });
+  }
+
+  returnDate(date){
+    if (date == "None"){
+      return "None";
+    }
+    var d = new Date(date);
+    return d.getHours() +":"+ d.getMinutes();
   }
 
 }

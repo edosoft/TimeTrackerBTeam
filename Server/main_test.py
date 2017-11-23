@@ -14,10 +14,14 @@
 # limitations under the License.
 
 # [START imports]
+from google.appengine.api import memcache
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
 import unittest
+import datetime
+
+from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
 # [END imports]
 
 # [START datastore_example_1]
@@ -35,6 +39,132 @@ class TestWorkday(ndb.Model):
     total = ndb.IntegerProperty()
 # [END datastore_example_1]
 
+def login(self, request, date):
+        '''A function which validates the login. It creates User and Workday entities '''
+        user = request
+
+        if user is None:
+            # Error - Logging without authenticating with Google
+            return WorkdayResponseMessage(text="Error: Invalid Data", response_code=400)
+        else:
+            query = TestUser.query(TestUser.email == user.email).get()
+            # If the user doesn't exist, it inserts it to the database.
+            if query is None:
+                auth = TestUser(email=user.email)
+                auth.put()
+
+            queryworkday = TestWorkday.query(TestWorkday.employeeid == user.email,
+                                         TestWorkday.date == date).get()
+
+            if queryworkday is None:
+                # If there is no workday, a new one is created and added to the DB.
+                work = TestWorkday()
+                work.employeeid = user.email
+                work.checkin = None
+                work.checkout = None
+                work.total = 0
+                work.put()
+
+                # Ok - Creating workday
+                return WorkdayResponseMessage(text="Creating Workday", employeeid=work.employeeid,
+                                              date=str(work.date), checkin=str(work.checkin),
+                                              checkout=str(work.checkout), total=work.total,
+                                              response_code=200)
+            else:
+                work = queryworkday
+                print (queryworkday)
+
+                # Ok - Returning existent
+                return WorkdayResponseMessage(text="Returning Workday", employeeid=work.employeeid,
+                                              date=str(work.date), checkin=str(work.checkin),
+                                              checkout=str(work.checkout), total=work.total,
+                                              response_code=200)
+
+def checkin(self, request, date):
+    '''A function which updates the Workday with the check in date'''
+    user = request
+
+    querycheckin = TestWorkday.query(TestWorkday.employeeid == user.email,
+                                 TestWorkday.date == date).get()
+
+    # querycheckin has the Workday of the employee in the proper day.
+    if querycheckin.checkin is None:
+        now = date
+        checkmin = now.replace(hour=7, minute=30, second=59, microsecond=0)
+        checkmax = now.replace(hour=9, minute=00, second=59, microsecond=0)
+        if now < checkmin:
+            # Error - Check in too soon
+            return CheckinResponseMessage(response_code=400,
+                                          text="You can't check in before 7:30 am")
+        else:
+            querycheckin.checkin = now
+            querycheckin.put()
+            if now < checkmax:
+                # Ok
+                return CheckinResponseMessage(response_code=200,
+                                              text="Successful Check in",
+                                              checkin=str(querycheckin.checkin))
+            else:
+                # Issue - Check in too late.
+                return CheckinResponseMessage(response_code=200,
+                                              text="Check in out of time",
+                                              checkin=str(querycheckin.checkin))
+    else:
+        # Error - Check in after check in
+        return CheckinResponseMessage(response_code=400, text="You can't check in again today")
+
+def checkout(self, request, date):
+        #A function which updates the Workday with the check out date and the total hours
+        user = request
+
+        querycheckout = TestWorkday.query(TestWorkday.employeeid == user.email,
+                                      TestWorkday.date == date).get()
+
+        if querycheckout.checkout is not None:
+            # Error - Check out after check out
+            return CheckoutResponseMessage(response_code=400,
+                                           text="You can't check out if you checked out already")
+
+        if querycheckout.checkin is None:
+            # Error - Check out without check in
+            return CheckoutResponseMessage(response_code=400,
+                                           text="You can't check out without checking in")
+        else:
+            now = date
+            checkmin = now.replace(hour=13, minute=00, second=0, microsecond=0)
+            checkmax = now.replace(hour=19, minute=00, second=0, microsecond=0)
+            checknoon = now.replace(hour=15, minute=00, second=0, microsecond=0)
+
+            querycheckout.checkout = datetime.datetime.now()
+            querycheckout.total = (querycheckout.checkout - querycheckout.checkin).seconds / 60
+            if now < checkmin:
+                querycheckout.put()
+                # Issue - Check out too soon
+                return CheckoutResponseMessage(response_code=200,
+                                               text="You checked out too early",
+                                               checkout=str(querycheckout.checkout),
+                                               total=querycheckout.total)
+            else:
+                if now > checknoon:  # If you go out after 15:00, a hour is substracted from the total
+                    querycheckout.total = querycheckout.total - 60
+
+                if now < checkmax:
+                    querycheckout.put()
+                    # OK
+                    return CheckoutResponseMessage(response_code=200,
+                                                   text="Checkout Ok. Have a nice day :)",
+                                                   checkout=str(querycheckout.checkout),
+                                                   total=querycheckout.total)
+                else:
+                    querycheckout.checkout = checkmax
+                    querycheckout.put()
+                    # Issue - Check out too late.
+                    return CheckoutResponseMessage(response_code=200,
+                                                   text="Check out out of time",
+                                                   checkout=str(querycheckout.checkout),
+                                                   total=querycheckout.total)
+
+
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
 
@@ -45,6 +175,7 @@ class DatastoreTestCase(unittest.TestCase):
         self.testbed.activate()
         # Next, declare which service stubs you want to use.
         self.testbed.init_datastore_v3_stub()
+        self.testbed.init_memcache_stub()
         # Clear ndb's in-context cache between tests.
         # This prevents data from leaking between tests.
         # Alternatively, you could disable caching by
@@ -62,10 +193,152 @@ class DatastoreTestCase(unittest.TestCase):
     def testInsertEntity(self):
         TestUser().put()
         self.assertEqual(1, len(TestUser.query().fetch(2)))
+
+    def testentityok(self):
+        test = TestUser(email="lelele")
+        test.put()
+        self.assertEqual("lelele", TestUser.query().get().email)
     # [END datastore_example_insert]
 
-    # [START datastore_example_filter]
-    # [END datastore_example_filter]
+# [START TestWorkday Tests]
+    def test_workday_no_user(self):
+        date = datetime.datetime.now()
+        date = date.replace(hour=7, minute=31)
+        result = login(self, None, date)
+        self.assertEqual(result.text, "Error: Invalid Data")
+
+    def test_workday_user(self):
+        date = datetime.datetime.now()
+        date = date.replace(hour=7, minute=31)
+        test = TestUser(email="lelele")
+        result = login(self, test, date)
+        self.assertEqual(result.text, "Creating Workday")
+
+    def test_workday_returning_user(self):
+        date = datetime.datetime.now()
+        date = date.replace(hour=7, minute=31)
+        test = TestUser(email="lelele")
+        login(self, test, date)
+        result = login(self, test, date)
+        self.assertEqual(result.text, "Returning Workday")
+        self.assertEqual(len(TestWorkday.query().fetch(2)), 1)
+
+    def test_workday_multiple_user(self):
+        date = datetime.datetime.now()
+        test = TestUser(email="lelele")
+        login(self, test, date)
+        date = date.replace(hour=7, minute=31)
+        result = login(self, test, date)
+        self.assertEqual(result.text, "Returning Workday")
+        self.assertEqual(len(TestWorkday.query().fetch(2)), 1)
+# [END   TestWorkday Tests]
+
+# [START TestUser Tests]
+    def test_user(self):
+        date = datetime.datetime.now()
+        result = login(self, TestUser(), date)
+        self.assertEqual(result.text, "Creating Workday")
+
+    def test_multiple_user(self):
+        date = datetime.datetime.now()
+        result = login(self, TestUser(), date)
+        result = login(self, TestUser(email="lelele"), date)
+        result = login(self, TestUser(email="lelele2"), date)
+        self.assertEqual(3, len(TestUser.query().fetch(10)))
+
+    def test_workday_returning_user(self):
+        date = datetime.datetime.now()
+        date = date.replace(hour=7, minute=31)
+        test = TestUser(email="lelele")
+        login(self, test, date)
+        result = login(self, test, date)
+        self.assertEqual(result.text, "Returning Workday")
+        self.assertEqual(len(TestWorkday.query().fetch(2)), 1)
+
+    def test_workday_multiple_user(self):
+        date = datetime.datetime.now()
+        test = TestUser(email="lelele")
+        login(self, test, date)
+        date = date.replace(hour=7, minute=31)
+        result = login(self, test, date)
+        self.assertEqual(result.text, "Returning Workday")
+        self.assertEqual(len(TestWorkday.query().fetch(2)), 1)
+# [END   TestUser Tests]
+
+# [START Check In Tests]
+    def testcheckinok(self):
+        date = datetime.datetime.now()
+        date = date.replace(hour=8, minute=30)
+        work = TestWorkday(employeeid="lelele",date=date, checkin=None, checkout=None, total=0)
+        work.put()
+        test = TestUser(email="lelele")
+        result = checkin(self, test, date)
+        self.assertEqual(result.text, "Successful Check in")
+
+    def testcheckinearly(self):
+        date = datetime.datetime.now().replace(hour=6)
+        work = TestWorkday(employeeid="lelele",date=date, checkin=None, checkout=None, total=0)
+        work.put()
+        test = TestUser(email="lelele")
+        result = checkin(self, test, date)
+        self.assertEqual(result.text, "You can't check in before 7:30 am")
+
+    def testcheckinlate(self):
+        date = datetime.datetime.now()
+        date = date.replace(hour=10)
+        work = TestWorkday(employeeid="lelele",date=date, checkin=None, checkout=None, total=0)
+        work.put()
+        test = TestUser(email="lelele")
+        result = checkin(self, test, date)
+        self.assertEqual(result.text, "Check in out of time") 
+
+    def testcheckinwithanother(self):
+        date = datetime.datetime.now()
+        date = date.replace(hour=10)
+        work = TestWorkday(employeeid="lelele",date=date, checkin=date, checkout=None, total=0)
+        work.put()
+        test = TestUser(email="lelele")
+        result = checkin(self, test, date)
+        self.assertEqual(result.text, "You can't check in again today")     
+# [END   Check In Tests]
+
+# [START Check Out Tests]
+    def testcheckoutok(self):
+        date = datetime.datetime.now()
+        date = date.replace(hour=15, minute=30)
+        work = TestWorkday(employeeid="lelele",date=date, checkin=date, checkout=None, total=0)
+        work.put()
+        test = TestUser(email="lelele")
+        result = checkout(self, test, date)
+        self.assertEqual(result.text, "Checkout Ok. Have a nice day :)")
+
+    def testcheckoutearly(self):
+        date = datetime.datetime.now().replace(hour=11)
+        work = TestWorkday(employeeid="lelele",date=date, checkin=date, checkout=None, total=0)
+        work.put()
+        test = TestUser(email="lelele")
+        result = checkout(self, test, date)
+        self.assertEqual(result.text, "You checked out too early")
+
+    def testcheckoutlate(self):
+        date = datetime.datetime.now()
+        date = date.replace(hour=20)
+        work = TestWorkday(employeeid="lelele",date=date, checkin=date, checkout=None, total=0)
+        work.put()
+        test = TestUser(email="lelele")
+        result = checkout(self, test, date)
+        self.assertEqual(result.text, "Check out out of time") 
+
+    def testcheckoutwithanother(self):
+        date = datetime.datetime.now()
+        date = date.replace(hour=15)
+        work = TestWorkday(employeeid="lelele",date=date, checkin=date, checkout=date, total=0)
+        work.put()
+        test = TestUser(email="lelele")
+        result = checkout(self, test, date)
+        self.assertEqual(result.text, "You can't check out if you checked out already")     
+# [END   Check Out Tests]
+
 
 
 # [START main]
