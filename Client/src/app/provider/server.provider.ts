@@ -13,7 +13,7 @@ export class ServerProvider {
 
   url: string = this.L;
 
-  logged: boolean = false;
+  logged = false;
 
   public auth2: any;
 
