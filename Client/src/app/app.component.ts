@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ServerProvider } from './provider/server.provider';
-import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { DoCheck } from '@angular/core';
+import { User } from './provider/model';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-root',
@@ -9,18 +11,17 @@ import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 })
 
 
-export class AppComponent {
+export class AppComponent implements DoCheck {
   title_header = 'Time Tracking';
-  is_logged: any = false;
+  is_logged: any;
 
   constructor(private server: ServerProvider) {
-      this.is_logged = this.server.logged;
-      console.log('before: ' + this.is_logged);
+   
   }
 
-  ngAfterViewInit() {
-    /*this.is_logged = this.server.logged;
-    console.log("After logged:" + this.server.logged);*/
+  ngDoCheck(){
+    this.is_logged = this.server.logged;
+    console.log("is logged:" + this.is_logged)
   }
 
 }
