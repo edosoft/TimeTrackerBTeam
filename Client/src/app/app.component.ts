@@ -10,8 +10,8 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements DoCheck {
-  title_header = 'Time Tracking';
-  is_logged: any;
+  titleHeader = 'Time Tracking';
+  isLogged: any;
   currentUser: any;
 
   constructor(private server: ServerProvider) {
@@ -19,7 +19,7 @@ export class AppComponent implements DoCheck {
   }
 
   ngDoCheck() {
-    this.is_logged = this.server.logged;
+    this.isLogged = this.server.logged;
     this.currentUser = this.server.getUser();
   }
 
