@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 import datetime
-
 import endpoints
+
+import login
 
 from google.appengine.ext import ndb
 from protorpc import message_types
@@ -10,22 +11,8 @@ from protorpc import remote
 
 from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
 
+from models import User, Workday
 
-# [START Models]
-class User(ndb.Model):
-    """Model to store an employee's valid login."""
-    email = ndb.StringProperty(indexed=True)
-
-
-class Workday(ndb.Model):
-    """ Model to represent the workday of an employee."""
-    employeeid = ndb.StringProperty()
-    date = ndb.DateProperty(auto_now_add=True)
-    checkin = ndb.DateTimeProperty()
-    checkout = ndb.DateTimeProperty()
-    total = ndb.IntegerProperty()
-
-# [END Models]
 # v1 will be deprecated by Aug-2018, but it can be used for educational purposes
 
 
@@ -37,48 +24,22 @@ class MainPage(remote.Service):
     @endpoints.method(message_types.VoidMessage, WorkdayResponseMessage, path='login',
                       http_method='POST', name='login')
     def login(self, request):
-        '''A function which validates the login. It creates User and Workday entities '''
+        '''A function which validates the login. It creates a new User if it doesn't exist in the DB,
+     and new Workday entities if the valid user hasn't logged in that day. If it's a returning user,
+     this function returns the created Workday, and doesn't create a new User.
+     Needs - User verified by Google.
+     Returns - WorkdayResponseMessage. '''
         user = endpoints.get_current_user()
-
-        if user is None:
-            # Error - Logging without authenticating with Google
-            return WorkdayResponseMessage(text="Error: Invalid Data", response_code=400)
-        else:
-            query = User.query(User.email == user.email()).get()
-            # If the user doesn't exist, it inserts it to the database.
-            if query is None:
-                auth = User(email=user.email())
-                auth.put()
-
-            queryworkday = Workday.query(Workday.employeeid == user.email(),
-                                         Workday.date == datetime.datetime.now()).get()
-
-            if queryworkday is None:
-                # If there is no workday, a new one is created and added to the DB.
-                work = Workday()
-                work.employeeid = user.email()
-                work.checkin = None
-                work.checkout = None
-                work.total = 0
-                work.put()
-
-                # Ok - Creating workday
-                return WorkdayResponseMessage(text="Creating Workday", employeeid=work.employeeid,
-                                              date=str(work.date), checkin=str(work.checkin),
-                                              checkout=str(work.checkout), total=work.total,
-                                              response_code=200)
-            else:
-                work = queryworkday
-                # Ok - Returning existent
-                return WorkdayResponseMessage(text="Returning Workday", employeeid=work.employeeid,
-                                              date=str(work.date), checkin=str(work.checkin),
-                                              checkout=str(work.checkout), total=work.total,
-                                              response_code=200)
+        return login.login(user)      
 
     @endpoints.method(message_types.VoidMessage, CheckinResponseMessage, path='checkin',
                       http_method='POST', name='checkin')
     def checkin(self, request):
-        '''A function which updates the Workday with the check in date'''
+        '''A function which updates the Workday with the check in date. If the check in button
+        is pressed in a valid time, the system updates the Workday entity with the date. If not, 
+        the function returns an error, or raises an Issue if necessary.
+        Needs - A valid date
+        Returns - CheckinResponseMessage'''
         user = endpoints.get_current_user()
 
         querycheckin = Workday.query(Workday.employeeid == user.email(),
@@ -117,7 +78,10 @@ class MainPage(remote.Service):
     @endpoints.method(message_types.VoidMessage, CheckoutResponseMessage,
                       path='checkout', http_method='POST', name='checkout')
     def checkout(self, request):
-        '''A function which updates the Workday with the check out date and the total hours'''
+        '''A function which updates the Workday with the checkout date and the total hours.
+        If the checkout is made in a valid time, the system returns updates the Workday entity
+        with the checkout date and total. If not, the system returns an error or raises an issue 
+        if necessary'''
         user = endpoints.get_current_user()
 
         querycheckout = Workday.query(Workday.employeeid == user.email(),
