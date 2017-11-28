@@ -10,12 +10,12 @@
                         <div *ngIf="checkedin" class="time-check-inout">
                             <p>
                                 <i class="fa fa-sign-in" aria-hidden="true"></i> Hour:</p>
-                            <p>{{currentC.checkin}}</p>
+                            <p>{{currentUser.checkin}}</p>
                         </div>
                         <div *ngIf="checkedout" class="time-check-inout">
                             <p>
                                 <i class="fa fa-sign-out" aria-hidden="true"></i> Hour:</p>
-                            <p>{{currentC.checkout}}</p>
+                            <p>{{currentUser.checkout}}</p>
                         </div>
                     </div>
                 </div>
