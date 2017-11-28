@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ServerProvider } from './provider/server.provider';
 import { DoCheck } from '@angular/core';
 import { User } from './provider/model';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-root',
@@ -10,15 +10,15 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements DoCheck {
-  title_header = 'Time Tracking';
-  is_logged: any;
+  titleHeader = 'Time Tracking';
+  isLogged: any;
 
   constructor(private server: ServerProvider) {
 
   }
 
   ngDoCheck() {
-    this.is_logged = this.server.logged;
+    this.isLogged = this.server.logged;
   }
 
   logOut() {
