@@ -8,7 +8,7 @@
             <div *ngIf="isLogged" class="container-title-welcome-logout">
                 <div class="welcome">
                     <p>Welcome,</p>
-                    <p>{{currentUser.name}}</p>
+                    <p>{{currentUser.name.split(" ", 1)}}</p>
                 </div>
                 <div (click)="logOut" class="logout">
                     <a href="#">Logout</a>
