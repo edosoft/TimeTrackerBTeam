@@ -41,10 +41,6 @@ def checkin(user):
                                               checkin=str(querycheckin.checkin))
     else:
         # Error - Check in after check in
-<<<<<<< Updated upstream
         return CheckinResponseMessage(response_code=400,
                                       checkin=str(querycheckin.checkin),
                                       text="You can't check in again today")
-=======
-        return CheckinResponseMessage(response_code=400, checkin=str(querycheckin.checkin), text="You can't check in again today")
->>>>>>> Stashed changes
