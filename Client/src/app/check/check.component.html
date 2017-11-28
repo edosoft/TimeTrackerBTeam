@@ -27,6 +27,10 @@
                     <strong>You checked in too late!</strong>
                     <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">x</a>
                 </div>
+                <div *ngIf="checkOutMin" class="alert alert-warning alert-dismissable">
+                    <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
+                    <strong>You checked out too early.</strong>
+                  </div>
                 <div class="container-general-check-buttons">
                     <div class="checkbtns">
                         <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="check">Check In</button>

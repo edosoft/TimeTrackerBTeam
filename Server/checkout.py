@@ -22,7 +22,7 @@ def checkout(user):
                                        text="You can't check out without checking in")
     else:
         now = datetime.datetime.now()
-        checkmin = now.replace(hour=13, minute=00, second=0, microsecond=0)
+        checkmin = now.replace(hour=14, minute=00, second=0, microsecond=0)
         checkmax = now.replace(hour=19, minute=00, second=0, microsecond=0)
         checknoon = now.replace(hour=15, minute=00, second=0, microsecond=0)
 
