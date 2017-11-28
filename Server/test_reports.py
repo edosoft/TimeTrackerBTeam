@@ -1,116 +1,128 @@
 #!/usr/bin/env python
 
+from google.appengine.api import memcache
+from google.appengine.ext import ndb
+from google.appengine.ext import testbed
+
 import unittest
+import calendar
 import datetime
-from reports import dataStore, Workday
 
+from messages import WeekReportMessage, WeekResponseMessage
+from models import User, Workday
+def get_report(self, first, last):
+    '''A function which returns the reports of a selected week '''
+    #print(map(lambda x: x.date.isocalendar()[2], q))
+    queryWork = Workday.query(Workday.date >= first, Workday.date < last)
+    if len(queryWork.fetch(2)) < 1:
+        return WeekResponseMessage(response_code=400, text="There are no registers at the selected week")
+    else:
+        queryUser = User.query()
+        result = []
+        for user in queryUser:
+            weekRep = WeekReportMessage()
+            weekRep.email=user.email
+            weekRep.monday = 0
+            weekRep.tuesday = 0
+            weekRep.thursday = 0
+            weekRep.friday = 0
+            weekRep.wednesday = 0
+            query_work_by_employee = queryWork.filter(Workday.employeeid == weekRep.email)
+            for elem in query_work_by_employee:
+                day_emp = elem.date.isocalendar()[2]
+                
+                if day_emp == 1:
+                    weekRep.monday = elem.total
+                elif day_emp == 2:
+                    weekRep.tuesday = elem.total
+                elif day_emp == 3:
+                    weekRep.wednesday = elem.total
+                elif day_emp == 4:
+                    weekRep.thursday = elem.total
+                elif day_emp == 5:
+                    weekRep.friday = elem.total
 
-class TestReport(unittest.TestCase):
-    '''Class to test the different cases of report'''
-    '''
-    Given a HRM trying to access a week where there is no data:
-    The system shows an error: 'There are not registers in the selected week'
-    Given a HRM accessing a valid week with data:
-    The system returns: a list of employees,
-                        their hours per day value
-                        and a total value per week,
-    showing the row with a different color if the weekly limit has not been reached.
-    Also, vacation days have to be shown on in a different way:
-    The weekly limit will change if h/w worked < workdaysx8.
-    Given a HRM accessing a valid week:
-    The system returns the previous weekly report, in order to not show empty data.
-    '''
+            weekRep.total = weekRep.monday + weekRep.tuesday + weekRep.wednesday + weekRep.thursday + weekRep.friday
+            result.append(weekRep)
+
+        return WeekResponseMessage(response_code=200, text="Returning weekly report", reports=result)
+
+# [START datastore_example_test]
+class DatastoreTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.data = dataStore()
-        self.date = datetime.date(2017, 10, 25)
-        self.number = self.date.isocalendar()[1]
-        self.checkin = datetime.datetime(2017, 10, 25, 8, 20)
-        self.checkout = datetime.datetime(2017, 10, 25, 15, 20)
-        self.employee = Workday()
-        self.employee.setCheckin(self.checkin)
-        self.employee.setCheckout(self.checkout)
+        # First, create an instance of the Testbed class.
+        self.testbed = testbed.Testbed()
+        # Then activate the testbed, which prepares the service stubs for use.
+        self.testbed.activate()
+        # Next, declare which service stubs you want to use.
+        self.testbed.init_datastore_v3_stub()
+        self.testbed.init_memcache_stub()
+        # Clear ndb's in-context cache between tests.
+        # This prevents data from leaking between tests.
+        # Alternatively, you could disable caching by
+        # using ndb.get_context().set_cache_policy(False)
+        ndb.get_context().clear_cache()
 
-        self.employee1 = Workday()
-        self.employee1.setEmployee("Juan")
-        self.employee1.setDate(self.date)
-        self.employee1.setCheckin(self.checkin)
-        self.employee1.setCheckout(self.checkout)
+# [END datastore_example_test]
 
-        employee2 = Workday()
-        employee2.setEmployee("Ana")
-        employee2.setDate(datetime.date(2017, 10, 26))
-        employee2.setCheckin(datetime.datetime(2017, 10, 26, 8, 20))
-        employee2.setCheckout(datetime.datetime(2017, 10, 26, 15, 20))
+    # [START datastore_example_teardown]
+    def tearDown(self):
+        self.testbed.deactivate()
+    # [END datastore_example_teardown]
 
-        employee3 = Workday()
-        employee3.setDate(self.date)
-        employee3.setEmployee("Carlos")
-        employee3.setCheckin(self.checkin)
-        employee3.setCheckout(self.checkout)
+# [START Report Tests]
+    def test_get_empty_report(self):
+        first =datetime.date(2017, 1, 1)
+        last = datetime.date(2017, 1, 8)
+        result = get_report(self, first, last)
+        self.assertEqual(result.text, "There are no registers at the selected week")
+        self.assertEqual(type(result), WeekResponseMessage)
 
-        employee4 = Workday()
-        employee4.setEmployee("Juan")
-        employee4.setDate(datetime.date(2017, 10, 26))
-        employee4.setCheckin(datetime.datetime(2017, 10, 26, 8, 20))
-        employee4.setCheckout(datetime.datetime(2017, 10, 26, 15, 20))
+    def test_get_report(self):
+        user1 = User(email="lelele")
+        user1.put()
+        user2 = User(email="alexia")
+        user2.put()
+        date = datetime.datetime.now().replace(day = 5)
+        work = Workday(employeeid="lelele",date=date, checkin=None, checkout=None, total=5)
+        work.put()
+        date = datetime.datetime.now().replace(day = 21)
+        work = Workday(employeeid="lelele",date=date, checkin=None, checkout=None, total=7)
+        work.put()
+        date = datetime.datetime.now().replace(day = 22)
+        work = Workday(employeeid="lelele",date=date, checkin=None, checkout=None, total=7)
+        work.put()
+        date = datetime.datetime.now().replace(day = 23)
+        work = Workday(employeeid="lelele",date=date, checkin=None, checkout=None, total=9)
+        work.put()
 
-        employee5 = Workday()
-        employee5.setEmployee("Juan")
-        employee5.setDate(datetime.date(2017, 10, 27))
-        employee5.setCheckin(datetime.datetime(2017, 10, 27, 8, 20))
-        employee5.setCheckout(datetime.datetime(2017, 10, 27, 15, 20))
+        date = datetime.datetime.now().replace(day = 20)
+        work = Workday(employeeid="alexia",date=date, checkin=None, checkout=None, total=8)
+        work.put()
+        date = datetime.datetime.now().replace(day = 21)
+        work = Workday(employeeid="alexia",date=date, checkin=None, checkout=None, total=8)
+        work.put()
+        date = datetime.datetime.now().replace(day = 22)
+        work = Workday(employeeid="alexia",date=date, checkin=None, checkout=None, total=8)
+        work.put()
+        date = datetime.datetime.now().replace(day = 23)
+        work = Workday(employeeid="alexia",date=date, checkin=None, checkout=None, total=8)
+        work.put()
 
-        self.data.add(self.employee1)
-        self.data.add(employee2)
-        self.data.add(employee3)
-        self.data.add(employee4)
-        self.data.add(employee5)
+        first = datetime.date(2017, 11, 20)
+        last = datetime.date(2017, 11, 26)
 
-    def test_create_workday(self):
-        """Create a workday, add it to the database, test it"""
-        self.assertEqual(self.employee.getTotal(), 7)
+        result = get_report(self, first, last)
+        self.assertEqual(len(User.query().fetch(10)), 2)
+        self.assertEqual(len(result.reports), 2)
+        self.assertEqual(result.reports[0].email, "lelele")
+        self.assertEqual(result.reports[1].email, "alexia")
+        self.assertEqual(result.reports[0].total, 23)
+        self.assertEqual(len(Workday.query().fetch(10)), 8)
+   
+# [END   Report Tests]
 
-    def test_access_workday_in_week(self):
-        """Test getting an object from a certain week identified by number"""
-
-        result = self.data.get_weekly_report(self.number)
-        self.assertEqual(result[0].getId(), "Juan", "No data found")
-        self.assertEqual(result[1].getTotal(), 7, "No data found")
-        self.assertEqual(result[1].getId(), "Ana", "No data found")
-
-    def test_access_data_in_week_error(self):
-        """Testing trying an object from a week, but giving an error"""
-        wrong_number = -15
-        self.assertEqual(self.data.get_weekly_report(wrong_number), "There are not registers in the selected week")
-        # self.assertEqual(result.data.employee, "Ernesto", "No data found")
-
-    def test_get_report_from_employee(self):
-        """Test getting an object from a certain week"""
-        basedate = datetime.date(2017, 10, 25)
-        year_number = basedate.year
-        week_number = basedate.isocalendar()[1]
-
-        result = self.data.get_weekly_data_by_employee("Juan", year_number, week_number)
-        self.assertEqual(result.employeeid, "Juan", "No data found")
-        self.assertEqual(result.wednesday, 7)
-        self.assertEqual(result.total, 21, "No data found")
-
-    def test_insert_duplicate_data(self):
-        employee6 = self.employee1
-
-        self.assertEqual(self.data.add(employee6), "Duplicate workday")
-
-
-'''
-    def test_total_hours_worked_over(self):
-        """Analyzing the weekdays and filtering the vacation ones"""
-        self.assertEqual(emp.validationTotal(), 2)
-
-    def test_total_hours_worked_lesser(self):
-        """Analyzing the weekdays and filtering the vacation ones"""
-        self.assertEqual(emp.validationTotal(), 1)
-'''
 
 if __name__ == '__main__':
     unittest.main()

@@ -86,8 +86,8 @@ if __name__ == '__main__':
         default=os.getcwd())
     parser.add_argument(
         '--test-pattern',
-        help='The file pattern for test modules, defaults to *_test.py.',
-        default='*_test.py')
+        help='The file pattern for test modules, defaults to test_*.py.',
+        default='test_*.py')
 
     args = parser.parse_args()
 
