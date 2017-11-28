@@ -16,6 +16,11 @@ export class CheckComponent implements OnInit {
   checkedIn: boolean;
   checkedOut: boolean;
   date: string;
+  dateCheckin: any;
+  checkHour: any;
+  checkMins: any;
+  soonCheckin= false;
+  lateCheckin = false;
 
   constructor(private server: ServerProvider, private datePipe: DatePipe) { }
 
@@ -30,6 +35,16 @@ export class CheckComponent implements OnInit {
     if (this.currentUser.checkin) {
       this.checkedIn = true;
     }
+    this.dateCheckin = (this.server.getUser().checkin).split(':', 2);
+    this.checkHour = +this.dateCheckin[0];
+    this.checkMins = +this.dateCheckin[1];
+    if (this.checkHour <= 7 && this.checkMins < 30) {
+      this.soonCheckin = true;
+    } else {
+      if (this.checkHour > 9 && this.checkMins > 0) {
+        this.lateCheckin = true;
+      }
+    }
   }
 
   async checkOut() {
@@ -40,5 +55,8 @@ export class CheckComponent implements OnInit {
       this.checkedOut = true;
     }
   }
-
+  close() {
+    this.lateCheckin = false;
+    this.soonCheckin = false;
+  }
 }

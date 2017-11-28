@@ -13,7 +13,7 @@ def checkout(user):
 
     if querycheckout.checkout is not None:
         # Error - Check out after check out
-        return CheckoutResponseMessage(response_code=400,
+        return CheckoutResponseMessage(response_code=400, checkout=str(querycheckout.checkout),
                                        text="You can't check out if you checked out already")
 
     if querycheckout.checkin is None:

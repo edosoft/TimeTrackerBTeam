@@ -73,6 +73,7 @@ export class ServerProvider {
       } else {
         console.log(JSON.stringify(response.result));
         this.user.date = response.result.date;
+        console.log(response.result.checkin);
         this.user.checkin = this.returnDate(response.result.checkin);
         this.user.checkout = this.returnDate(response.result.checkout);
         this.user.id = response.result.employeeid;
@@ -102,6 +103,7 @@ export class ServerProvider {
     return new Promise<boolean>((resolve, reject) => {
       gapi.client.timetrackerApi.checkin().execute((response: any) => {
         if (response.error) {
+          console.log('oasidjf');
           console.log(response.error);
           resolve(false);
         } else {
@@ -137,10 +139,10 @@ export class ServerProvider {
     const d = new Date(date);
 
     if (d.getMinutes() < 10) {
-      return `${d.getHours()} :0 ${d.getMinutes()}`;
+      return `${d.getHours()}:0${d.getMinutes()}`;
     }
 
-    return `${d.getHours()} : ${d.getMinutes()}`;
+    return `${d.getHours()}:${d.getMinutes()}`;
   }
 
 }
