@@ -1,54 +1,53 @@
-from google.appengine.api import memcache
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
 import unittest
-import calendar
 import datetime
 
-from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage, WeekResponseMessage, WeekReportMessage
+from messages import WorkdayResponseMessage
 from models import User, Workday
 # [END imports]
 
+
 def login(self, request, date):
-        '''A function which validates the login. It creates User and Workday entities '''
-        user = request
+    '''A function which validates the login. It creates User and Workday entities '''
+    user = request
 
-        if user is None:
-            # Error - Logging without authenticating with Google
-            return WorkdayResponseMessage(text="Error: Invalid Data", response_code=400)
+    if user is None:
+        # Error - Logging without authenticating with Google
+        return WorkdayResponseMessage(text="Error: Invalid Data", response_code=400)
+    else:
+        query = User.query(User.email == user.email).get()
+        # If the user doesn't exist, it inserts it to the database.
+        if query is None:
+            auth = User(email=user.email)
+            auth.put()
+
+        queryworkday = Workday.query(Workday.employeeid == user.email,
+                                     Workday.date == date).get()
+
+        if queryworkday is None:
+            # If there is no workday, a new one is created and added to the DB.
+            work = Workday()
+            work.employeeid = user.email
+            work.checkin = None
+            work.checkout = None
+            work.total = 0
+            work.put()
+
+            # Ok - Creating workday
+            return WorkdayResponseMessage(text="Creating Workday", employeeid=work.employeeid,
+                                          date=str(work.date), checkin=str(work.checkin),
+                                          checkout=str(work.checkout), total=work.total,
+                                          response_code=200)
         else:
-            query = User.query(User.email == user.email).get()
-            # If the user doesn't exist, it inserts it to the database.
-            if query is None:
-                auth = User(email=user.email)
-                auth.put()
+            work = queryworkday
 
-            queryworkday = Workday.query(Workday.employeeid == user.email,
-                                         Workday.date == date).get()
-
-            if queryworkday is None:
-                # If there is no workday, a new one is created and added to the DB.
-                work = Workday()
-                work.employeeid = user.email
-                work.checkin = None
-                work.checkout = None
-                work.total = 0
-                work.put()
-
-                # Ok - Creating workday
-                return WorkdayResponseMessage(text="Creating Workday", employeeid=work.employeeid,
-                                              date=str(work.date), checkin=str(work.checkin),
-                                              checkout=str(work.checkout), total=work.total,
-                                              response_code=200)
-            else:
-                work = queryworkday
-
-                # Ok - Returning existent
-                return WorkdayResponseMessage(text="Returning Workday", employeeid=work.employeeid,
-                                              date=str(work.date), checkin=str(work.checkin),
-                                              checkout=str(work.checkout), total=work.total,
-                                              response_code=200)
+            # Ok - Returning existent
+            return WorkdayResponseMessage(text="Returning Workday", employeeid=work.employeeid,
+                                          date=str(work.date), checkin=str(work.checkin),
+                                          checkout=str(work.checkout), total=work.total,
+                                          response_code=200)
 
 
 # [START datastore_example_test]
@@ -113,25 +112,8 @@ class DatastoreTestCase(unittest.TestCase):
         result = login(self, User(email="lelele"), date)
         result = login(self, User(email="lelele2"), date)
         self.assertEqual(3, len(User.query().fetch(10)))
-
-    def test_workday_returning_user(self):
-        date = datetime.datetime.now()
-        date = date.replace(hour=7, minute=31)
-        test = User(email="lelele")
-        login(self, test, date)
-        result = login(self, test, date)
-        self.assertEqual(result.text, "Returning Workday")
-        self.assertEqual(len(Workday.query().fetch(2)), 1)
-
-    def test_workday_multiple_user(self):
-        date = datetime.datetime.now()
-        test = User(email="lelele")
-        login(self, test, date)
-        date = date.replace(hour=7, minute=31)
-        result = login(self, test, date)
-        self.assertEqual(result.text, "Returning Workday")
-        self.assertEqual(len(Workday.query().fetch(2)), 1)
 # [END   User Tests]
+
 
 # [START main]
 if __name__ == '__main__':

@@ -73,9 +73,9 @@ class dataStore():
     def formatDataByWeek(self, input):
         result = WeekEmployeeData()
         result.employeeid = input[0].employeeid
+
         for elem in input:
             date = elem.date
-            
             day_emp = calendar.day_name[date.weekday()]
             if day_emp == "Monday":
                 result.setMonday(elem.total)

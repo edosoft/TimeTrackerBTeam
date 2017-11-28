@@ -4,6 +4,7 @@
 from protorpc import messages
 # Protocolo RPC.
 
+
 class WeekReportMessage(messages.Message):
     email = messages.StringField(1)
     monday = messages.IntegerField(2)
@@ -13,11 +14,11 @@ class WeekReportMessage(messages.Message):
     friday = messages.IntegerField(6)
     total = messages.IntegerField(7)
 
+
 class WeekResponseMessage(messages.Message):
     reports = messages.MessageField(WeekReportMessage, 1, repeated=True)
     response_code = messages.IntegerField(2, required=True)
     text = messages.StringField(3, required=True)
-
 
 
 class WorkdayResponseMessage(messages.Message):

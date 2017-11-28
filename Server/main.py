@@ -5,13 +5,12 @@ import endpoints
 
 import login
 
-from google.appengine.ext import ndb
 from protorpc import message_types
 from protorpc import remote
 
 from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
 
-from models import User, Workday
+from models import Workday
 
 # v1 will be deprecated by Aug-2018, but it can be used for educational purposes
 
@@ -25,12 +24,13 @@ class MainPage(remote.Service):
                       http_method='POST', name='login')
     def login(self, request):
         '''A function which validates the login. It creates a new User if it doesn't exist in the DB,
-     and new Workday entities if the valid user hasn't logged in that day. If it's a returning user,
-     this function returns the created Workday, and doesn't create a new User.
-     Needs - User verified by Google.
-     Returns - WorkdayResponseMessage. '''
+        and new Workday entities if the valid user hasn't logged in that day. If it's a returning user,
+        this function returns the created Workday, and doesn't create a new User.
+        Needs - User verified by Google.
+        Returns - WorkdayResponseMessage. '''
+
         user = endpoints.get_current_user()
-        return login.login(user)      
+        return login.login(user)
 
     @endpoints.method(message_types.VoidMessage, CheckinResponseMessage, path='checkin',
                       http_method='POST', name='checkin')
@@ -40,6 +40,7 @@ class MainPage(remote.Service):
         the function returns an error, or raises an Issue if necessary.
         Needs - A valid date
         Returns - CheckinResponseMessage'''
+
         user = endpoints.get_current_user()
 
         querycheckin = Workday.query(Workday.employeeid == user.email(),
@@ -51,6 +52,7 @@ class MainPage(remote.Service):
             checkmin = now.replace(hour=7, minute=30, second=59, microsecond=0)
             checkmax = now.replace(hour=9, minute=00, second=59, microsecond=0)
             checkoutmax = now.replace(hour=19, minute=00, second=0, microsecond=0)
+
             if now < checkmin:
                 # Error - Check in too soon
                 return CheckinResponseMessage(response_code=400,

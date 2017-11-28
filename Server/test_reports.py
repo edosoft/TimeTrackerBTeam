@@ -2,7 +2,6 @@
 
 import unittest
 import datetime
-import calendar
 from reports import dataStore, Workday
 
 
@@ -106,12 +105,10 @@ class TestReport(unittest.TestCase):
 '''
     def test_total_hours_worked_over(self):
         """Analyzing the weekdays and filtering the vacation ones"""
-        
         self.assertEqual(emp.validationTotal(), 2)
 
     def test_total_hours_worked_lesser(self):
         """Analyzing the weekdays and filtering the vacation ones"""
-        
         self.assertEqual(emp.validationTotal(), 1)
 '''
 

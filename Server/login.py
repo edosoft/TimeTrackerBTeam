@@ -2,6 +2,8 @@ import datetime
 
 from messages import WorkdayResponseMessage
 from models import User, Workday
+
+
 def login(user):
     '''A function which validates the login. It creates a new User if it doesn't exist in the DB,
      and new Workday entities if the valid user hasn't logged in that day. If it's a returning user,
@@ -43,4 +45,3 @@ def login(user):
                                           date=str(work.date), checkin=str(work.checkin),
                                           checkout=str(work.checkout), total=work.total,
                                           response_code=200)
-                                          
