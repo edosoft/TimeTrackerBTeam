@@ -1,7 +1,8 @@
 import datetime
 
 from messages import CheckinResponseMessage
-from models import User, Workday
+from models import Workday
+
 
 def checkin(user):
     '''A function which updates the Workday with the check in date. If the check in button
@@ -11,7 +12,7 @@ def checkin(user):
     Returns - CheckinResponseMessage'''
 
     querycheckin = Workday.query(Workday.employeeid == user.email(),
-                                     Workday.date == datetime.datetime.now()).get()
+                                 Workday.date == datetime.datetime.now()).get()
 
     # querycheckin has the Workday of the employee in the proper day.
     if querycheckin.checkin is None:

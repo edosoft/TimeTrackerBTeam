@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import datetime
 import endpoints
 
 import login
@@ -11,8 +10,6 @@ from protorpc import message_types
 from protorpc import remote
 
 from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
-
-from models import Workday
 
 # v1 will be deprecated by Aug-2018, but it can be used for educational purposes
 

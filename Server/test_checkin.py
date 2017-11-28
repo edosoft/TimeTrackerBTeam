@@ -1,13 +1,12 @@
-from google.appengine.api import memcache
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
 import unittest
-import calendar
 import datetime
 
 from messages import CheckinResponseMessage
 from models import User, Workday
+
 
 def checkin(self, request, date):
     '''A function which updates the Workday with the check in date'''
@@ -42,6 +41,7 @@ def checkin(self, request, date):
         # Error - Check in after check in
         return CheckinResponseMessage(response_code=400, text="You can't check in again today")
 
+
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
 
@@ -70,7 +70,7 @@ class DatastoreTestCase(unittest.TestCase):
     def testcheckinok(self):
         date = datetime.datetime.now()
         date = date.replace(hour=8, minute=30)
-        work = Workday(employeeid="lelele",date=date, checkin=None, checkout=None, total=0)
+        work = Workday(employeeid="lelele", date=date, checkin=None, checkout=None, total=0)
         work.put()
         test = User(email="lelele")
         result = checkin(self, test, date)
@@ -78,7 +78,7 @@ class DatastoreTestCase(unittest.TestCase):
 
     def testcheckinearly(self):
         date = datetime.datetime.now().replace(hour=6)
-        work = Workday(employeeid="lelele",date=date, checkin=None, checkout=None, total=0)
+        work = Workday(employeeid="lelele", date=date, checkin=None, checkout=None, total=0)
         work.put()
         test = User(email="lelele")
         result = checkin(self, test, date)
@@ -87,21 +87,22 @@ class DatastoreTestCase(unittest.TestCase):
     def testcheckinlate(self):
         date = datetime.datetime.now()
         date = date.replace(hour=10)
-        work = Workday(employeeid="lelele",date=date, checkin=None, checkout=None, total=0)
+        work = Workday(employeeid="lelele", date=date, checkin=None, checkout=None, total=0)
         work.put()
         test = User(email="lelele")
         result = checkin(self, test, date)
-        self.assertEqual(result.text, "Check in out of time") 
+        self.assertEqual(result.text, "Check in out of time")
 
     def testcheckinwithanother(self):
         date = datetime.datetime.now()
         date = date.replace(hour=10)
-        work = Workday(employeeid="lelele",date=date, checkin=date, checkout=None, total=0)
+        work = Workday(employeeid="lelele", date=date, checkin=date, checkout=None, total=0)
         work.put()
         test = User(email="lelele")
         result = checkin(self, test, date)
-        self.assertEqual(result.text, "You can't check in again today")     
+        self.assertEqual(result.text, "You can't check in again today")
 # [END   Check In Tests]
+
 
 # [START main]
 if __name__ == '__main__':

@@ -1,7 +1,8 @@
 import datetime
 
 from messages import CheckoutResponseMessage
-from models import User, Workday
+from models import Workday
+
 
 def checkout(user):
     '''A function which updates the Workday with the checkout date and the total hours.
@@ -9,7 +10,7 @@ def checkout(user):
     with the checkout date and total. If not, the system returns an error or raises an issue 
     if necessary'''
     querycheckout = Workday.query(Workday.employeeid == user.email(),
-                                      Workday.date == datetime.datetime.now()).get()
+                                  Workday.date == datetime.datetime.now()).get()
 
     if querycheckout.checkout is not None:
         # Error - Check out after check out

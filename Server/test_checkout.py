@@ -1,16 +1,15 @@
-from google.appengine.api import memcache
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
 import unittest
-import calendar
 import datetime
 
 from messages import CheckoutResponseMessage
 from models import User, Workday
 
+
 def checkout(self, request, date):
-        #A function which updates the Workday with the check out date and the total hours
+        # A function which updates the Workday with the check out date and the total hours
         user = request
 
         querycheckout = Workday.query(Workday.employeeid == user.email,
@@ -60,6 +59,7 @@ def checkout(self, request, date):
                                                    checkout=str(querycheckout.checkout),
                                                    total=querycheckout.total)
 
+
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
 
@@ -89,7 +89,7 @@ class DatastoreTestCase(unittest.TestCase):
     def testcheckoutok(self):
         date = datetime.datetime.now()
         date = date.replace(hour=15, minute=30)
-        work = Workday(employeeid="lelele",date=date, checkin=date, checkout=None, total=0)
+        work = Workday(employeeid="lelele", date=date, checkin=date, checkout=None, total=0)
         work.put()
         test = User(email="lelele")
         result = checkout(self, test, date)
@@ -97,7 +97,7 @@ class DatastoreTestCase(unittest.TestCase):
 
     def testcheckoutearly(self):
         date = datetime.datetime.now().replace(hour=11)
-        work = Workday(employeeid="lelele",date=date, checkin=date, checkout=None, total=0)
+        work = Workday(employeeid="lelele", date=date, checkin=date, checkout=None, total=0)
         work.put()
         test = User(email="lelele")
         result = checkout(self, test, date)
@@ -106,21 +106,22 @@ class DatastoreTestCase(unittest.TestCase):
     def testcheckoutlate(self):
         date = datetime.datetime.now()
         date = date.replace(hour=20)
-        work = Workday(employeeid="lelele",date=date, checkin=date, checkout=None, total=0)
+        work = Workday(employeeid="lelele", date=date, checkin=date, checkout=None, total=0)
         work.put()
         test = User(email="lelele")
         result = checkout(self, test, date)
-        self.assertEqual(result.text, "Check out out of time") 
+        self.assertEqual(result.text, "Check out out of time")
 
     def testcheckoutwithanother(self):
         date = datetime.datetime.now()
         date = date.replace(hour=15)
-        work = Workday(employeeid="lelele",date=date, checkin=date, checkout=date, total=0)
+        work = Workday(employeeid="lelele", date=date, checkin=date, checkout=date, total=0)
         work.put()
         test = User(email="lelele")
         result = checkout(self, test, date)
-        self.assertEqual(result.text, "You can't check out if you checked out already")     
+        self.assertEqual(result.text, "You can't check out if you checked out already")
 # [END   Check Out Tests]
+
 
 # [START main]
 if __name__ == '__main__':

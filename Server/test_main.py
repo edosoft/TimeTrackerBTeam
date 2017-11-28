@@ -15,19 +15,13 @@
 # limitations under the License.
 
 # [START imports]
-from google.appengine.api import memcache
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
 import unittest
-import calendar
-import datetime
 
-from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage, WeekResponseMessage, WeekReportMessage
-from models import User, Workday
+from models import User
 # [END imports]
-
-
 
 
 # [START datastore_example_test]
@@ -64,6 +58,7 @@ class DatastoreTestCase(unittest.TestCase):
         test.put()
         self.assertEqual("lelele", User.query().get().email)
     # [END datastore_example_insert]
+
 
 # [START main]
 if __name__ == '__main__':
