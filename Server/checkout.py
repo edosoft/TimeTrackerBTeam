@@ -14,7 +14,7 @@ def checkout(user):
 
     if querycheckout.checkout is not None:
         # Error - Check out after check out
-        return CheckoutResponseMessage(response_code=400,
+        return CheckoutResponseMessage(response_code=400, checkout=str(querycheckout.checkout),
                                        text="You can't check out if you checked out already")
 
     if querycheckout.checkin is None:
@@ -23,7 +23,7 @@ def checkout(user):
                                        text="You can't check out without checking in")
     else:
         now = datetime.datetime.now()
-        checkmin = now.replace(hour=13, minute=00, second=0, microsecond=0)
+        checkmin = now.replace(hour=14, minute=00, second=0, microsecond=0)
         checkmax = now.replace(hour=19, minute=00, second=0, microsecond=0)
         checknoon = now.replace(hour=15, minute=00, second=0, microsecond=0)
 

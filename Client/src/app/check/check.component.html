@@ -19,10 +19,22 @@
                         </div>
                     </div>
                 </div>
+                <div *ngIf="soonCheckin" class="alert alert-danger">
+                    <strong>You can't check in, its too early!</strong>
+                    <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">x</a>
+                </div>
+                <div *ngIf="lateCheckin" class="alert alert-danger">
+                    <strong>You checked in too late!</strong>
+                    <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">x</a>
+                </div>
+                <div *ngIf="checkOutMin" class="alert alert-warning alert-dismissable">
+                    <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
+                    <strong>You checked out too early.</strong>
+                  </div>
                 <div class="container-general-check-buttons">
                     <div class="checkbtns">
-                        <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg btn-success" [disabled]="check">Check In</button>
-                        <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg btn-warning" [disabled]="!check">Check Out</button>
+                        <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="check">Check In</button>
+                        <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="!check">Check Out</button>
                     </div>
                 </div>
             </div>

@@ -42,4 +42,6 @@ def checkin(user):
                                               checkin=str(querycheckin.checkin))
     else:
         # Error - Check in after check in
-        return CheckinResponseMessage(response_code=400, text="You can't check in again today")
+        return CheckinResponseMessage(response_code=400,
+                                      checkin=str(querycheckin.checkin),
+                                      text="You can't check in again today")
