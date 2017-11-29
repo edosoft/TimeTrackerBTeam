@@ -7,34 +7,34 @@
                 </div>
                 <div class="list-log">
                     <div class="content-list-log">
-                        <div *ngIf="checkedIn" class="time-check-inout">
+                        <div *ngIf="checkedIn != 'None'" class="time-check-inout">
                             <p>
                                 <i class="fa fa-sign-in" aria-hidden="true"></i> Hour:</p>
-                            <p>{{currentUser.checkin}}</p>
+                            <p>{{checkedIn}}</p>
                         </div>
-                        <div *ngIf="checkedOut" class="time-check-inout">
+                        <div *ngIf="checkedOut != 'None'" class="time-check-inout">
                             <p>
                                 <i class="fa fa-sign-out" aria-hidden="true"></i> Hour:</p>
-                            <p>{{currentUser.checkout}}</p>
+                            <p>{{checkedOut}}</p>
                         </div>
                     </div>
                 </div>
                 <div *ngIf="soonCheckin" class="alert alert-danger">
                     <strong>You can't check in, its too early!</strong>
-                    <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">x</a>
+                    <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
                 </div>
                 <div *ngIf="lateCheckin" class="alert alert-danger">
                     <strong>You checked in too late!</strong>
-                    <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">x</a>
+                    <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
                 </div>
                 <div *ngIf="checkOutMin" class="alert alert-warning alert-dismissable">
-                    <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
+                    <a class="close" data-dismiss="alert" aria-label="close" (click)="closeOut()">×</a>
                     <strong>You checked out too early.</strong>
                   </div>
                 <div class="container-general-check-buttons">
                     <div class="checkbtns">
-                        <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="check">Check In</button>
-                        <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="!check">Check Out</button>
+                        <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="checkedIn != 'None'">Check In</button>
+                        <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="checkedOut != 'None' || checkedIn == 'None'">Check Out</button>
                     </div>
                 </div>
             </div>
