@@ -15,7 +15,6 @@ export class AppComponent implements DoCheck {
   currentUser: any;
 
   constructor(private server: ServerProvider) {
-
   }
 
   ngDoCheck() {
