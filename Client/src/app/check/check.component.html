@@ -19,21 +19,21 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="soonCheckin" class="alert alert-danger">
+                <div *ngIf="soonCheckin" class="alert alert-danger alert-dismissable">
+                    <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
                     <strong>You can't check in, its too early!</strong>
-                    <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
                 </div>
-                <div *ngIf="lateCheckin" class="alert alert-danger">
-                    <strong>You checked in too late!</strong>
+                <div *ngIf="lateCheckin" class="alert alert-danger alert-dismissable">
                     <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
+                    <strong>You checked in too late!</strong>
                 </div>
                 <div *ngIf="checkOutMin" class="alert alert-warning alert-dismissable">
                     <a class="close" data-dismiss="alert" aria-label="close" (click)="closeOut()">×</a>
                     <strong>You checked out too early.</strong>
-                  </div>
+                </div>
                 <div class="container-general-check-buttons">
                     <div class="checkbtns">
-                        <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="checkedIn != 'None'">Check In</button>
+                        <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="checkedIn != 'None' || checkinOutofRange">Check In</button>
                         <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="checkedOut != 'None' || checkedIn == 'None'">Check Out</button>
                     </div>
                 </div>

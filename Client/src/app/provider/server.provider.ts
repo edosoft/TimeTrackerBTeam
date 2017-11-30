@@ -48,11 +48,11 @@ export class ServerProvider {
     this.auth2.attachClickHandler(element, {},
       (googleUser) => {
         const profile = googleUser.getBasicProfile();
-        console.log('Token: ' + googleUser.getAuthResponse().id_token);
-        console.log('ID: ' + profile.getId());
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail());
+        // console.log('Token: ' + googleUser.getAuthResponse().id_token);
+        // console.log('ID: ' + profile.getId());
+        // console.log('Name: ' + profile.getName());
+        // console.log('Image URL: ' + profile.getImageUrl());
+        // console.log('Email: ' + profile.getEmail());
 
         // YOUR CODE HERE
         this.user = new User();
@@ -68,18 +68,18 @@ export class ServerProvider {
   // Check that user exists in datastore
   logIn() {
     gapi.client.timetrackerApi.login().execute((response: any) => {
-      if (response.error) {
-        console.log(response.error);
+      if (response.result.response_code === '400') {
+        console.log(response.response_code);
       } else {
-        console.log(JSON.stringify(response.result));
+        // console.log(JSON.stringify(response.result));
         this.user.date = response.result.date;
-        console.log(response.result.checkin);
+        // console.log(response.result.checkin);
         this.user.checkin = this.returnDate(response.result.checkin);
         this.user.checkout = this.returnDate(response.result.checkout);
         this.user.id = response.result.employeeid;
         this.user.total = response.result.total;
         this.logged = true;
-        console.log('server logged:' + this.logged);
+        // console.log('server logged:' + this.logged);
         this.zone.run(() => {
           this.router.navigate(['/check']);
         });
@@ -102,9 +102,8 @@ export class ServerProvider {
   checkIn() {
     return new Promise<boolean>((resolve, reject) => {
       gapi.client.timetrackerApi.checkin().execute((response: any) => {
-        if (response.error) {
-          console.log('oasidjf');
-          console.log(response.error);
+        if (response.result.response_code === '400') {
+          this.user.checkin = 'None';
           resolve(false);
         } else {
           console.log(JSON.stringify(response.result));
@@ -118,9 +117,9 @@ export class ServerProvider {
   checkOut() {
     return new Promise<boolean>((resolve, reject) => {
       gapi.client.timetrackerApi.checkout().execute((response: any) => {
-        if (response.error) {
-          console.log(response.error);
-          resolve(true);
+        if (response.result.response_code === '400') {
+          this.user.checkout = 'None';
+          resolve(false);
         } else {
           console.log(JSON.stringify(response.result));
           this.user.checkout = this.returnDate(response.result.checkout);

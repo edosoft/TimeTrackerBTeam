@@ -24,12 +24,21 @@ export class CheckComponent implements OnInit {
   dateCheck: string;
   dateCheckInt: number;
   checkOutMin: boolean;
+  actualHour: any;
+  checkinOutofRange: boolean;
+  actualMinute: any;
 
   constructor(private server: ServerProvider, private datePipe: DatePipe) {
   }
   ngOnInit() {
     this.date = this.datePipe.transform(new Date(), 'EEEE, MMMM d, y');
     this.currentUser = this.server.getUser();
+    this.actualHour = +(this.datePipe.transform(new Date(), 'HH'));
+    this.actualMinute = +(this.datePipe.transform(new Date(), 'mm'));
+    console.log(this.actualHour, this.actualMinute);
+    if (this.actualHour <= 7 && this.actualMinute < 30 || (this.actualHour >= 19)) {
+      this.checkinOutofRange = true;
+    }
     this.checkedIn = this.server.getUser().checkin;
     this.checkedOut = this.server.getUser().checkout;
   }
@@ -44,7 +53,7 @@ export class CheckComponent implements OnInit {
     if (this.checkHour <= 7 && this.checkMins < 30) {
       this.soonCheckin = true;
     } else {
-      if (this.checkHour > 9 && this.checkMins > 0) {
+      if (this.checkHour >= 10) {
         this.lateCheckin = true;
       }
     }
@@ -53,8 +62,8 @@ export class CheckComponent implements OnInit {
   async checkOut() {
     this.check = await this.server.checkOut();
     this.checkedOut = this.server.getUser().checkout;
-    this.dateCheckInt = +this.checkedOut.split(":", 1).join(); //Coge las cifras de horas y las convierte en numero
-    if(this.dateCheckInt < 14){
+    this.dateCheckInt = +this.checkedOut.split(':', 1).join(); // Coge las cifras de horas y las convierte en numero
+    if (this.dateCheckInt < 14) {
       this.checkOutMin = true;
     }
   }
@@ -63,6 +72,6 @@ export class CheckComponent implements OnInit {
     this.soonCheckin = false;
   }
   closeOut() {
-    this.checkOutMin=false;
+    this.checkOutMin = false;
   }
 }
