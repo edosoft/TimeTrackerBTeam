@@ -1,0 +1,7 @@
+cron:
+- description: "automatic checkout"
+  url: /_ah/api/timetrackerApi/v1/autocheckout
+  schedule: every mon, tue, wed, thu 19:00
+- description: "automatic checkout on fridays"
+  url: /_ah/api/timetrackerApi/v1/autocheckout
+  schedule: every friday 15:00

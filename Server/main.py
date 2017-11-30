@@ -6,6 +6,8 @@ import login
 import checkin
 import checkout
 
+from tasks import automatic_checkout_helper
+
 from protorpc import message_types
 from protorpc import remote
 
@@ -35,7 +37,7 @@ class MainPage(remote.Service):
                       http_method='POST', name='checkin')
     def checkin(self, request):
         '''A function which updates the Workday with the check in date. If the check in button
-        is pressed in a valid time, the system updates the Workday entity with the date. If not, 
+        is pressed in a valid time, the system updates the Workday entity with the date. If not,
         the function returns an error, or raises an Issue if necessary.
         Needs - A valid date
         Returns - CheckinResponseMessage'''
@@ -48,10 +50,17 @@ class MainPage(remote.Service):
     def checkout(self, request):
         '''A function which updates the Workday with the checkout date and the total hours.
         If the checkout is made in a valid time, the system returns updates the Workday entity
-        with the checkout date and total. If not, the system returns an error or raises an issue 
+        with the checkout date and total. If not, the system returns an error or raises an issue
         if necessary'''
         user = endpoints.get_current_user()
         return checkout.checkout(user)
+
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='autocheckout', http_method='GET', name='autocheckout')
+    def automatic_checkout(self, request):
+        """ Helper for the cron task to close all pending checkouts """
+        automatic_checkout_helper()
+        return message_types.VoidMessage()
 
 
 app = endpoints.api_server([MainPage], restricted=False)
