@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CheckComponent } from '../check/check.component';
 import { LoginComponent } from '../login/login.component';
+import { ReportsComponent } from '../reports/reports.component';
 
 const appRoutes: Routes = [{
   path: '',
@@ -9,6 +10,9 @@ const appRoutes: Routes = [{
 }, {
   path: 'check',
   component: CheckComponent
+}, {
+  path: 'report',
+  component: ReportsComponent
 }, {
   path: '**',
   redirectTo: ''

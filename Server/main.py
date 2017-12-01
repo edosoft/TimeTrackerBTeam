@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 import endpoints
-
+import datetime
 import login
 import checkin
 import checkout
+import reports
 
 from tasks import automatic_checkout_helper
 
@@ -12,6 +13,9 @@ from protorpc import message_types
 from protorpc import remote
 
 from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
+from messages import RequestReport, ReportMessage, ReportResponseMessage
+
+from models import User, Workday
 
 # v1 will be deprecated by Aug-2018, but it can be used for educational purposes
 
@@ -61,6 +65,36 @@ class MainPage(remote.Service):
         """ Helper for the cron task to close all pending checkouts """
         automatic_checkout_helper()
         return message_types.VoidMessage()
+    @endpoints.method(RequestReport, ReportResponseMessage,
+                      path='report', http_method='POST', name='report')
+    def report(self, request):
+        '''A function which updates the Workday with the checkout date and the total hours.
+        If the checkout is made in a valid time, the system returns updates the Workday entity
+        with the checkout date and total. If not, the system returns an error or raises an issue 
+        if necessary'''
+        #user = endpoints.get_current_user()
+
+        return reports.get_report(request.date, request.ismonthly)
+
+
+    @endpoints.method(message_types.VoidMessage, CheckinResponseMessage,
+                      path='create', http_method='POST', name='create')
+    def create(self, request):
+        '''An auxiliar function which creates mock users'''
+        #user = endpoints.get_current_user()
+        auth = User(email="hrm@edosoft.es")
+        auth.put()
+        for day in range(1, 10):
+            if day != 4 and day != 5:
+                work = Workday()
+                work.employeeid = "hrm@edosoft.es"
+                work.date = datetime.date(2017, 11, day)
+                work.checkin = datetime.datetime(2017, 11, day, 7, 31)
+                work.checkout = datetime.datetime(2017, 11, day, 15, 2)
+                work.total = 7
+                work.put()
+        return CheckinResponseMessage(response_code=200,
+                                      text="Mock workdays created")
 
 
 app = endpoints.api_server([MainPage], restricted=False)

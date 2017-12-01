@@ -19,7 +19,7 @@ export class ServerProvider {
   url: string = this.L;
 
   logged = false;
-
+  ismonthly: string;
   public auth2: any;
 
   public user: User;
@@ -73,7 +73,7 @@ export class ServerProvider {
       } else {
         // console.log(JSON.stringify(response.result));
         this.user.date = response.result.date;
-        // console.log(response.result.checkin);
+        //console.log(response.result.checkin);
         this.user.checkin = this.returnDate(response.result.checkin);
         this.user.checkout = this.returnDate(response.result.checkout);
         this.user.id = response.result.employeeid;
@@ -87,7 +87,45 @@ export class ServerProvider {
     });
   }
 
+  returnToCheck(){
+    this.zone.run(() => {
+      this.router.navigate(['/check']);
+    });
+  }
 
+  report(ismonthly){
+/*
+    gapi.client.timetrackerApi.create().execute((response: any) => {
+      if (response.error) {
+        console.log(response.error);
+      } else {
+        console.log(JSON.stringify(response.result));
+      }
+    });
+*/
+    this.ismonthly = ismonthly;
+    this.zone.run(() => {
+      this.router.navigate(['/report']);
+    });
+  }
+
+  getReport(body){
+    return new Promise<any>((resolve) => {
+      var content = {
+        date: body.date,
+        ismonthly: body.ismonthly
+    };
+      gapi.client.timetrackerApi.report(content).execute((response: any) => {
+        if (response.error) {
+          console.log(response.error);
+          resolve(response.result);
+        } else {
+          //console.log(response.result);
+          resolve(response.result);
+        }
+      });
+    });
+  }
 
   logOut() {
     this.logged = false;

@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { CheckComponent } from './check/check.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { ReportsComponent } from './reports/reports.component';
 
 
 
@@ -16,7 +17,8 @@ import { NavigationComponent } from './navigation/navigation.component';
     AppComponent,
     LoginComponent,
     CheckComponent,
-    NavigationComponent
+    NavigationComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,8 @@
 from google.appengine.ext import ndb
 
 
+#TODO: Insert User into Workday.
+
 # [START Models]
 class User(ndb.Model):
     """Model to store an employee's valid login."""
