@@ -11,17 +11,17 @@ import { Observable } from 'rxjs/Observable';
 })
 export class AppComponent implements DoCheck, OnInit {
   isLogged: any;
-  currentUser: any;
+  currentUserWorkday: any;
 
-  constructor(private server: ServerProvider) {
-  }
+  constructor(private server: ServerProvider) {}
+
   ngOnInit() {
-    this.currentUser = this.server.getUser();
+    this.currentUserWorkday = this.server.getUserWorkday();
   }
 
   ngDoCheck() {
     this.isLogged = this.server.logged;
-    this.currentUser = this.server.getUser();
+    this.currentUserWorkday = this.server.getUserWorkday();
   }
 
   logOut() {

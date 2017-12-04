@@ -12,5 +12,10 @@ indexes:
 
 - kind: Workday
   properties:
+  - name: employee.email
+  - name: date
+
+- kind: Workday
+  properties:
   - name: employeeid
   - name: date

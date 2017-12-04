@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -22,10 +22,10 @@ export class ServerProvider {
   reportType: number;
   public auth2: any;
 
-  public user: User;
+  public userWorkday: User;
 
-  getUser() {
-    return this.user;
+  getUserWorkday() {
+    return this.userWorkday;
   }
 
   public googleInit() {
@@ -48,38 +48,28 @@ export class ServerProvider {
     this.auth2.attachClickHandler(element, {},
       (googleUser) => {
         const profile = googleUser.getBasicProfile();
-        // console.log('Token: ' + googleUser.getAuthResponse().id_token);
-        // console.log('ID: ' + profile.getId());
-        // console.log('Name: ' + profile.getName());
-        // console.log('Image URL: ' + profile.getImageUrl());
-        // console.log('Email: ' + profile.getEmail());
 
-        // YOUR CODE HERE
-        this.user = new User();
-        this.user.name = profile.getName();
+        this.userWorkday = new User();
+        this.userWorkday.name = profile.getName();
         this.logIn();
-
       }, (error) => {
         alert(JSON.stringify(error, undefined, 2));
       });
-
   }
 
-  // Check that user exists in datastore
+  // Check that userWorkday exists in datastore
   logIn() {
     gapi.client.timetrackerApi.login().execute((response: any) => {
       if (response.result.response_code === '400') {
         console.log(response.response_code);
       } else {
-        // console.log(JSON.stringify(response.result));
-        this.user.date = response.result.date;
-        //console.log(response.result.checkin);
-        this.user.checkin = this.returnDate(response.result.checkin);
-        this.user.checkout = this.returnDate(response.result.checkout);
-        this.user.id = response.result.employeeid;
-        this.user.total = response.result.total;
+        this.userWorkday.date = response.result.date;
+        this.userWorkday.checkin = this.returnDate(response.result.checkin);
+        this.userWorkday.checkout = this.returnDate(response.result.checkout);
+        this.userWorkday.id = response.result.employeeid;
+        this.userWorkday.total = response.result.total;
         this.logged = true;
-        // console.log('server logged:' + this.logged);
+
         this.zone.run(() => {
           this.router.navigate(['/check']);
         });
@@ -87,7 +77,7 @@ export class ServerProvider {
     });
   }
 
-  returnToCheck(){
+  returnToCheck() {
     this.zone.run(() => {
       this.router.navigate(['/check']);
     });
@@ -107,9 +97,10 @@ export class ServerProvider {
     });
   }
 
-  getReport(body){
+  getReport(body) {
     return new Promise<any>((resolve) => {
-      var content = {
+
+      const content = {
         date: body.date,
         report_type: body.report_type
     };
@@ -118,7 +109,6 @@ export class ServerProvider {
           console.log(response.error);
           resolve(response.result);
         } else {
-          //console.log(response.result);
           resolve(response.result);
         }
       });
@@ -139,11 +129,11 @@ export class ServerProvider {
     return new Promise<boolean>((resolve, reject) => {
       gapi.client.timetrackerApi.checkin().execute((response: any) => {
         if (response.result.response_code === '400') {
-          this.user.checkin = 'None';
+          this.userWorkday.checkin = 'None';
           resolve(false);
         } else {
           console.log(JSON.stringify(response.result));
-          this.user.checkin = this.returnDate(response.result.checkin);
+          this.userWorkday.checkin = this.returnDate(response.result.checkin);
           resolve(true);
         }
       });
@@ -154,14 +144,22 @@ export class ServerProvider {
     return new Promise<boolean>((resolve, reject) => {
       gapi.client.timetrackerApi.checkout().execute((response: any) => {
         if (response.result.response_code === '400') {
-          this.user.checkout = 'None';
+          this.userWorkday.checkout = 'None';
           resolve(false);
         } else {
           console.log(JSON.stringify(response.result));
-          this.user.checkout = this.returnDate(response.result.checkout);
-          this.user.total = response.result.total;
+          this.userWorkday.checkout = this.returnDate(response.result.checkout);
+          this.userWorkday.total = response.result.total;
           resolve(false);
         }
+      });
+    });
+  }
+
+  getWeekTotal() {
+    return new Promise<boolean>((resolve, reject) => {
+      gapi.client.timetrackerApi.weektotal().execute((response: any) => {
+        console.log(response);
       });
     });
   }

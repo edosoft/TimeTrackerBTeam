@@ -1,10 +1,12 @@
 @import '~sass/variables';
 @import '~sass/mixins';
+
 .list-log-checks {
     margin-top: 200px;
     background-color: #fff;
     border-radius: 3px;
     box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
+
     .title-date {
         padding: 15px;
         background-color: $color_1;
@@ -14,19 +16,24 @@
             color: #fff;
         }
     }
+
     .list-log {
         padding: 15px;
+
         .content-list-log {
             @include display-flex();
             @include align-items(center);
             @include justify-content(space-between);
+
             .time-check-inout {
                 width: 50%;
                 display: flex;
                 justify-content: center;
+
                 p {
                     margin: 0px;
                     font-size: 21px;
+
                     i{
                         margin-right: 5px;
                     }
@@ -34,12 +41,16 @@
             }
         }
     }
+
     .container-general-check-buttons {
         padding: 15px;
+
         .checkbtns {
             display: flex;
+
             button {
                 width: 50%;
+
                 &:first-child {
                     margin-right: 15px;
                 }
@@ -47,9 +58,11 @@
         }
     }
 }
+
 button:disabled {
     opacity: 0.2;
 }
+
 .flexhour{
     display: flex;
     flex-wrap: wrap;

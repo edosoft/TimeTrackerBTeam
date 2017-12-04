@@ -5,12 +5,16 @@ from messages import ReportMessage, ReportResponseMessage, WorkdayMessage
 from models import User, Workday
 
 def get_report(date, report_type=None):
-    '''A function which returns the reports of a selected date. It returns the user, 
+    """
+    A function which returns the reports of a selected date. It returns the user, 
     total hours per day and total hours in the range. 
     Needs - The date and last day to check
-    Returns - ResponseMessage, an array of ReportMessages '''
-    #print(map(lambda x: x.date.isocalendar()[2], q))
-    #AQUI
+    Returns - ResponseMessage, an array of ReportMessages
+    """
+
+    # print(map(lambda x: x.date.isocalendar()[2], q))
+    # AQUI
+
     first_date = datetime.strptime(date, "%Y-%m-%d").date()
     cal = calendar.monthrange(first_date.year, first_date.month)
     if report_type == 1:
@@ -24,25 +28,31 @@ def get_report(date, report_type=None):
 
     if len(requested_workdays.fetch(10)) < 1:
         return ReportResponseMessage(response_code=400, text="There are no records in the selected date")
+
     else:
         all_users = User.query()
         result = []
+
         for user in all_users:
-            report_employee = ReportMessage()
+            employee_report = ReportMessage()
             total_hours_per_employee = []
-            report_employee.email = user.email
+            employee_report.email = user.email
             workdays_by_employee = requested_workdays.filter(
-                Workday.employeeid == report_employee.email).order(+Workday.date)
+                Workday.employee.email == employee_report.email).order(+Workday.date)
+
             for elem in workdays_by_employee:
-                date_workday = str(elem.date);
-                day_week = elem.date.isocalendar()[2]
-                report_employee.workday.append(WorkdayMessage(date = date_workday, day_week = day_week, total = elem.total))
+                workday_date = str(elem.date)
+                day_of_week = elem.date.isocalendar()[2]
+                employee_report.workday.append(WorkdayMessage(date=workday_date,
+                                                              day_of_week=day_of_week,
+                                                              total=elem.total))
                 total_hours_per_employee.append(elem.total)
 
             if report_type == 1:
                 report_employee.total_days_worked = len(workdays_by_employee.fetch())
 
-            report_employee.total = sum(total_hours_per_employee)
             if len(workdays_by_employee.fetch()):
-                result.append(report_employee)
-        return ReportResponseMessage(response_code=200, text="Returning report", reports=result, month = cal[1])
+                result.append(employee_report)
+
+        return ReportResponseMessage(response_code=200, text="Returning report",
+                                     reports=result, month=cal[1])

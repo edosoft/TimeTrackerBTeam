@@ -16,6 +16,6 @@ export class Report {
 
 export class Workday {
   date: string;
-  day_week: number;
+  day_of_week: number;
   total: any;
 }

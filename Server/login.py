@@ -4,44 +4,47 @@ from messages import WorkdayResponseMessage
 from models import User, Workday
 
 
-def login(user):
-    '''A function which validates the login. It creates a new User if it doesn't exist in the DB,
-     and new Workday entities if the valid user hasn't logged in that day. If it's a returning user,
-     this function returns the created Workday.
-     Needs - User verified by Google.
-     Returns - WorkdayResponseMessage. '''
+def log_in(user):
+    """
+    A function which validates the login. It creates a new User if it doesn't exist in the DB,
+    and new Workday entities if the valid user hasn't logged in that day. If it's a returning user,
+    this function returns the created Workday.
+    Needs - User verified by Google.
+    Returns - WorkdayResponseMessage.
+    """
 
+    # Error - Logging without authenticating with Google
     if user is None:
-        # Error - Logging without authenticating with Google
         return WorkdayResponseMessage(text="Error: Invalid Data", response_code=400)
+
     else:
-        query = User.query(User.email == user.email()).get()
+        user_query = User.query(User.email == user.email()).get()
+
         # If the user doesn't exist, it inserts it to the database.
-        if query is None:
+        if user_query is None:
             auth = User(email=user.email())
             auth.put()
 
-        queryworkday = Workday.query(Workday.employeeid == user.email(),
-                                     Workday.date == datetime.datetime.now()).get()
+        workday_query = Workday.query(Workday.employee == User(email=user.email()),
+                                      Workday.date == datetime.datetime.now()).get()
 
-        if queryworkday is None:
-            # If there is no workday, a new one is created and added to the DB.
+        # If there is no workday, a new one is created and added to the DB.
+        if workday_query is None:
             work = Workday()
-            work.employeeid = user.email()
+            work.employee = User(email=user.email())
             work.checkin = None
             work.checkout = None
             work.total = 0
             work.put()
-
-            # Ok - Creating workday
-            return WorkdayResponseMessage(text="Creating Workday", employeeid=work.employeeid,
+            return WorkdayResponseMessage(text="Creating Workday", employee=work.employee.email,
                                           date=str(work.date), checkin=str(work.checkin),
                                           checkout=str(work.checkout), total=work.total,
                                           response_code=200)
+
+        # Ok - Returning existent
         else:
-            work = queryworkday
-            # Ok - Returning existent
-            return WorkdayResponseMessage(text="Returning Workday", employeeid=work.employeeid,
+            work = workday_query
+            return WorkdayResponseMessage(text="Returning Workday", employee=work.employee.email,
                                           date=str(work.date), checkin=str(work.checkin),
                                           checkout=str(work.checkout), total=work.total,
                                           response_code=200)

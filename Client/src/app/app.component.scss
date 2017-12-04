@@ -1,16 +1,20 @@
 @import '~sass/variables';
 @import '~sass/mixins';
+
 header {
     background-color: #6C7A89;
     .navbar {
+
         .container-header {
             @include display-flex();
             @include align-items(center);
             @include justify-content(space-between);
             padding: 0px 15px;
+
             .logo-title-app {
                 @include display-flex();
                 @include align-items(center);
+
                 img {
                     width: 100%;
                     max-width: 60px;
@@ -28,21 +32,26 @@ header {
                     }
                 }
             }
+
             .container-title-welcome-logout {
                 @include display-flex();
                 @include align-items(center);
+
                 .welcome {
                     @include display-flex();
                     margin-right: 20px;
+                    
                     p {
                         margin: 0px;
                         color: #fff;
                         font-size: 19px;
+                        
                         &:first-child {
                             margin-right: 5px;
                         }
                     }
                 }
+
                 .logout {
                     a {
                         background-color: $color_0;
@@ -79,8 +88,8 @@ header {
 .container-general {
     margin: 100px 0px;
     height: 100vh;
+
     @media (min-width: 768px) {
         margin: 0px 0px 0px -15px;
-
     }
 }

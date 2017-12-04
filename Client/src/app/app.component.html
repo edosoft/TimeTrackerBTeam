@@ -26,7 +26,7 @@
                 </div>
                 <div class="welcome">
                     <p>Welcome,</p>
-                    <p>{{currentUser.name.split(" ", 1)}}</p>
+                    <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
                 </div>
                 <div (click)="logOut" class="logout">
                     <a href="#">Logout</a>
@@ -34,12 +34,20 @@
             </div>
         </div>
     </div>
+
+    <div *ngIf="isLogged" class="container-title-welcome-logout">
+      <div class="welcome">
+        <p>Welcome,</p>
+        <p>{{currentUser.name.split(" ", 1)}}</p>
+      </div>
+      <div (click)="logOut" class="logout">
+        <a href="#">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
 </header>
 
 <div class="container-fluid container-general">
-
-    <div>
-        <router-outlet></router-outlet>
-    </div>
-
+  <router-outlet></router-outlet>
 </div>

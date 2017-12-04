@@ -6,10 +6,10 @@ from models import Workday
 def automatic_checkout_helper():
 
     # Returns today's workdays
-    queryWorkday = Workday.query(Workday.date == datetime.date.today()).fetch()
+    workday_query = Workday.query(Workday.date == datetime.date.today()).fetch()
 
     # Updates checkout for each workday
-    for workday in queryWorkday:
+    for workday in workday_query:
         if workday.checkin is not None and workday.checkout is None:
             workday.checkout = datetime.datetime.now()
             workday.put()
