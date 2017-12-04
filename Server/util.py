@@ -1,24 +1,28 @@
 from functools import reduce
 from models import Workday, User
-import datetime
+from datetime import timedelta, datetime
 from messages import WeekTotalMessage, CheckinResponseMessage
 
 
 def get_week_total(user):
-    current_week = datetime.datetime.now().isocalendar()[1]
+
+    first_date = datetime.now()
+
+    start_date = first_date - timedelta(days=first_date.weekday())
+    end_date = start_date + timedelta(days=6)
 
     # Query to return all workdays in a week by user
-    query_week = Workday.query(Workday.employeeid == user.email(),
-                               Workday.date.isocalendar()[1] == current_week).fetch()
+    requested_workdays = Workday.query(Workday.date >= start_date, Workday.date <= end_date)
 
     # From the list of workdays, get another list with each total
-    week_hours = list(map((lambda day: day.total), query_week))
+    week_hours = list(map((lambda day: day.total), requested_workdays))
     # Sums each daily total in the list to calc the week total
     week_total = reduce((lambda day_total, week_total: week_total + day_total), week_hours)
 
     return WeekTotalMessage(response_code=200,
-                            user=user.email,
+                            user=user.email(),
                             hours=week_total)
+
 
 def create_mock_user():
     # user = endpoints.get_current_user()
@@ -39,7 +43,7 @@ def create_mock_user():
                 work.put()
 
         return CheckinResponseMessage(response_code=200,
-                                        text="Mock workdays created")
+                                      text="Mock workdays created")
 
     return CheckinResponseMessage(response_code=200,
-                                    text="Mock workdays returned")
+                                  text="Mock workdays returned")
