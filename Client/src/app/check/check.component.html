@@ -6,16 +6,12 @@
                     <h2>{{date}}</h2>
                 </div>
                 <div class="list-log">
-                    <div class="content-list-log">
+                    <div class="content-list-log flexhour">
                         <div *ngIf="checkedIn != 'None'" class="time-check-inout">
-                            <p>
-                                <i class="fa fa-sign-in" aria-hidden="true"></i> Hour:</p>
-                            <p>{{checkedIn}}</p>
+                            <p><i class="fa fa-sign-in" aria-hidden="true"></i>{{checkedIn}}</p>
                         </div>
                         <div *ngIf="checkedOut != 'None'" class="time-check-inout">
-                            <p>
-                                <i class="fa fa-sign-out" aria-hidden="true"></i> Hour:</p>
-                            <p>{{checkedOut}}</p>
+                            <p><i class="fa fa-sign-out" aria-hidden="true"></i>{{checkedOut}}</p>
                         </div>
                     </div>
                 </div>

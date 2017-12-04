@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ServerProvider } from './provider/server.provider';
 import { DoCheck } from '@angular/core';
 import { User } from './provider/model';
@@ -9,12 +9,14 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements DoCheck {
-  titleHeader = 'Time Tracking';
+export class AppComponent implements DoCheck, OnInit {
   isLogged: any;
   currentUser: any;
 
   constructor(private server: ServerProvider) {
+  }
+  ngOnInit() {
+    this.currentUser = this.server.getUser();
   }
 
   ngDoCheck() {

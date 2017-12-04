@@ -27,7 +27,7 @@
                 p {
                     margin: 0px;
                     font-size: 21px;
-                    &:first-child {
+                    i{
                         margin-right: 5px;
                     }
                 }
@@ -49,4 +49,8 @@
 }
 button:disabled {
     opacity: 0.2;
+}
+.flexhour{
+    display: flex;
+    flex-wrap: wrap;
 }

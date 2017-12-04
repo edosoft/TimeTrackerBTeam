@@ -35,12 +35,11 @@ export class CheckComponent implements OnInit {
     this.currentUser = this.server.getUser();
     this.actualHour = +(this.datePipe.transform(new Date(), 'HH'));
     this.actualMinute = +(this.datePipe.transform(new Date(), 'mm'));
-    console.log(this.actualHour, this.actualMinute);
     if (this.actualHour <= 7 && this.actualMinute < 30 || (this.actualHour >= 19)) {
       this.checkinOutofRange = true;
     }
-    this.checkedIn = this.server.getUser().checkin;
-    this.checkedOut = this.server.getUser().checkout;
+    this.checkedIn = this.currentUser.checkin;
+    this.checkedOut = this.currentUser.checkout;
   }
 
   async checkIn() {
