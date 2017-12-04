@@ -3,7 +3,6 @@
   <!-- TODO: Insert maxDate, so you can't pick future dates-->
   <input [(ngModel)]="selectedDate" [value]="selectedDate" type="date" id="dateInput" max="todayDate" required/>
   <button (click)="getReport()" type="button" class="btn btn-primary btn-success">{{buttonTitle}}</button>
-  <button (click)="returnToCheck()" type="button" class="btn btn-primary btn-lg">Return to Check View</button>
   <blockquote *ngIf="noRecordsFound">{{noRecordsFound}}</blockquote>
 </div>
 
@@ -20,7 +19,7 @@
   </thead>
   <tbody>
       <tr *ngFor="let report of results">
-          <td>{{report.email}}</td>
+          <td>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
           <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
           <td >{{report.total}}</td>
           <td *ngFor="let num of report.workday">

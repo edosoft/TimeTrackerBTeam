@@ -1,41 +1,29 @@
 <header>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-header">
-            <div class="logo-title-app">
-                <img src="../assets/images/stopwatch.png" title="time tracker" alt="time tracker">
-            </div>
-            <div *ngIf="!isLogged" class="title-app">
-                <h2> Time Tracking Application</h2>
-            </div>
-            <div *ngIf="isLogged" class="container-title-welcome-logout">
-                <div class= "navbar2">
-                    <ul class="nav">
-                        <li class="nav-item">
-                            <button class="nav-link" (click)="returnToCheck()">Check</button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="nav-link" (click)="weeklyReport()">Weekly report</button>
-                        </li>
-                        <li class="nav-item">
-                            <button class="nav-link" (click)="monthlyReport()">Monthly report</button>
-                        </li>
-                        <!-- <li class="nav-item">
-                            <button class="nav-link" href="#">Issues</button>
-                        </li> -->
-                    </ul>
-                </div>
-                <div class="welcome">
-                    <p>Welcome,</p>
-                    <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
-                </div>
-                <div (click)="logOut" class="logout">
-                    <a href="#">Logout</a>
-                </div>
-            </div>
-        </div>
+  <div class="navbar navbar-fixed-top">
+    <div class="container-header">
+      <img src="../assets/images/stopwatch.png" title="time tracker" alt="White Watch">
+      <div *ngIf="!isLogged" class="title-app">
+        <h2>
+          Time Tracking Application
+        </h2>
+      </div>
+      <div *ngIf="isLogged" class="container-title-welcome-logout">
+          <ul class="nav">
+            <li class="nav-item"><button class="nav-link" (click)="returnToCheck()">Check</button></li>
+            <li class="nav-item"><button class="nav-link" (click)="weeklyReport()">Weekly Report</button></li>
+            <li class="nav-item"><button class="nav-link" (click)="monthlyReport()">Monthly Report</button></li>
+          </ul>
+      </div>
     </div>
+    <div *ngIf="isLogged" class="welcome">
+      <p>Welcome, </p>
+      <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
+      <div (click)="logOut" class="logout">
+        <a href="#">Log Out</a>
+      </div>
+    </div>
+  </div>
 </header>
-
 <div class="container-fluid container-general">
   <router-outlet></router-outlet>
 </div>
