@@ -9,9 +9,7 @@ import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 })
 export class LoginComponent implements AfterViewInit {
 
-  constructor(private server: ServerProvider) {
-
-  }
+  constructor(private server: ServerProvider) {}
 
   ngAfterViewInit() {
     this.server.googleInit();

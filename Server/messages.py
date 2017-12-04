@@ -1,19 +1,18 @@
 #!/usr/bin/env python
 
-
 from protorpc import messages
-from protorpc import message_types
-# Protocolo RPC.
+
 
 class WorkdayMessage (messages.Message):
     date = messages.StringField(1)
-    day_week = messages.IntegerField(2)
+    day_of_week = messages.IntegerField(2)
     total = messages.IntegerField(3)
 
 
 class RequestReport(messages.Message):
     date = messages.StringField(1, required=True)
-    ismonthly = messages.StringField(2)
+    isMonthly = messages.StringField(2)
+
 
 class ReportMessage(messages.Message):
     email = messages.StringField(1)
@@ -28,6 +27,7 @@ class ReportResponseMessage(messages.Message):
     text = messages.StringField(3, required=True)
     month = messages.IntegerField(4, required=False)
 
+
 class WorkdayResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
     employee = messages.StringField(3)
@@ -37,13 +37,21 @@ class WorkdayResponseMessage(messages.Message):
     total = messages.IntegerField(7)
     text = messages.StringField(1)
 
+
 class CheckinResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
     text = messages.StringField(1)
     checkin = messages.StringField(3)
+
 
 class CheckoutResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
     text = messages.StringField(1)
     checkout = messages.StringField(3)
     total = messages.IntegerField(4)
+
+
+class WeekTotalMessage(messages.Message):
+    response_code = messages.IntegerField(2)
+    user = messages.StringField(1)
+    hours = messages.StringField(3)

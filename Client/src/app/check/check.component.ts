@@ -11,73 +11,86 @@ import { DatePipe } from '@angular/common';
 })
 export class CheckComponent implements OnInit {
 
-  check = false;
-  currentUser: any;
-  checkedIn: string;
-  checkedOut: string;
+  currentUserWorkday: any;
+  checkInTime: string;
+  checkOutTime: string;
   date: string;
-  dateCheckin: any;
-  checkHour: any;
-  checkMins: any;
-  soonCheckin= false;
-  lateCheckin = false;
-  dateCheck: string;
-  dateCheckInt: number;
-  checkOutMin: boolean;
-  actualHour: any;
-  checkinOutofRange: boolean;
-  actualMinute: any;
 
-  constructor(private server: ServerProvider, private datePipe: DatePipe) {
-  }
+  checkInClock: any;
+  checkInHour: any;
+  checkInMinutes: any;
+  checkInSoon = false;
+  checkInLate = false;
+
+  checkOutHour: number;
+  checkOutSoon: boolean;
+  currentHour: any;
+  currentMinutes: any;
+  checkInOutofRange: boolean;
+
+  constructor(private server: ServerProvider, private datePipe: DatePipe) {}
+
   ngOnInit() {
     this.date = this.datePipe.transform(new Date(), 'EEEE, MMMM d, y');
-    this.currentUser = this.server.getUser();
-    this.actualHour = +(this.datePipe.transform(new Date(), 'HH'));
-    this.actualMinute = +(this.datePipe.transform(new Date(), 'mm'));
-    if (this.actualHour <= 7 && this.actualMinute < 30 || (this.actualHour >= 19)) {
-      this.checkinOutofRange = true;
+    this.currentUserWorkday = this.server.getUserWorkday();
+    this.currentHour = +(this.datePipe.transform(new Date(), 'HH'));
+    this.currentMinutes = +(this.datePipe.transform(new Date(), 'mm'));
+
+    if (this.currentHour <= 7 && this.currentMinutes < 30 || (this.currentHour >= 19)) {
+      this.checkInOutofRange = true;
     }
-    this.checkedIn = this.currentUser.checkin;
-    this.checkedOut = this.currentUser.checkout;
+
+    this.checkInTime = this.currentUserWorkday.checkin;
+    this.checkOutTime = this.currentUserWorkday.checkout;
   }
 
   async checkIn() {
-    this.check = await this.server.checkIn();
-    console.log(`check: ${this.check}`);
-    this.checkedIn = this.server.getUser().checkin;
-    this.dateCheckin = (this.checkedIn).split(':', 2);
-    this.checkHour = +this.dateCheckin[0];
-    this.checkMins = +this.dateCheckin[1];
-    if (this.checkHour <= 7 && this.checkMins < 30) {
-      this.soonCheckin = true;
+    await this.server.checkIn();
+
+    this.checkInTime = this.server.getUserWorkday().checkin;
+    this.checkInClock = (this.checkInTime).split(':', 2);
+    this.checkInHour = +this.checkInClock[0];
+    this.checkInMinutes = +this.checkInClock[1];
+
+    if (this.checkInHour <= 7 && this.checkInMinutes < 30) {
+      this.checkInSoon = true;
     } else {
-      if (this.checkHour >= 9) {
-        this.lateCheckin = true;
+      if (this.checkInHour >= 9) {
+        this.checkInLate = true;
       }
     }
   }
 
   async checkOut() {
-    this.check = await this.server.checkOut();
-    this.checkedOut = this.server.getUser().checkout;
-    this.dateCheckInt = +this.checkedOut.split(':', 1).join(); // Coge las cifras de horas y las convierte en numero
-    if (this.dateCheckInt < 14) {
-      this.checkOutMin = true;
+    await this.server.checkOut();
+
+    this.checkOutTime = this.server.getUserWorkday().checkout;
+    // Coge las cifras de horas y las convierte en numero
+    this.checkOutHour = +this.checkOutTime.split(':', 1).join();
+
+    if (this.checkOutHour < 14) {
+      this.checkOutSoon = true;
     }
   }
-  closeIn() {
-    this.lateCheckin = false;
-    this.soonCheckin = false;
-  }
-  closeOut() {
-    this.checkOutMin = false;
-  }
-  weeklyReport(){
-    this.server.report("No");
+
+  async getWeekTotal() {
+    await this.server.getWeekTotal();
   }
 
-  monthlyReport(){
-    this.server.report("True");
+  closeIn() {
+    this.checkInLate = false;
+    this.checkInSoon = false;
+  }
+
+  closeOut() {
+    this.checkOutSoon = false;
+  }
+
+  weeklyReport() {
+    this.server.report('No');
+  }
+
+  monthlyReport() {
+    this.server.report('True');
   }
 }

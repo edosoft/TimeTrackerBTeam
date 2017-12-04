@@ -1,26 +1,23 @@
 <header>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-header">
-            <div class="logo-title-app">
-                <img src="../assets/images/time-tracker-logo.png" title="time tracker" alt="time tracker">
-            </div>
-            <div *ngIf="isLogged" class="container-title-welcome-logout">
-                <div class="welcome">
-                    <p>Welcome,</p>
-                    <p>{{currentUser.name.split(" ", 1)}}</p>
-                </div>
-                <div (click)="logOut" class="logout">
-                    <a href="#">Logout</a>
-                </div>
-            </div>
-        </div>
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-header">
+    <div class="logo-title-app">
+      <img src="../assets/images/time-tracker-logo.png" title="time tracker" alt="time tracker">
     </div>
+
+    <div *ngIf="isLogged" class="container-title-welcome-logout">
+      <div class="welcome">
+        <p>Welcome,</p>
+        <p>{{currentUser.name.split(" ", 1)}}</p>
+      </div>
+      <div (click)="logOut" class="logout">
+        <a href="#">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
 </header>
 
 <div class="container-fluid container-general">
-
-    <div>
-        <router-outlet></router-outlet>
-    </div>
-
+  <router-outlet></router-outlet>
 </div>

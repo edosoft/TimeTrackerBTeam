@@ -8,7 +8,7 @@ from messages import CheckoutResponseMessage
 from models import User, Workday
 
 
-def checkout(self, request, date):
+def check_out(self, request, date):
         # A function which updates the Workday with the check out date and the total hours
         user = request
 
@@ -100,7 +100,6 @@ class DatastoreTestCase(unittest.TestCase):
         test = User(email="lelele")
         work = Workday(employee=test, date=date, checkin=date, checkout=None, total=0)
         work.put()
-        
         result = checkout(self, test, date)
         self.assertEqual(result.text, "You checked out too early")
 

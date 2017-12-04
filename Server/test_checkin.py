@@ -8,10 +8,12 @@ from messages import CheckinResponseMessage
 from models import User, Workday
 
 
-def checkin(self, request, date):
-    '''A function which updates the Workday with the check in date'''
-    user = request
+def check_in(self, request, date):
+    """
+    A function which updates the Workday with the check in date
+    """
 
+    user = request
     querycheckin = Workday.query(Workday.employee.email == user.email,
                                  Workday.date == date).get()
 
@@ -71,7 +73,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = datetime.datetime.now()
         date = date.replace(hour=8, minute=30)
         user = User(email="lelele")
-        work = Workday(employee= user, date=date, checkin=None, checkout=None, total=0)
+        work = Workday(employee=user, date=date, checkin=None, checkout=None, total=0)
         work.put()
         test = User(email="lelele")
         result = checkin(self, test, date)
@@ -80,7 +82,7 @@ class DatastoreTestCase(unittest.TestCase):
     def testcheckinearly(self):
         test = User(email="lelele")
         date = datetime.datetime.now().replace(hour=6)
-        work = Workday(employee= test, date=date, checkin=None, checkout=None, total=0)
+        work = Workday(employee=test, date=date, checkin=None, checkout=None, total=0)
         work.put()
         result = checkin(self, test, date)
         self.assertEqual(result.text, "You can't check in before 7:30 am")
@@ -91,7 +93,6 @@ class DatastoreTestCase(unittest.TestCase):
         date = date.replace(hour=10)
         work = Workday(employee=test, date=date, checkin=None, checkout=None, total=0)
         work.put()
-        
         result = checkin(self, test, date)
         self.assertEqual(result.text, "Check in out of time")
 

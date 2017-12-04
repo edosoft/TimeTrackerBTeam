@@ -1,42 +1,49 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="list-log-checks">
-                <div class="title-date">
-                    <h2>{{date}}</h2>
-                </div>
-                <div class="list-log">
-                    <div class="content-list-log flexhour">
-                        <div *ngIf="checkedIn != 'None'" class="time-check-inout">
-                            <p><i class="fa fa-sign-in" aria-hidden="true"></i>{{checkedIn}}</p>
-                        </div>
-                        <div *ngIf="checkedOut != 'None'" class="time-check-inout">
-                            <p><i class="fa fa-sign-out" aria-hidden="true"></i>{{checkedOut}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div *ngIf="soonCheckin" class="alert alert-danger alert-dismissable">
-                    <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
-                    <strong>You can't check in, its too early!</strong>
-                </div>
-                <div *ngIf="lateCheckin" class="alert alert-danger alert-dismissable">
-                    <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
-                    <strong>You checked in too late!</strong>
-                </div>
-                <div *ngIf="checkOutMin" class="alert alert-warning alert-dismissable">
-                    <a class="close" data-dismiss="alert" aria-label="close" (click)="closeOut()">×</a>
-                    <strong>You checked out too early.</strong>
-                </div>
-                <div class="container-general-check-buttons">
-                    <div class="checkbtns">
-                        <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="checkedIn != 'None' || checkinOutofRange">Check In</button>
-                        <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="checkedOut != 'None' || checkedIn == 'None'">Check Out</button>
-                    </div>
-                </div>
-                <button (click)="weeklyReport()" type="button" class="btn btn-primary ">Weekly Report</button>
-                <button (click)="monthlyReport()" type="button" class="btn btn-primary ">Monthly Report</button> 
-            
-            </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="list-log-checks">
+
+        <div class="title-date">
+          <h2>{{date}}</h2>
         </div>
+        
+        <div class="list-log">
+          <div class="content-list-log flexhour">
+            <div *ngIf="checkInTime != 'None'" class="time-check-inout">
+              <p><i class="fa fa-sign-in" aria-hidden="true"></i>{{checkInTime}}</p>
+            </div>
+            <div *ngIf="checkOutTime != 'None'" class="time-check-inout">
+              <p><i class="fa fa-sign-out" aria-hidden="true"></i>{{checkOutTime}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="checkInSoon" class="alert alert-danger alert-dismissable">
+          <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
+          <strong>You can't check in, its too early!</strong>
+        </div>
+
+        <div *ngIf="checkInLate" class="alert alert-danger alert-dismissable">
+          <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
+          <strong>You checked in too late!</strong>
+        </div>
+
+        <div *ngIf="checkOutSoon" class="alert alert-warning alert-dismissable">
+          <a class="close" data-dismiss="alert" aria-label="close" (click)="closeOut()">×</a>
+          <strong>You checked out too early.</strong>
+        </div>
+
+        <div class="container-general-check-buttons">
+          <div class="checkbtns">
+            <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="checkInTime != 'None' || checkInOutofRange">Check In</button>
+            <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="checkOutTime != 'None' || checkInTime == 'None'">Check Out</button>
+          </div>
+        </div>
+
+        <button (click)="weeklyReport()" type="button" class="btn btn-primary ">Weekly Report</button>
+        <button (click)="monthlyReport()" type="button" class="btn btn-primary ">Monthly Report</button>
+        <button (click)="getWeekTotal()" type="button" class="btn btn-primary ">Week Total</button> 
+      </div>
     </div>
+  </div>
 </div>

@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 
 from messages import ReportMessage, ReportResponseMessage, WorkdayMessage
 from models import User, Workday
+
+
 def get_report(date, isMonthly=None):
     '''A function which returns the reports of a selected date. It returns the user, 
     total hours per day and total hours in the range. 
@@ -40,8 +42,9 @@ def get_report(date, isMonthly=None):
                 Workday.employee.email == report_employee.email).order(+Workday.date)
             for elem in workdays_by_employee:
                 date_workday = str(elem.date);
-                day_week = elem.date.isocalendar()[2]
-                report_employee.workday.append(WorkdayMessage(date = date_workday, day_week = day_week, total = elem.total))
+                day_of_week = elem.date.isocalendar()[2]
+                report_employee.workday.append(WorkdayMessage(date=date_workday, day_of_week=day_of_week,
+                                                              total=elem.total))
                 total_hours_per_employee.append(elem.total)
 
             if isMonthly == "True":

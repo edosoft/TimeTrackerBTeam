@@ -10,23 +10,26 @@ from models import User, Workday
 
 
 def login(self, request, date):
-    '''A function which validates the login. It creates User and Workday entities '''
+    """
+    A function which validates the login. It creates User and Workday entities
+    """
+
     user = request
 
     if user is None:
         # Error - Logging without authenticating with Google
         return WorkdayResponseMessage(text="Error: Invalid Data", response_code=400)
     else:
-        query = User.query(User.email == user.email).get()
+        user_query = User.query(User.email == user.email).get()
         # If the user doesn't exist, it inserts it to the database.
-        if query is None:
+        if user_query is None:
             auth = User(email=user.email)
             auth.put()
 
-        queryworkday = Workday.query(Workday.employee.email == user.email,
-                                     Workday.date == date).get()
+        workday_query = Workday.query(Workday.employee.email == user.email,
+                                      Workday.date == date).get()
 
-        if queryworkday is None:
+        if workday_query is None:
             # If there is no workday, a new one is created and added to the DB.
             work = Workday()
             work.employee = User(email=user.email)
@@ -41,7 +44,7 @@ def login(self, request, date):
                                           checkout=str(work.checkout), total=work.total,
                                           response_code=200)
         else:
-            work = queryworkday
+            work = workday_query
 
             # Ok - Returning existent
             return WorkdayResponseMessage(text="Returning Workday", employee=work.employee.email,
