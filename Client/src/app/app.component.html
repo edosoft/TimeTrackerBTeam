@@ -2,9 +2,28 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-header">
             <div class="logo-title-app">
-                <img src="../assets/images/time-tracker-logo.png" title="time tracker" alt="time tracker">
+                <img src="../assets/images/stopwatch.png" title="time tracker" alt="time tracker">
+            </div>
+            <div *ngIf="!isLogged" class="title-app">
+                <h2> Time Tracking Application</h2>
             </div>
             <div *ngIf="isLogged" class="container-title-welcome-logout">
+                <div class= "navbar2">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <button class="nav-link" (click)="returnToCheck()">Check</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" (click)="weeklyReport()">Weekly report</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" (click)="monthlyReport()">Monthly report</button>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <button class="nav-link" href="#">Issues</button>
+                        </li> -->
+                    </ul>
+                </div>
                 <div class="welcome">
                     <p>Welcome,</p>
                     <p>{{currentUser.name.split(" ", 1)}}</p>

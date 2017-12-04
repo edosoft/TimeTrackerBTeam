@@ -1,7 +1,7 @@
 @import '~sass/variables';
 @import '~sass/mixins';
 header {
-    background-color: #000;
+    background-color: #6C7A89;
     .navbar {
         .container-header {
             @include display-flex();
@@ -17,10 +17,12 @@ header {
                     margin-right: 15px;
                     padding: 5px 0px;
                 }
-                h1 {
+            }
+            .title-app{
+                h2 {
                     color: #fff;
                     margin: 0px;
-                    font-size: 30px;
+                    font-size: 15px;
                     @media (min-width: 768px) {
                         font-size: 36px;
                     }
@@ -49,6 +51,24 @@ header {
                         border-radius: 2px;
                         text-decoration: none;
                         font-size: 16px;
+                    }
+                }
+                .navbar2{
+                    .nav{
+                        .nav-item{
+                            .nav-link{
+                                color: #fff;
+                                background: none;
+                                border: none;
+                                &:hover{
+                                    cursor: pointer;
+                                }
+                                &:focus{
+                                    font-weight: 1000;
+                                    outline: none;
+                                }
+                            }
+                        }
                     }
                 }
             }

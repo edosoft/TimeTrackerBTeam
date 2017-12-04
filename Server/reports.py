@@ -4,7 +4,7 @@ import calendar
 from messages import ReportMessage, ReportResponseMessage, WorkdayMessage
 from models import User, Workday
 
-def get_report(date, isMonthly=None):
+def get_report(date, report_type=None):
     '''A function which returns the reports of a selected date. It returns the user, 
     total hours per day and total hours in the range. 
     Needs - The date and last day to check
@@ -13,7 +13,7 @@ def get_report(date, isMonthly=None):
     #AQUI
     first_date = datetime.strptime(date, "%Y-%m-%d").date()
     cal = calendar.monthrange(first_date.year, first_date.month)
-    if isMonthly == "True":
+    if report_type == 1:
         start_date = first_date.replace(day=1)
         end_date = first_date.replace(day=cal[1])
     else:
@@ -39,7 +39,7 @@ def get_report(date, isMonthly=None):
                 report_employee.workday.append(WorkdayMessage(date = date_workday, day_week = day_week, total = elem.total))
                 total_hours_per_employee.append(elem.total)
 
-            if isMonthly == "True":
+            if report_type == 1:
                 report_employee.total_days_worked = len(workdays_by_employee.fetch())
 
             report_employee.total = sum(total_hours_per_employee)

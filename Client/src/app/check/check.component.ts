@@ -73,11 +73,4 @@ export class CheckComponent implements OnInit {
   closeOut() {
     this.checkOutMin = false;
   }
-  weeklyReport(){
-    this.server.report("No");
-  }
-
-  monthlyReport(){
-    this.server.report("True");
-  }
 }

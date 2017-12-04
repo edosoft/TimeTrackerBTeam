@@ -19,7 +19,7 @@ export class ServerProvider {
   url: string = this.L;
 
   logged = false;
-  ismonthly: string;
+  reportType: number;
   public auth2: any;
 
   public user: User;
@@ -93,19 +93,17 @@ export class ServerProvider {
     });
   }
 
-  report(ismonthly){
-/*
-    gapi.client.timetrackerApi.create().execute((response: any) => {
-      if (response.error) {
-        console.log(response.error);
-      } else {
-        console.log(JSON.stringify(response.result));
-      }
-    });
-*/
-    this.ismonthly = ismonthly;
+  weeklyReport(){
+    this.reportType = 0;
     this.zone.run(() => {
-      this.router.navigate(['/report']);
+      this.router.navigate(['/weeklyreport']);
+    });
+  }
+
+  monthlyReport(){
+    this.reportType = 1;
+    this.zone.run(() => {
+      this.router.navigate(['/monthlyreport']);
     });
   }
 
@@ -113,7 +111,7 @@ export class ServerProvider {
     return new Promise<any>((resolve) => {
       var content = {
         date: body.date,
-        ismonthly: body.ismonthly
+        report_type: body.report_type
     };
       gapi.client.timetrackerApi.report(content).execute((response: any) => {
         if (response.error) {

@@ -11,7 +11,10 @@ const appRoutes: Routes = [{
   path: 'check',
   component: CheckComponent
 }, {
-  path: 'report',
+  path: 'weeklyreport',
+  component: ReportsComponent
+}, {
+  path: 'monthlyreport',
   component: ReportsComponent
 }, {
   path: '**',

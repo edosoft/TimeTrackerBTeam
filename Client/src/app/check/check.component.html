@@ -32,11 +32,6 @@
                         <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="checkedIn != 'None' || checkinOutofRange">Check In</button>
                         <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="checkedOut != 'None' || checkedIn == 'None'">Check Out</button>
                     </div>
-                </div>
-                <button (click)="weeklyReport()" type="button" class="btn btn-primary ">Weekly Report</button>
-                <button (click)="monthlyReport()" type="button" class="btn btn-primary ">Monthly Report</button> 
-            
-            </div>
         </div>
     </div>
 </div>

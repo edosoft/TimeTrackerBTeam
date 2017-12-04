@@ -10,7 +10,7 @@ import { Report, Workday } from '../provider/model';
 })
 export class ReportsComponent{
   arrayResults: Report[];
-  ismonthly: string;
+  reportType: number;
   selectedDate: string;
   titleButton;
   arrayDays: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
@@ -19,12 +19,12 @@ export class ReportsComponent{
   todayDate: string;
   constructor(private server: ServerProvider) {
     this.todayDate = this.server.getUser().date;
-    this.ismonthly = this.server.ismonthly;
+    this.reportType = this.server.reportType;
 
-    if (this.ismonthly == "No"){
-      this.titleButton = "Get Weekly Report";
+    if (this.reportType == 0){
+      this.titleButton = "Get Report";
     }else{
-      this.titleButton = "Get Monthly Report";
+      this.titleButton = "Get Report";
     }
     this.selectedDate = this.server.getUser().date;
     this.getReport();
@@ -89,7 +89,7 @@ export class ReportsComponent{
     }else{
       var body = {
         date: this.selectedDate,
-        ismonthly: this.ismonthly
+        report_type: this.reportType
     };
       this.server.getReport(body).then((response)=> {
         if (response.response_code == 400){
@@ -97,7 +97,7 @@ export class ReportsComponent{
           this.selectedDate = this.server.getUser().date;
         }else{
           this.noRecordsFound = "";
-          if (this.ismonthly == "True"){
+          if (this.reportType== 1){
             this.genMonthlyWorkdays(response);
           }else{
             this.genWeeklyWorkdays(response);

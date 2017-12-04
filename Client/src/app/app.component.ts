@@ -27,5 +27,14 @@ export class AppComponent implements DoCheck, OnInit {
   logOut() {
     this.server.logOut();
   }
-
+  returnToCheck(){
+    console.log("returntocheck");
+    this.server.returnToCheck();
+  }
+  weeklyReport(){
+    this.server.weeklyReport();
+  }
+  monthlyReport(){
+    this.server.monthlyReport();
+  }
 }

@@ -13,7 +13,7 @@ class WorkdayMessage (messages.Message):
 
 class RequestReport(messages.Message):
     date = messages.StringField(1, required=True)
-    ismonthly = messages.StringField(2)
+    report_type = messages.IntegerField(2)
 
 class ReportMessage(messages.Message):
     email = messages.StringField(1)

@@ -74,7 +74,7 @@ class MainPage(remote.Service):
         if necessary'''
         #user = endpoints.get_current_user()
 
-        return reports.get_report(request.date, request.ismonthly)
+        return reports.get_report(request.date, request.report_type)
 
 
     @endpoints.method(message_types.VoidMessage, CheckinResponseMessage,
