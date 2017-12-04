@@ -32,7 +32,7 @@ def get_report(date, isMonthly=None):
             total_hours_per_employee = []
             report_employee.email = user.email
             workdays_by_employee = requested_workdays.filter(
-                Workday.employeeid == report_employee.email).order(+Workday.date)
+                Workday.employee.email == report_employee.email).order(+Workday.date)
             for elem in workdays_by_employee:
                 date_workday = str(elem.date);
                 day_week = elem.date.isocalendar()[2]

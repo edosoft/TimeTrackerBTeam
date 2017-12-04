@@ -11,7 +11,7 @@ class User(ndb.Model):
 
 class Workday(ndb.Model):
     """ Model to represent the workday of an employee."""
-    employeeid = ndb.StringProperty()
+    employee = ndb.StructuredProperty(User)
     date = ndb.DateProperty(auto_now_add=True)
     checkin = ndb.DateTimeProperty()
     checkout = ndb.DateTimeProperty()

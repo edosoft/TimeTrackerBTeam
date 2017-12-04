@@ -23,20 +23,20 @@ def login(self, request, date):
             auth = User(email=user.email)
             auth.put()
 
-        queryworkday = Workday.query(Workday.employeeid == user.email,
+        queryworkday = Workday.query(Workday.employee.email == user.email,
                                      Workday.date == date).get()
 
         if queryworkday is None:
             # If there is no workday, a new one is created and added to the DB.
             work = Workday()
-            work.employeeid = user.email
+            work.employee = User(email=user.email)
             work.checkin = None
             work.checkout = None
             work.total = 0
             work.put()
 
             # Ok - Creating workday
-            return WorkdayResponseMessage(text="Creating Workday", employeeid=work.employeeid,
+            return WorkdayResponseMessage(text="Creating Workday", employee=work.employee.email,
                                           date=str(work.date), checkin=str(work.checkin),
                                           checkout=str(work.checkout), total=work.total,
                                           response_code=200)
@@ -44,7 +44,7 @@ def login(self, request, date):
             work = queryworkday
 
             # Ok - Returning existent
-            return WorkdayResponseMessage(text="Returning Workday", employeeid=work.employeeid,
+            return WorkdayResponseMessage(text="Returning Workday", employee=work.employee.email,
                                           date=str(work.date), checkin=str(work.checkin),
                                           checkout=str(work.checkout), total=work.total,
                                           response_code=200)

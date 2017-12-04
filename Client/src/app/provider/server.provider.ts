@@ -76,7 +76,7 @@ export class ServerProvider {
         //console.log(response.result.checkin);
         this.user.checkin = this.returnDate(response.result.checkin);
         this.user.checkout = this.returnDate(response.result.checkout);
-        this.user.id = response.result.employeeid;
+        this.user.id = response.result.employee.email;
         this.user.total = response.result.total;
         this.logged = true;
         // console.log('server logged:' + this.logged);
@@ -94,7 +94,7 @@ export class ServerProvider {
   }
 
   report(ismonthly){
-/*
+
     gapi.client.timetrackerApi.create().execute((response: any) => {
       if (response.error) {
         console.log(response.error);
@@ -102,7 +102,7 @@ export class ServerProvider {
         console.log(JSON.stringify(response.result));
       }
     });
-*/
+
     this.ismonthly = ismonthly;
     this.zone.run(() => {
       this.router.navigate(['/report']);

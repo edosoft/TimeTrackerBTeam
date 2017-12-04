@@ -30,19 +30,17 @@ class ReportResponseMessage(messages.Message):
 
 class WorkdayResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
-    employeeid = messages.StringField(3)
+    employee = messages.StringField(3)
     date = messages.StringField(4)
     checkin = messages.StringField(5)
     checkout = messages.StringField(6)
     total = messages.IntegerField(7)
     text = messages.StringField(1)
 
-
 class CheckinResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
     text = messages.StringField(1)
     checkin = messages.StringField(3)
-
 
 class CheckoutResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)

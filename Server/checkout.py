@@ -9,7 +9,7 @@ def checkout(user):
     If the checkout is made in a valid time, the system returns updates the Workday entity
     with the checkout date and total. If not, the system returns an error or raises an issue 
     if necessary'''
-    querycheckout = Workday.query(Workday.employeeid == user.email(),
+    querycheckout = Workday.query(Workday.employee.email == user.email(),
                                   Workday.date == datetime.datetime.now()).get()
 
     if querycheckout.checkout is not None:

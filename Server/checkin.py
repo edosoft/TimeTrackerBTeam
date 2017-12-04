@@ -11,7 +11,7 @@ def checkin(user):
     Needs - A valid date
     Returns - CheckinResponseMessage'''
 
-    querycheckin = Workday.query(Workday.employeeid == user.email(),
+    querycheckin = Workday.query(Workday.employee.email == user.email(),
                                  Workday.date == datetime.datetime.now()).get()
 
     # querycheckin has the Workday of the employee in the proper day.

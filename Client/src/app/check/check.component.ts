@@ -52,7 +52,7 @@ export class CheckComponent implements OnInit {
     if (this.checkHour <= 7 && this.checkMins < 30) {
       this.soonCheckin = true;
     } else {
-      if (this.checkHour >= 10) {
+      if (this.checkHour >= 9) {
         this.lateCheckin = true;
       }
     }
