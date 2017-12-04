@@ -9,4 +9,15 @@
 
 .container-table-report {
     overflow-x: auto;
+    .table-desktop {
+        display: none;
+        @media (min-width: 992px) {
+            display: block;
+        }
+    }
+    .table-mobile-tablet {
+        @media (min-width: 992px) {
+            display: none;
+        }
+    }
 }
