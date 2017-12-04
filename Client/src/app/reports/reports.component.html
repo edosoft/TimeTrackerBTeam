@@ -1,30 +1,33 @@
 <div class="button-report">
-  <label for="dateInput">Pick a date:</label>
-  <!-- TODO: Insert maxDate, so you can't pick future dates-->
-  <input [(ngModel)]="selectedDate" [value]="selectedDate" type="date" id="dateInput" max="todayDate" required/>
-  <button (click)="getReport()" type="button" class="btn btn-primary btn-success">{{buttonTitle}}</button>
-  <blockquote *ngIf="noRecordsFound">{{noRecordsFound}}</blockquote>
+    <label for="dateInput">Pick a date:</label>
+    <!-- TODO: Insert maxDate, so you can't pick future dates-->
+    <input [(ngModel)]="selectedDate" [value]="selectedDate" type="date" id="dateInput" max="todayDate" required/>
+    <button (click)="getReport()" type="button" class="btn btn-primary btn-success">{{buttonTitle}}</button>
+    <blockquote *ngIf="noRecordsFound">{{noRecordsFound}}</blockquote>
 </div>
 
-<table class="table table-hover">
-  <thead>
-      <tr>
-        <th>Id</th>
-        <th *ngIf="reportType == 1" >Total Days</th>
-        <th>Total Hours</th>
-        <th *ngFor="let day of daysList">
-          {{day}}
-        </th>   
-      </tr>
-  </thead>
-  <tbody>
-      <tr *ngFor="let report of results">
-          <td>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
-          <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
-          <td >{{Math.floor(report.total/60)}}:{{report.total%60}}</td>
-          <td *ngFor="let num of report.workday">
-            {{Math.floor(num.total/60)}}
-          </td>                
-      </tr>
-  </tbody>
-</table> 
+<div class="container-table-report">
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th *ngIf="reportType == 1">Total Days</th>
+                <th>Total Hours</th>
+                <th *ngFor="let day of daysList">
+                    {{day}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let report of results">
+                <td>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
+                <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
+                <td>{{Math.floor(report.total/60)}}:{{report.total%60}}</td>
+                <td *ngFor="let num of report.workday">
+                    {{Math.floor(num.total/60)}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
