@@ -49,10 +49,11 @@ def get_report(date, report_type=None):
                 total_hours_per_employee.append(elem.total)
 
             if report_type == 1:
-                report_employee.total_days_worked = len(workdays_by_employee.fetch())
+                employee_report.total_days_worked = len(workdays_by_employee.fetch())
+
+            employee_report.total = sum(total_hours_per_employee)
 
             if len(workdays_by_employee.fetch()):
                 result.append(employee_report)
-
         return ReportResponseMessage(response_code=200, text="Returning report",
                                      reports=result, month=cal[1])

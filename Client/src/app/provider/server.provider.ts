@@ -75,6 +75,7 @@ export class ServerProvider {
         });
       }
     });
+
   }
 
   returnToCheck() {
@@ -83,7 +84,19 @@ export class ServerProvider {
     });
   }
 
+
+  createMockUser(){
+    gapi.client.timetrackerApi.create().execute((response: any) => {
+      if (response.error) {
+        console.log(response.error);
+      } else {
+        console.log(JSON.stringify(response.result));
+      }
+      });
+  }
+
   weeklyReport(){
+    this.createMockUser();
     this.reportType = 0;
     this.zone.run(() => {
       this.router.navigate(['/weeklyreport']);
@@ -91,6 +104,7 @@ export class ServerProvider {
   }
 
   monthlyReport(){
+    this.createMockUser();
     this.reportType = 1;
     this.zone.run(() => {
       this.router.navigate(['/monthlyreport']);

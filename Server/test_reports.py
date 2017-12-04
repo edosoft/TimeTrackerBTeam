@@ -135,7 +135,6 @@ class DatastoreTestCase(unittest.TestCase):
         self.assertEqual(len(result.reports), 2)
         self.assertEqual(result.reports[0].email, "user@edosoft.es")
         self.assertEqual(result.reports[1].email, "hmr@edosoft.es")
-        print (result.reports[0].total)
         self.assertEqual(result.reports[0].total, 1400, "Wrong total hours for #1")
         self.assertEqual(result.reports[1].total, 32*60, "Wrong total hours for #2")
         self.assertEqual(len(Workday.query().fetch(10)), 8)

@@ -21,9 +21,9 @@
       <tr *ngFor="let report of results">
           <td>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
           <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
-          <td >{{report.total}}</td>
+          <td >{{Math.floor(report.total/60)}}:{{report.total%60}}</td>
           <td *ngFor="let num of report.workday">
-            {{num.total}}
+            {{Math.floor(num.total/60)}}
           </td>                
       </tr>
   </tbody>
