@@ -47,11 +47,7 @@
         }
     }
     .worked-timesheet {
-        padding-bottom: 20px;
-        h2 {
-            text-align: center;
-            font-size: 27px;
-        }
+        padding-bottom: 15px;
         .time-worked {
             @include display-flex();
             @include justify-content(center);
