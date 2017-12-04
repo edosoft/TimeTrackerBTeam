@@ -18,6 +18,10 @@ def log_in(user):
         return WorkdayResponseMessage(text="Error: Invalid Data", response_code=400)
 
     else:
+        verify_email = user.email().split('@')[1]
+        if (verify_email != 'edosoft.es'):
+            return WorkdayResponseMessage(text="Error: Invalid Domain", response_code=400)
+        
         user_query = User.query(User.email == user.email()).get()
 
         # If the user doesn't exist, it inserts it to the database.

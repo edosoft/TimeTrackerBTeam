@@ -9,17 +9,20 @@ from models import User, Workday
 # [END imports]
 
 
-def login(self, request, date):
+def login(request, date):
     """
     A function which validates the login. It creates User and Workday entities
     """
-
     user = request
 
     if user is None:
         # Error - Logging without authenticating with Google
         return WorkdayResponseMessage(text="Error: Invalid Data", response_code=400)
     else:
+        verify_email = user.email.split('@')[1]
+        if (verify_email != 'edosoft.es'):
+            return WorkdayResponseMessage(text="Error: Invalid Domain", response_code=400)
+
         user_query = User.query(User.email == user.email).get()
         # If the user doesn't exist, it inserts it to the database.
         if user_query is None:
@@ -69,36 +72,38 @@ class DatastoreTestCase(unittest.TestCase):
         # Alternatively, you could disable caching by
         # using ndb.get_context().set_cache_policy(False)
         ndb.get_context().clear_cache()
+        self.user = User(email="email@edosoft.es")
+        self.date = datetime.datetime.now()
 
 # [START Workday Tests]
     def test_workday_no_user(self):
         date = datetime.datetime.now()
         date = date.replace(hour=7, minute=31)
-        result = login(self, None, date)
+        result = login(None, date)
         self.assertEqual(result.text, "Error: Invalid Data")
 
     def test_workday_user(self):
         date = datetime.datetime.now()
         date = date.replace(hour=7, minute=31)
-        test = User(email="lelele")
-        result = login(self, test, date)
+        test = User(email="lelele@edosoft.es")
+        result = login(test, date)
         self.assertEqual(result.text, "Creating Workday")
 
     def test_workday_returning_user(self):
         date = datetime.datetime.now()
         date = date.replace(hour=7, minute=31)
-        test = User(email="lelele")
-        login(self, test, date)
-        result = login(self, test, date)
+        test = User(email="lelele@edosoft.es")
+        login(test, date)
+        result = login(test, date)
         self.assertEqual(result.text, "Returning Workday")
         self.assertEqual(len(Workday.query().fetch(2)), 1)
 
     def test_workday_multiple_user(self):
         date = datetime.datetime.now()
-        test = User(email="lelele")
-        login(self, test, date)
+        test = User(email="lelele@edosoft.es")
+        login(test, date)
         date = date.replace(hour=7, minute=31)
-        result = login(self, test, date)
+        result = login(test, date)
         self.assertEqual(result.text, "Returning Workday")
         self.assertEqual(len(Workday.query().fetch(2)), 1)
 # [END   Workday Tests]
@@ -106,15 +111,23 @@ class DatastoreTestCase(unittest.TestCase):
 # [START User Tests]
     def test_user(self):
         date = datetime.datetime.now()
-        result = login(self, User(), date)
+        result = login(self.user, date)
         self.assertEqual(result.text, "Creating Workday")
 
     def test_multiple_user(self):
         date = datetime.datetime.now()
-        result = login(self, User(), date)
-        result = login(self, User(email="lelele"), date)
-        result = login(self, User(email="lelele2"), date)
+        result = login(self.user, date)
+        result = login(User(email="lelele@edosoft.es"), date)
+        result = login(User(email="lelele2@edosoft.es"), date)
         self.assertEqual(3, len(User.query().fetch(10)))
+
+    def test_invalid_user(self):
+        user_error = User(email="lala@gmail.es")
+        result = login(user_error,self.date)
+        self.assertEqual(result.text, "Error: Invalid Domain")
+        user_ok = User(email="lala@edosoft.es")
+        result = login(user_ok,self.date)
+        self.assertEqual(result.text, "Creating Workday")
 # [END   User Tests]
 
 

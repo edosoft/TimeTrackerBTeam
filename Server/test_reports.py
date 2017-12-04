@@ -9,9 +9,7 @@ from datetime import datetime, timedelta
 
 from messages import ReportMessage, ReportResponseMessage, WorkdayMessage
 from models import User, Workday
-
-
-def get_report(date, isMonthly=None):
+def get_report(date, report_type=None):
     '''A function which returns the reports of a selected date. It returns the user, 
     total hours per day and total hours in the range. 
     Needs - The date and last day to check
@@ -20,7 +18,7 @@ def get_report(date, isMonthly=None):
     #AQUI
     first_date = datetime.strptime(date, "%Y-%m-%d").date()
     cal = calendar.monthrange(first_date.year, first_date.month)
-    if isMonthly == "True":
+    if report_type == 1:
         start_date = first_date.replace(day=1)
         end_date = first_date.replace(day=cal[1])
     else:
@@ -47,7 +45,7 @@ def get_report(date, isMonthly=None):
                                                               total=elem.total))
                 total_hours_per_employee.append(elem.total)
 
-            if isMonthly == "True":
+            if report_type == 1:
                 report_employee.total_days_worked = len(workdays_by_employee.fetch())
 
             report_employee.total = sum(total_hours_per_employee)
@@ -94,7 +92,7 @@ class DatastoreTestCase(unittest.TestCase):
 
         for x in range(6, 11):
             date = datetime.now().replace(month = 11, day = x)
-            work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=7)
+            work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=480)
             work.put()
 
         result = get_report(first, "No")
@@ -103,9 +101,9 @@ class DatastoreTestCase(unittest.TestCase):
         self.assertTrue(len(result.reports) > 0, "No report created")
         self.assertTrue(len(result.reports) == 1, "More than one report found")
         self.assertEqual(result.reports[0].email, "user@edosoft.es", "Invalid user found")
-        self.assertEqual(result.reports[0].workday[0].total, 7, "Bad data stored")
-        self.assertEqual(result.reports[0].workday[1].total, 7, "Bad data stored")
-        self.assertEqual(result.reports[0].total, 35, "Total data not found:")
+        self.assertEqual(result.reports[0].workday[0].total, 480, "Bad data stored")
+        self.assertEqual(result.reports[0].workday[1].total, 480, "Bad data stored")
+        self.assertEqual(result.reports[0].total, 2400, "Total data not found:")
         self.assertEqual(result.reports[0].total_days_worked, None, "Bad count of days")
 
     def test_get_report(self):
@@ -114,31 +112,32 @@ class DatastoreTestCase(unittest.TestCase):
         user2 = User(email="hmr@edosoft.es")
         user2.put()
         date = datetime.now().replace(month = 11,day = 5)
-        work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=5)
+        work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=300)
         work.put()
         for x in range(21, 23):
             date = datetime.now().replace(month = 11,day = x)
-            work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=15)
+            work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=300)
             work.put()
 
         date = datetime.now().replace(month = 11,day = 23)
-        work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=10)
+        work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=500)
         work.put()
 
         for x in range(20, 24):
             date = datetime.now().replace(month = 11,day = x)
-            work = Workday(employee=user2,date=date, checkin=None, checkout=None, total=8)
+            work = Workday(employee=user2,date=date, checkin=None, checkout=None, total=480)
             work.put()
 
         first = "2017-11-20"
 
-        result = get_report(first, "True")
+        result = get_report(first, 1)
         self.assertEqual(len(User.query().fetch(10)), 2)
         self.assertEqual(len(result.reports), 2)
         self.assertEqual(result.reports[0].email, "user@edosoft.es")
         self.assertEqual(result.reports[1].email, "hmr@edosoft.es")
-        self.assertEqual(result.reports[0].total, 45, "Wrong total hours for #1")
-        self.assertEqual(result.reports[1].total, 32, "Wrong total hours for #2")
+        print (result.reports[0].total)
+        self.assertEqual(result.reports[0].total, 1400, "Wrong total hours for #1")
+        self.assertEqual(result.reports[1].total, 32*60, "Wrong total hours for #2")
         self.assertEqual(len(Workday.query().fetch(10)), 8)
         self.assertEqual(result.reports[0].total_days_worked, 4, "Bad count of days")
         self.assertEqual(result.reports[1].total_days_worked, 4, "Bad count of days")

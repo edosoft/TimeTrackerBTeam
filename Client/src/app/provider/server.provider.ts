@@ -61,7 +61,7 @@ export class ServerProvider {
   logIn() {
     gapi.client.timetrackerApi.login().execute((response: any) => {
       if (response.result.response_code === '400') {
-        console.log(response.response_code);
+        window.alert(response.result.text);
       } else {
         this.userWorkday.date = response.result.date;
         this.userWorkday.checkin = this.returnDate(response.result.checkin);
