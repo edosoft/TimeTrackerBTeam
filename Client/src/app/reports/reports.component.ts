@@ -13,7 +13,7 @@ export class ReportsComponent{
   reportType: number;
   selectedDate: string;
   buttonTitle: string;
-  daysList: any[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  daysList: any[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   dayNumbers: number[];
   noRecordsFound: string;
   todayDate: string;
@@ -33,6 +33,58 @@ export class ReportsComponent{
     this.getReport();
   }
 
+
+  getCorrectWorkday(Workday, num){
+    if (this.reportType == 0){
+      return Workday.find(workday => workday.day_of_week == num + 1);
+    }else{
+      return Workday.find(workday => {
+        return parseInt(workday.date.split('-')[2], 10) == num + 1;
+      });
+      
+    }
+  }
+
+  generateWorkdays(rawValues){
+    const arrayReports: Report[] = rawValues.reports;
+    let limitDaysForRow;
+    if (this.reportType == 0){
+      limitDaysForRow = 7;
+    }else{
+      limitDaysForRow= rawValues.month;
+      this.dayNumbers = [];
+          for (let x = 1; x <= limitDaysForRow; x++) {
+            this.dayNumbers.push(x);
+          }
+          this.daysList = this.dayNumbers;
+    }
+
+    for (let x = 0; x < arrayReports.length; x++) {
+      const arrayWorkdaysByEmployee: Workday[] = [];
+
+      for (let y = 0; y < limitDaysForRow; y++) {
+        let existent_work;
+        if (arrayReports[x].workday == undefined){
+        existent_work = undefined;
+        }else{
+        existent_work = this.getCorrectWorkday(arrayReports[x].workday, y);
+        }
+        if (existent_work === undefined) {
+          const workday = new Workday();
+          workday.day_of_week = y + 1;
+          workday.total = 0;
+          arrayWorkdaysByEmployee.push(workday);
+        }else {
+          arrayWorkdaysByEmployee.push(existent_work);
+        }
+      }
+      arrayReports[x].workday = arrayWorkdaysByEmployee;
+    }
+    this.results = arrayReports;
+
+  }
+
+/*
   generateMonthlyWorkdays(rawValues) {
     const arrayReports: Report[] = rawValues.reports;
     const limitDaysForRow: number = rawValues.month;
@@ -47,9 +99,14 @@ export class ReportsComponent{
       const arrayWorkdaysByEmployee: Workday[] = [];
 
       for (let y = 0; y < limitDaysForRow; y++) {
-        const existent_work = arrayReports[x].workday.find(workday => {
+        let existent_work;
+        if (arrayReports[x].workday == undefined){
+        existent_work = undefined;
+        }else{
+        existent_work = arrayReports[x].workday.find(workday => {
           return parseInt(workday.date.split('-')[2], 10) == y + 1;
         });
+        }
 
         if (existent_work === undefined) {
           const workday = new Workday();
@@ -77,7 +134,12 @@ export class ReportsComponent{
       const arrayWorkdaysByEmployee: Workday[] = [];
 
       for (let y = 0; y < limitDaysForRow; y++) {
-        const existent_work = arrayReports[x].workday.find(workday => workday.day_of_week == y + 1);
+        let existent_work;
+        if (arrayReports[x].workday == undefined){
+        existent_work = undefined;
+        }else{
+        existent_work = arrayReports[x].workday.find(workday => workday.day_of_week == y + 1);
+        }
         console.log(existent_work);
         if (existent_work === undefined) {
           const workday = new Workday();
@@ -93,6 +155,7 @@ export class ReportsComponent{
 
     this.results = arrayReports;
   }
+*/
 
   // La funcion del boton
   getReport() {
@@ -111,11 +174,13 @@ export class ReportsComponent{
           this.selectedDate = this.server.getUserWorkday().date;
         } else {
           this.noRecordsFound = '';
+          /*
           if (this.reportType == 1) {
             this.generateMonthlyWorkdays(response);
           } else {
             this.generateWeeklyWorkdays(response);
-          }
+          }*/
+          this.generateWorkdays(response);
         }
       });
     }

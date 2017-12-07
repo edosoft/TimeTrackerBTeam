@@ -14,8 +14,3 @@ indexes:
   properties:
   - name: employee.email
   - name: date
-
-- kind: Workday
-  properties:
-  - name: employeeid
-  - name: date

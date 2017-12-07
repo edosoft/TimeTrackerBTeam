@@ -36,9 +36,9 @@ def create_mock_user():
             if day != 4 and day != 5 and day != 11 and day != 12 and day != 18 and day != 19 and day != 25 and day != 26:
                 work = Workday()
                 work.employee = auth
-                work.date = datetime.date(2017, 11, day)
-                work.checkin = datetime.datetime(2017, 11, day, 7, 31)
-                work.checkout = datetime.datetime(2017, 11, day, 15, 2)
+                work.date = datetime(2017, 11, day)
+                work.checkin = datetime(2017, 11, day, 7, 31)
+                work.checkout = datetime(2017, 11, day, 15, 2)
                 work.total = 480
                 work.put()
 
