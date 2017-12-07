@@ -30,8 +30,8 @@ export class CheckComponent implements OnInit {
 
   /* Variables for dailyWorkedTime function */
 
-  checkIndone: boolean = false;
-  checkOutdone: boolean = false;
+  checkIndone = false;
+  checkOutdone = false;
   currentTime: any;
   currentTimeMinutes: any;
   currentTimeHour: any;
@@ -42,10 +42,10 @@ export class CheckComponent implements OnInit {
   timecheckOutHour: any;
   timecheckOutMinutes: any;
   dailytotalTimeMinutes: any;
-  dailytotaltime:any;
+  dailytotaltime: any;
   dailyWorkedTimeHour: any;
   dailyWorkedTimeMinutes: any;
-  timer : any = null;
+  timer: any = null;
 
   /* END Variables for dailyWorkedTime function */
 
@@ -64,12 +64,12 @@ export class CheckComponent implements OnInit {
     this.checkInTime = this.currentUserWorkday.checkin;
     this.checkOutTime = this.currentUserWorkday.checkout;
 
-    if (this.checkInTime != 'None'){
+    if (this.checkInTime != 'None') {
       this.checkIndone = true;
-      if (this.checkOutTime == 'None'){
-        this.timer = setInterval(this.dailyWorkedTime.bind(this), 60*1000);
+      if (this.checkOutTime == 'None') {
+        this.timer = setInterval(this.dailyWorkedTime.bind(this), 60 * 1000);
         this.dailytotaltime = this.dailyWorkedTime();
-      }else{
+      }else {
         clearInterval(this.timer);
         this.checkOutdone = true;
         this.dailytotaltime = this.dailyWorkedTime();
@@ -94,7 +94,7 @@ export class CheckComponent implements OnInit {
       }
     }
     this.dailytotaltime = '00:00';
-    this.timer = setInterval(this.dailyWorkedTime.bind(this), 60*1000);
+    this.timer = setInterval(this.dailyWorkedTime.bind(this), 60 * 1000);
   }
 
   async checkOut() {
@@ -124,66 +124,66 @@ export class CheckComponent implements OnInit {
     this.checkOutSoon = false;
   }
 
-  
-  dailyWorkedTime(){
-    
-    /**
-     * Calculate the daily time worked when has done check in and check out. 
-     */
-    
-    this.timeCheckIn = this.server.getUserWorkday().checkin;
-    this.timeCheckIn = this.timeCheckIn.split(":");
-    this.timecheckInHour = parseInt(this.timeCheckIn[0]);
-    this.timecheckInMinutes = parseInt(this.timeCheckIn[1]);
 
-    if ((this.checkIndone == true) && (this.checkOutdone == false)){
+  dailyWorkedTime() {
+
+    /**
+     * Calculate the daily time worked when has done check in and check out.
+     */
+
+    this.timeCheckIn = this.server.getUserWorkday().checkin;
+    this.timeCheckIn = this.timeCheckIn.split(':');
+    this.timecheckInHour = parseInt(this.timeCheckIn[0], 10);
+    this.timecheckInMinutes = parseInt(this.timeCheckIn[1], 10);
+
+    if ((this.checkIndone == true) && (this.checkOutdone == false)) {
 
       this.currentTimeHour = new Date().getHours();
       this.currentTimeMinutes = new Date().getMinutes();
 
-      this.currentTime = (this.currentTimeHour*60) + this.currentTimeMinutes;
-      this.timeCheckIn = (this.timecheckInHour*60) + this.timecheckInMinutes;
+      this.currentTime = (this.currentTimeHour * 60) + this.currentTimeMinutes;
+      this.timeCheckIn = (this.timecheckInHour * 60) + this.timecheckInMinutes;
 
       this.dailytotalTimeMinutes = this.currentTime - this.timeCheckIn;
 
       this.dailyWorkedTimeMinutes = this.dailytotalTimeMinutes % 60;
       this.dailyWorkedTimeHour = (this.dailytotalTimeMinutes - this.dailyWorkedTimeMinutes) / 60;
 
-      if (this.dailyWorkedTimeHour < 10){
+      if (this.dailyWorkedTimeHour < 10) {
         this.dailyWorkedTimeHour = '0' + this.dailyWorkedTimeHour;
       }
 
-      if (this.dailyWorkedTimeMinutes < 10){
+      if (this.dailyWorkedTimeMinutes < 10) {
         this.dailyWorkedTimeMinutes = '0' + this.dailyWorkedTimeMinutes;
       }
 
       this.dailytotaltime = this.dailyWorkedTimeHour + ':' + this.dailyWorkedTimeMinutes;
 
-    }else if ((this.checkIndone == true) && (this.checkOutdone == true)){
+    }else if ((this.checkIndone == true) && (this.checkOutdone == true)) {
 
       this.timeCheckOut = this.server.getUserWorkday().checkout;
-      this.timeCheckOut = this.timeCheckOut.split(":");
-      this.timecheckOutHour = parseInt(this.timeCheckOut[0]);
-      this.timecheckOutMinutes = parseInt(this.timeCheckOut[1]);
-      
-      this.timeCheckIn = (this.timecheckInHour*60) + this.timecheckInMinutes;
-      this.timeCheckOut = (this.timecheckOutHour*60) + this.timecheckOutMinutes;
+      this.timeCheckOut = this.timeCheckOut.split(':');
+      this.timecheckOutHour = parseInt(this.timeCheckOut[0], 10);
+      this.timecheckOutMinutes = parseInt(this.timeCheckOut[1], 10);
+
+      this.timeCheckIn = (this.timecheckInHour * 60) + this.timecheckInMinutes;
+      this.timeCheckOut = (this.timecheckOutHour * 60) + this.timecheckOutMinutes;
 
       this.dailytotalTimeMinutes = this.timeCheckOut - this.timeCheckIn;
 
       this.dailyWorkedTimeMinutes = this.dailytotalTimeMinutes % 60;
       this.dailyWorkedTimeHour = (this.dailytotalTimeMinutes - this.dailyWorkedTimeMinutes) / 60;
 
-      if (this.dailyWorkedTimeHour < 10){
+      if (this.dailyWorkedTimeHour < 10) {
         this.dailyWorkedTimeHour = '0' + this.dailyWorkedTimeHour;
       }
 
-      if (this.dailyWorkedTimeMinutes < 10){
+      if (this.dailyWorkedTimeMinutes < 10) {
         this.dailyWorkedTimeMinutes = '0' + this.dailyWorkedTimeMinutes;
       }
 
       this.dailytotaltime = this.dailyWorkedTimeHour + ':' + this.dailyWorkedTimeMinutes;
-  
+
     }
 
     return this.dailytotaltime;

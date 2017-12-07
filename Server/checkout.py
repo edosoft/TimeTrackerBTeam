@@ -29,7 +29,7 @@ def check_out(user):
         now = datetime.datetime.now()
         check_out_min = now.replace(hour=14, minute=00, second=0, microsecond=0)
         check_out_max = now.replace(hour=19, minute=00, second=0, microsecond=0)
-        lunch_time = now.replace(hour=15, minute=00, second=0, microsecond=0)
+        #lunch_time = now.replace(hour=15, minute=00, second=0, microsecond=0)
 
         check_out_query.checkout = datetime.datetime.now()
         check_out_query.total = (check_out_query.checkout - check_out_query.checkin).seconds / 60
@@ -44,9 +44,11 @@ def check_out(user):
 
         else:
             # If you go out after 15:00, a hour is substracted from the total
+            # TO LOOK. This doesn't work if you check in veeeery late.
+            '''
             if now > lunch_time:
                 check_out_query.total = check_out_query.total - 60
-
+            '''
             # OK
             if now < check_out_max:
                 check_out_query.put()
