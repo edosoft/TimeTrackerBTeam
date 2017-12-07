@@ -1,8 +1,11 @@
-<div class="button-report">
-    <label for="dateInput">Pick a date:</label>
+<div class="button-report row">
     <!-- TODO: Insert maxDate, so you can't pick future dates-->
-    <input [(ngModel)]="selectedDate" [value]="selectedDate" type="date" id="dateInput" max="todayDate" required/>
-    <button (click)="getReport()" type="button" class="btn btn-primary btn-success">{{buttonTitle}}</button>
+    <div class="input-group col-sm-4">
+        <input [(ngModel)]="selectedDate" [value]="selectedDate" class="form-control" type="date" id="dateInput" max="todayDate" required/>
+        <div class="input-group-btn">
+            <button (click)="getReport()" type="button" class="btn btn-primary">{{buttonTitle}}</button>
+        </div>
+    </div>
     <blockquote *ngIf="noRecordsFound">{{noRecordsFound}}</blockquote>
 </div>
 
