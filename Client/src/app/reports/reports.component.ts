@@ -8,7 +8,7 @@ import { Report, Workday } from '../provider/model';
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss']
 })
-export class ReportsComponent{
+export class ReportsComponent {
   results: Report[];
   reportType: number;
   selectedDate: string;
@@ -23,7 +23,7 @@ export class ReportsComponent{
     this.todayDate = this.server.getUserWorkday().date;
     this.reportType = this.server.reportType;
 
-    if (this.reportType == 0) {
+    if (this.reportType === 0) {
       this.buttonTitle = 'Get Weekly Report';
     } else {
       this.buttonTitle = 'Get Monthly Report';
@@ -34,29 +34,29 @@ export class ReportsComponent{
   }
 
 
-  getCorrectWorkday(Workday, num){
-    if (this.reportType == 0){
-      return Workday.find(workday => workday.day_of_week == num + 1);
-    }else{
-      return Workday.find(workday => {
-        return parseInt(workday.date.split('-')[2], 10) == num + 1;
-      });
-      
+  getCorrectWorkday(workday, num) {
+    if (this.reportType === 0) {
+      return workday.find(wd => wd.day_of_week === num + 1);
+    } else {
+      return workday.find(wd => parseInt(wd.date.split('-')[2], 10) === num + 1);
     }
   }
 
-  generateWorkdays(rawValues){
+  generateWorkdays(rawValues) {
     const arrayReports: Report[] = rawValues.reports;
     let limitDaysForRow;
-    if (this.reportType == 0){
+
+    if (this.reportType === 0) {
       limitDaysForRow = 7;
-    }else{
-      limitDaysForRow= rawValues.month;
+    } else {
+      limitDaysForRow = rawValues.month;
       this.dayNumbers = [];
-          for (let x = 1; x <= limitDaysForRow; x++) {
-            this.dayNumbers.push(x);
-          }
-          this.daysList = this.dayNumbers;
+
+      for (let x = 1; x <= limitDaysForRow; x++) {
+        this.dayNumbers.push(x);
+      }
+
+      this.daysList = this.dayNumbers;
     }
 
     for (let x = 0; x < arrayReports.length; x++) {
@@ -64,11 +64,13 @@ export class ReportsComponent{
 
       for (let y = 0; y < limitDaysForRow; y++) {
         let existent_work;
-        if (arrayReports[x].workday == undefined){
+
+        if (arrayReports[x].workday === undefined) {
         existent_work = undefined;
-        }else{
+        } else {
         existent_work = this.getCorrectWorkday(arrayReports[x].workday, y);
         }
+
         if (existent_work === undefined) {
           const workday = new Workday();
           workday.day_of_week = y + 1;
@@ -159,7 +161,7 @@ export class ReportsComponent{
 
   // La funcion del boton
   getReport() {
-    if (this.selectedDate == '') {
+    if (this.selectedDate === '') {
       this.noRecordsFound = 'Please, insert a valid date. Returning to today';
       this.selectedDate = this.server.getUserWorkday().date;
     } else {
@@ -169,7 +171,7 @@ export class ReportsComponent{
         report_type: this.reportType
       };
       this.server.getReport(body).then((response) => {
-        if (response.response_code == 400) {
+        if (response.response_code === 400) {
           this.noRecordsFound = 'No records found in the selected date. Returning to today';
           this.selectedDate = this.server.getUserWorkday().date;
         } else {

@@ -1,5 +1,5 @@
 .button-report {
-    margin-top: 60px;
+    margin-top: 25px;
     align-content: center;
 }
 
@@ -9,15 +9,22 @@
 
 .container-table-report {
     overflow-x: auto;
+    margin-top: 20px;
+
     .table-desktop {
         display: none;
         @media (min-width: 992px) {
             display: block;
         }
     }
+
     .table-mobile-tablet {
         @media (min-width: 992px) {
             display: none;
         }
+    }
+
+    .report-row:nth-child(even), .header-row {
+        background-color: #DEDEDE;
     }
 }
