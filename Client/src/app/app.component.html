@@ -18,9 +18,9 @@
     <div *ngIf="isLogged" class="welcome">
       <p>Welcome, </p>
       <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
-      <div (click)="logOut" class="logout">
-        <a href="#">Log Out</a>
-      </div>
+      <button (click)="logOut()" class="logout">  
+        <p><i class="fa fa-power-off"></i>Log Out</p>
+      </button>
     </div>
   </div>
 </header>
