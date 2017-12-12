@@ -192,4 +192,14 @@ export class ServerProvider {
     return `${d.getHours()}:${d.getMinutes()}`;
   }
 
+  getServerTime(){
+    gapi.client.timetrackerApi.servertime().execute((response: any) => {
+      if (response.error) {
+        console.log(response.error);
+      } else {
+        console.log(JSON.stringify(response.result));
+      }
+    });
+  }
+
 }

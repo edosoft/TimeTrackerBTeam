@@ -55,3 +55,10 @@ class WeekTotalMessage(messages.Message):
     response_code = messages.IntegerField(2)
     user = messages.StringField(1)
     hours = messages.IntegerField(3)
+
+
+class ServerTimeMessage(messages.Message):
+    response_code = messages.IntegerField(2)
+    text = messages.StringField(1)
+    time = messages.IntegerField(3)
+

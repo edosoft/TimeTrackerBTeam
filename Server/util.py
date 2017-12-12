@@ -47,3 +47,7 @@ def create_mock_user():
 
     return CheckinResponseMessage(response_code=200,
                                   text="Mock workdays returned")
+
+
+def get_server_time():
+    return datetime.now().time()

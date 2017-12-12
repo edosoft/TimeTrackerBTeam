@@ -109,5 +109,14 @@ class MainPage(remote.Service):
 
         return util.create_mock_user()
 
+    @endpoints.method(message_types.VoidMessage, CheckinResponseMessage,
+                      path='servertime', http_method='POST', name='servertime')
+    def servertime(self, request):
+        """
+        A function which takes the server time
+        """
+
+        return util.get_server_time()
+
 
 app = endpoints.api_server([MainPage], restricted=False)

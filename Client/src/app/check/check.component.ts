@@ -46,6 +46,7 @@ export class CheckComponent implements OnInit {
   dailyWorkedTimeHour: any;
   dailyWorkedTimeMinutes: any;
   timer: any = null;
+  serverTime: any;
 
   /* END Variables for dailyWorkedTime function */
 
@@ -138,8 +139,11 @@ export class CheckComponent implements OnInit {
 
     if ((this.checkIndone == true) && (this.checkOutdone == false)) {
 
-      this.currentTimeHour = new Date().getHours();
-      this.currentTimeMinutes = new Date().getMinutes();
+      // this.currentTimeHour = new Date().getHours();
+      // this.currentTimeMinutes = new Date().getMinutes();
+
+      this.serverTime = this.server.getServerTime();
+      console.log(this.serverTime);
 
       this.currentTime = (this.currentTimeHour * 60) + this.currentTimeMinutes;
       this.timeCheckIn = (this.timecheckInHour * 60) + this.timecheckInMinutes;
