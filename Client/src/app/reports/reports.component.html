@@ -6,11 +6,17 @@
       <button (click)="getReport()" type="button" class="btn btn-primary">{{buttonTitle}}</button>
     </div>
   </div>
-  <blockquote *ngIf="noRecordsFound">{{noRecordsFound}}</blockquote>
+</div>
+<div *ngIf="noRecordsFound" class="mssg alert alert-danger alert-dismissable">
+  <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
+  <strong>No records found in the selected date.</strong>
+</div>
+<div *ngIf="invalidDate" class="mssg alert alert-danger alert-dismissable">
+  <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
+  <strong>Please, insert a valid date.</strong>
 </div>
 
 <div class="container-table-report">
-
   <table class="table table-desktop">
     <thead>
       <tr class="header-row">

@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { CheckComponent } from './check/check.component';
 import { ReportsComponent } from './reports/reports.component';
+import { CanActivateViaUserWorkdayGuard } from './provider/guard.provider';
 
 
 

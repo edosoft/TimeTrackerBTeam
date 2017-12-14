@@ -3,19 +3,29 @@ import { Routes, RouterModule } from '@angular/router';
 import { CheckComponent } from '../check/check.component';
 import { LoginComponent } from '../login/login.component';
 import { ReportsComponent } from '../reports/reports.component';
+import { CanActivateViaUserWorkdayGuard } from './guard.provider';
 
 const appRoutes: Routes = [{
   path: '',
   component: LoginComponent
 }, {
   path: 'check',
-  component: CheckComponent
+  component: CheckComponent,
+  canActivate: [
+    CanActivateViaUserWorkdayGuard
+  ]
 }, {
   path: 'weeklyreport',
-  component: ReportsComponent
+  component: ReportsComponent,
+  canActivate: [
+    CanActivateViaUserWorkdayGuard
+  ]
 }, {
   path: 'monthlyreport',
-  component: ReportsComponent
+  component: ReportsComponent,
+  canActivate: [
+    CanActivateViaUserWorkdayGuard
+  ]
 }, {
   path: '**',
   redirectTo: ''
@@ -25,6 +35,6 @@ const appRoutes: Routes = [{
   imports: [RouterModule.forRoot(appRoutes)],
   exports: [RouterModule],
   declarations: [],
-  providers: [],
+  providers: [CanActivateViaUserWorkdayGuard],
 })
 export class AppRoutingModule { }
