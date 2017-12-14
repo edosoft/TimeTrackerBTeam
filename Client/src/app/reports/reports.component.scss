@@ -1,31 +1,39 @@
 .button-report {
-    margin-top: 60px;
-    align-content: center;
+  margin-top: 25px;
+  align-content: center;
 }
 
 .table-report {
-    margin-top: 100px;
+  margin-top: 100px;
 }
 
 .container-table-report {
-    overflow-x: auto;
-    .table-desktop {
-        display: none;
-        @media (min-width: 992px) {
-            display: block;
-        }
+  overflow-x: auto;
+  margin-top: 20px;
+  .table-desktop {
+    display: none;
+    @media (min-width: 992px) {
+      display: block;
     }
-    .table-mobile-tablet {
-        @media (min-width: 992px) {
-            display: none;
-        }
+  }
+  .table-mobile-tablet {
+    @media (min-width: 992px) {
+      display: none;
     }
+  }
 }
-.mssg{
-    text-align: center;
-    width: 400px;
-    margin: 20px auto;
+
+.report-row:nth-child(even),
+.header-row {
+  background-color: #DEDEDE;
 }
-.close{
-    cursor: pointer;
+
+.mssg {
+  text-align: center;
+  width: 400px;
+  margin: 20px auto;
+}
+
+.close {
+  cursor: pointer;
 }
