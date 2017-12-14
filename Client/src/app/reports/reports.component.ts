@@ -12,10 +12,11 @@ export class ReportsComponent{
   results: Report[];
   reportType: number;
   selectedDate: string;
+  invalidDate: boolean;
   buttonTitle: string;
   daysList: any[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   dayNumbers: number[];
-  noRecordsFound: string;
+  noRecordsFound: boolean;
   todayDate: string;
   Math = Math;
 
@@ -160,7 +161,7 @@ export class ReportsComponent{
   // La funcion del boton
   getReport() {
     if (this.selectedDate == '') {
-      this.noRecordsFound = 'Please, insert a valid date. Returning to today';
+      this.invalidDate = true;
       this.selectedDate = this.server.getUserWorkday().date;
     } else {
 
@@ -170,10 +171,10 @@ export class ReportsComponent{
       };
       this.server.getReport(body).then((response) => {
         if (response.response_code == 400) {
-          this.noRecordsFound = 'No records found in the selected date. Returning to today';
+          this.noRecordsFound = true;
           this.selectedDate = this.server.getUserWorkday().date;
         } else {
-          this.noRecordsFound = '';
+          this.noRecordsFound = false;
           /*
           if (this.reportType == 1) {
             this.generateMonthlyWorkdays(response);
@@ -188,6 +189,11 @@ export class ReportsComponent{
 
   returnToCheck() {
     this.server.returnToCheck();
+  }
+
+  close() {
+    this.noRecordsFound = false;
+    this.invalidDate = false;
   }
 }
 
