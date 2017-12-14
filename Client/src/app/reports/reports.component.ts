@@ -14,6 +14,7 @@ export class ReportsComponent {
   selectedDate: string;
   invalidDate: boolean;
   buttonTitle: string;
+  infoText: string;
   daysList: any[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   dayNumbers: number[];
   noRecordsFound: boolean;
@@ -26,8 +27,10 @@ export class ReportsComponent {
 
     if (this.reportType === 0) {
       this.buttonTitle = 'Get Weekly Report';
+      this.infoText = 'Select a week to get the report';
     } else {
       this.buttonTitle = 'Get Monthly Report';
+      this.infoText = 'Select a month to get the report';
     }
 
     this.selectedDate = this.server.getUserWorkday().date;
@@ -121,6 +124,7 @@ export class ReportsComponent {
     const time = report.total;
     let min;
     let max;
+    let color;
 
     // Weekly report
     if (this.reportType === 0) {
@@ -128,12 +132,14 @@ export class ReportsComponent {
       max = min + 60;
 
       if (time < min) {
-        return { 'color': 'red' };
+        color = 'red';
       } else if (time > max) {
-        return { 'color': 'blue' };
+        color = 'blue';
       } else {
-        return { 'color': 'green' };
+        color = 'green';
       }
+
+      return { 'font-weight': 'bold', 'color': `${color}` };
 
       // Monthly report
     } else if (this.reportType === 1) {
@@ -149,6 +155,12 @@ export class ReportsComponent {
     const minsStr = mins < 10 ? `0${mins}` : mins.toString();
 
     return `${hoursStr}:${minsStr}`;
+  }
+
+  weekendColumn() {
+    /*if (this.reportType === 1) {
+      return { 'background-color': 'grey' };
+    }*/
   }
 
   returnToCheck() {
