@@ -1,6 +1,7 @@
 <div class="button-report row">
   <div class="input-group col-sm-4">
-    <input [(ngModel)]="selectedDate" [value]="selectedDate" class="form-control" type="date" id="dateInput" max="todayDate" required/>
+    <input [(ngModel)]="selectedDate" [value]="selectedDate" class="form-control" type="date" id="dateInput" max="todayDate"
+      required/>
     <div class="input-group-btn">
       <button (click)="getReport()" type="button" class="btn btn-primary">{{buttonTitle}}</button>
     </div>
@@ -25,7 +26,7 @@
       <tr class="report-row" *ngFor="let report of results">
         <td>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
         <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
-        <td>{{Math.floor(report.total/60)}}:{{report.total%60}}</td>
+        <td [ngStyle]="hoursColor(report)">{{hoursFormat(report.total)}}</td>
         <td *ngFor="let num of report.workday">
           {{Math.floor(num.total/60)}}
         </td>
@@ -43,7 +44,7 @@
     <tbody>
       <tr class="report-row" *ngFor="let report of results">
         <td>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
-        <td>{{Math.floor(report.total/60)}}:{{report.total%60}}</td>
+        <td [ngStyle]="hoursColor(report)">{{hoursFormat(report.total)}}</td>
       </tr>
     </tbody>
   </table>

@@ -66,9 +66,9 @@ export class ReportsComponent {
         let existent_work;
 
         if (arrayReports[x].workday === undefined) {
-        existent_work = undefined;
+          existent_work = undefined;
         } else {
-        existent_work = this.getCorrectWorkday(arrayReports[x].workday, y);
+          existent_work = this.getCorrectWorkday(arrayReports[x].workday, y);
         }
 
         if (existent_work === undefined) {
@@ -108,6 +108,40 @@ export class ReportsComponent {
         }
       });
     }
+  }
+
+  hoursColor(report) {
+    const time = report.total;
+    let min;
+    let max;
+
+    // Weekly report
+    if (this.reportType === 0) {
+      min = 2400;
+      max = min + 60;
+
+      if (time < min) {
+        return { 'color': 'red' };
+      } else if (time > max) {
+        return { 'color': 'blue' };
+      } else {
+        return { 'color': 'green' };
+      }
+
+      // Monthly report
+    } else if (this.reportType === 1) {
+      return { 'font-weight': 'bold' };
+    }
+  }
+
+  hoursFormat(time) {
+    const hours = time / 60;
+    const mins = time % 60;
+
+    const hoursStr = hours < 10 ? `0${hours}` : hours.toString();
+    const minsStr = mins < 10 ? `0${mins}` : mins.toString();
+
+    return `${hoursStr}:${minsStr}`;
   }
 
   returnToCheck() {
