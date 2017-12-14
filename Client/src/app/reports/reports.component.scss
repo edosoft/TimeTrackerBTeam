@@ -1,15 +1,20 @@
 .button-report {
   margin-top: 25px;
   align-content: center;
+  margin-bottom: 20px;
 }
 
-.table-report {
-  margin-top: 100px;
+.help {
+  i {
+    margin-right: 5px;
+    color: blue;
+  }
 }
 
 .container-table-report {
   overflow-x: auto;
-  margin-top: 20px;
+  margin: 20px auto;
+  text-align: center;
   .table-desktop {
     display: none;
     @media (min-width: 992px) {
@@ -23,15 +28,10 @@
   }
 }
 
-.report-row:nth-child(even),
-.header-row {
-  background-color: #DEDEDE;
-}
-
 .mssg {
   text-align: center;
   width: 400px;
-  margin: 20px auto;
+  margin-top: 20px;
 }
 
 .close {
