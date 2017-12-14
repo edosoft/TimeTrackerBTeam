@@ -36,9 +36,9 @@ export class ReportsComponent {
 
   getCorrectWorkday(workday, num) {
     if (this.reportType === 0) {
-      return workday.find(wd => wd.day_of_week === num + 1);
+      return workday.find(wd => wd.day_of_week == num + 1);
     } else {
-      return workday.find(wd => parseInt(wd.date.split('-')[2], 10) === num + 1);
+      return workday.find(wd => parseInt(wd.date.split('-')[2], 10) == num + 1);
     }
   }
 

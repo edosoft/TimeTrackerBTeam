@@ -84,8 +84,13 @@ export class ServerProvider {
     });
   }
 
+  returnToLogin() {
+    this.zone.run(() => {
+      this.router.navigate(['']);
+    });
+  }
 
-  createMockUser(){
+  createMockUser() {
     gapi.client.timetrackerApi.create().execute((response: any) => {
       if (response.error) {
         console.log(response.error);

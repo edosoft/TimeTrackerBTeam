@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ServerProvider } from './provider/server.provider';
-import { DoCheck, NgZone } from '@angular/core';
+import { DoCheck } from '@angular/core';
 import { User } from './provider/model';
 import { Observable } from 'rxjs/Observable';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +13,7 @@ export class AppComponent implements DoCheck, OnInit {
   isLogged: any;
   currentUserWorkday: any;
 
-  constructor(private server: ServerProvider, private zone: NgZone, private router: Router) {}
+  constructor(private server: ServerProvider) {}
 
   ngOnInit() {
     this.currentUserWorkday = this.server.getUserWorkday();
@@ -27,9 +26,7 @@ export class AppComponent implements DoCheck, OnInit {
 
   logOut() {
     this.server.logOut();
-    this.zone.run(() => {
-      this.router.navigate(['']);
-    });
+    this.server.returnToLogin();
   }
   returnToCheck() {
     console.log('returntocheck');

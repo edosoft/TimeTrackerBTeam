@@ -61,9 +61,17 @@ export class CheckComponent implements OnInit {
       this.checkInOutofRange = true;
     }
 
-    this.checkInTime = this.currentUserWorkday.checkin;
-    this.checkOutTime = this.currentUserWorkday.checkout;
+    if (this.currentUserWorkday === undefined) {
+      this.checkInTime = 'None';
+    }else {
+      this.checkInTime = this.currentUserWorkday.checkin;
+    }
 
+    if (this.currentUserWorkday === undefined) {
+      this.checkOutTime = 'None';
+    }else {
+      this.checkOutTime = this.currentUserWorkday.checkout;
+    }
     if (this.checkInTime != 'None') {
       this.checkIndone = true;
       if (this.checkOutTime == 'None') {
