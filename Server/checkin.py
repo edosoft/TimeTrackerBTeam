@@ -4,7 +4,7 @@ from messages import CheckinResponseMessage
 from models import Workday
 
 
-def check_in(user):
+def check_in(user, current_date=None):
     """
     A function which updates the Workday with the check in date. If the check in button
     is pressed in a valid time, the system updates the Workday entity with the date. If not,
@@ -12,13 +12,18 @@ def check_in(user):
     Needs - A valid date
     Returns - CheckinResponseMessage
     """
+    if current_date is None:
+        current_date = datetime.datetime.now()
+        email = user.email()
+    else:
+        email = user.email
 
-    check_in_query = Workday.query(Workday.employee.email == user.email(),
-                                   Workday.date == datetime.datetime.now()).get()
+    check_in_query = Workday.query(Workday.employee.email == email,
+                                   Workday.date == current_date).get()
 
     # check_in_query has the Workday of the employee in the proper day.
     if check_in_query.checkin is None:
-        now = datetime.datetime.now()
+        now = current_date
         check_in_min = now.replace(hour=7, minute=30, second=59, microsecond=0)
         check_in_max = now.replace(hour=9, minute=00, second=59, microsecond=0)
         check_out_max = now.replace(hour=19, minute=00, second=0, microsecond=0)

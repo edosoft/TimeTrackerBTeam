@@ -15,12 +15,14 @@ def get_report(date, report_type=None):
     # print(map(lambda x: x.date.isocalendar()[2], q))
     # AQUI
 
-    first_date = datetime.strptime(date, "%Y-%m-%d").date()
-    cal = calendar.monthrange(first_date.year, first_date.month)
     if report_type == 1:
+        first_date = datetime.strptime(date, "%Y-%m").date()
+        cal = calendar.monthrange(first_date.year, first_date.month)
         start_date = first_date.replace(day=1)
         end_date = first_date.replace(day=cal[1])
     else:
+        first_date = datetime.strptime(date + '-0', "%Y-W%W-%w").date()
+        cal = calendar.monthrange(first_date.year, first_date.month)
         start_date = first_date - timedelta(days=first_date.weekday())
         end_date = start_date + timedelta(days=6)
 
@@ -52,8 +54,29 @@ def get_report(date, report_type=None):
                 #employee_report.total_days_worked = len(workdays_by_employee.fetch())
             employee_report.total_days_worked = len(workdays_by_employee.fetch())
             employee_report.total = sum(total_hours_per_employee)
+            
+            #Create empty workdays if it's necessary.
+            complete_workdays = []
+            acc = 0
+            for day in perdelta(start_date, end_date):
+                query_find_day = workdays_by_employee.filter(Workday.date == day).get()
+                if query_find_day is None:
+                    complete_workdays.append(WorkdayMessage(date=str(day),
+                                                            day_of_week=day.isocalendar()[2],
+                                                            total=0))
+                else:
+                    complete_workdays.append(employee_report.workday[acc])
+                    acc += 1
+            employee_report.workday = complete_workdays
             #if len(workdays_by_employee.fetch()):
             #    result.append(employee_report)
             result.append(employee_report)
         return ReportResponseMessage(response_code=200, text="Returning report",
                                      reports=result, month=cal[1])
+
+
+def perdelta(start, end, delta=timedelta(days=1)):
+    curr = start
+    while curr <= end:
+        yield curr
+        curr += delta

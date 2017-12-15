@@ -7,41 +7,7 @@ import datetime
 from messages import CheckinResponseMessage
 from models import User, Workday
 
-
-def check_in(self, request, date):
-    """
-    A function which updates the Workday with the check in date
-    """
-
-    user = request
-    querycheckin = Workday.query(Workday.employee.email == user.email,
-                                 Workday.date == date).get()
-
-    # querycheckin has the Workday of the employee in the proper day.
-    if querycheckin.checkin is None:
-        now = date
-        checkmin = now.replace(hour=7, minute=30, second=59, microsecond=0)
-        checkmax = now.replace(hour=9, minute=00, second=59, microsecond=0)
-        if now < checkmin:
-            # Error - Check in too soon
-            return CheckinResponseMessage(response_code=400,
-                                          text="You can't check in before 7:30 am")
-        else:
-            querycheckin.checkin = now
-            querycheckin.put()
-            if now < checkmax:
-                # Ok
-                return CheckinResponseMessage(response_code=200,
-                                              text="Successful Check in",
-                                              checkin=str(querycheckin.checkin))
-            else:
-                # Issue - Check in too late.
-                return CheckinResponseMessage(response_code=200,
-                                              text="Check in out of time",
-                                              checkin=str(querycheckin.checkin))
-    else:
-        # Error - Check in after check in
-        return CheckinResponseMessage(response_code=400, text="You can't check in again today")
+from checkin import check_in
 
 
 # [START datastore_example_test]
@@ -76,7 +42,7 @@ class DatastoreTestCase(unittest.TestCase):
         work = Workday(employee=user, date=date, checkin=None, checkout=None, total=0)
         work.put()
         test = User(email="lelele")
-        result = checkin(self, test, date)
+        result = check_in(test, date)
         self.assertEqual(result.text, "Successful Check in")
 
     def testcheckinearly(self):
@@ -84,7 +50,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = datetime.datetime.now().replace(hour=6)
         work = Workday(employee=test, date=date, checkin=None, checkout=None, total=0)
         work.put()
-        result = checkin(self, test, date)
+        result = check_in(test, date)
         self.assertEqual(result.text, "You can't check in before 7:30 am")
 
     def testcheckinlate(self):
@@ -93,7 +59,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = date.replace(hour=10)
         work = Workday(employee=test, date=date, checkin=None, checkout=None, total=0)
         work.put()
-        result = checkin(self, test, date)
+        result = check_in(test, date)
         self.assertEqual(result.text, "Check in out of time")
 
     def testcheckinwithanother(self):
@@ -102,7 +68,7 @@ class DatastoreTestCase(unittest.TestCase):
         test = User(email="lelele")
         work = Workday(employee=test, date=date, checkin=date, checkout=None, total=0)
         work.put()
-        result = checkin(self, test, date)
+        result = check_in(test, date)
         self.assertEqual(result.text, "You can't check in again today")
 # [END   Check In Tests]
 

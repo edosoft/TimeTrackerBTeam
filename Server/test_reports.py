@@ -9,50 +9,8 @@ from datetime import datetime, timedelta
 
 from messages import ReportMessage, ReportResponseMessage, WorkdayMessage
 from models import User, Workday
-def get_report(date, report_type=None):
-    '''A function which returns the reports of a selected date. It returns the user, 
-    total hours per day and total hours in the range. 
-    Needs - The date and last day to check
-    Returns - ResponseMessage, an array of ReportMessages '''
-    #print(map(lambda x: x.date.isocalendar()[2], q))
-    #AQUI
-    first_date = datetime.strptime(date, "%Y-%m-%d").date()
-    cal = calendar.monthrange(first_date.year, first_date.month)
-    if report_type == 1:
-        start_date = first_date.replace(day=1)
-        end_date = first_date.replace(day=cal[1])
-    else:
-        start_date = first_date - timedelta(days=first_date.weekday())
-        end_date = start_date + timedelta(days=6)
 
-    requested_workdays = Workday.query(Workday.date >= start_date, Workday.date <= end_date)
-
-    if len(requested_workdays.fetch(10)) < 1:
-        return ReportResponseMessage(response_code=400, text="There are no records in the selected date")
-    else:
-        all_users = User.query()
-        result = []
-        for user in all_users:
-            report_employee = ReportMessage()
-            total_hours_per_employee = []
-            report_employee.email = user.email
-            workdays_by_employee = requested_workdays.filter(
-                Workday.employee.email == report_employee.email).order(+Workday.date)
-            for elem in workdays_by_employee:
-                date_workday = str(elem.date);
-                day_of_week = elem.date.isocalendar()[2]
-                report_employee.workday.append(WorkdayMessage(date=date_workday, day_of_week=day_of_week,
-                                                              total=elem.total))
-                total_hours_per_employee.append(elem.total)
-
-            if report_type == 1:
-                report_employee.total_days_worked = len(workdays_by_employee.fetch())
-
-            report_employee.total = sum(total_hours_per_employee)
-            if len(workdays_by_employee.fetch()):
-                result.append(report_employee)
-        return ReportResponseMessage(response_code=200, text="Returning report", reports=result, month = cal[1])
-
+from reports import get_report
 
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
@@ -80,13 +38,13 @@ class DatastoreTestCase(unittest.TestCase):
 
 # [START Report Tests]
     def test_get_empty_report(self):
-        first = "2017-11-1"
-        result = get_report(first, "No")
+        first = "2017-W34"
+        result = get_report(first, 0)
         self.assertEqual(result.text, "There are no records in the selected date")
         self.assertEqual(type(result), ReportResponseMessage)
 
     def test_get_report_ok(self):
-        first ="2017-11-8"
+        first ="2017-W45"
         user1 = User(email="user@edosoft.es")
         user1.put()
 
@@ -95,7 +53,7 @@ class DatastoreTestCase(unittest.TestCase):
             work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=480)
             work.put()
 
-        result = get_report(first, "No")
+        result = get_report(first, 0)
         self.assertEqual(len(User.query().fetch(10)), 1, "More than one user found")
         self.assertEqual(len(Workday.query().fetch(10)), 5, "Not all Workday created")
         self.assertTrue(len(result.reports) > 0, "No report created")
@@ -104,7 +62,6 @@ class DatastoreTestCase(unittest.TestCase):
         self.assertEqual(result.reports[0].workday[0].total, 480, "Bad data stored")
         self.assertEqual(result.reports[0].workday[1].total, 480, "Bad data stored")
         self.assertEqual(result.reports[0].total, 2400, "Total data not found:")
-        self.assertEqual(result.reports[0].total_days_worked, None, "Bad count of days")
 
     def test_get_report(self):
         user1 = User(email="user@edosoft.es")
@@ -128,7 +85,7 @@ class DatastoreTestCase(unittest.TestCase):
             work = Workday(employee=user2,date=date, checkin=None, checkout=None, total=480)
             work.put()
 
-        first = "2017-11-20"
+        first = "2017-11"
 
         result = get_report(first, 1)
         self.assertEqual(len(User.query().fetch(10)), 2)

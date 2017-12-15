@@ -189,7 +189,7 @@ export class ServerProvider {
     }
 
     const d = new Date(date);
-
+    
     if (d.getMinutes() < 10) {
       return `${d.getHours()}:0${d.getMinutes()}`;
     }

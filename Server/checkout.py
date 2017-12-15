@@ -4,7 +4,7 @@ from messages import CheckoutResponseMessage
 from models import Workday
 
 
-def check_out(user):
+def check_out(user, current_date=None):
     """
     A function which updates the Workday with the checkout date and the total hours.
     If the checkout is made in a valid time, the system returns updates the Workday entity
@@ -12,8 +12,14 @@ def check_out(user):
     if necessary
     """
 
-    check_out_query = Workday.query(Workday.employee.email == user.email(),
-                                    Workday.date == datetime.datetime.now()).get()
+    if current_date is None:
+        current_date = datetime.datetime.now()
+        email = user.email()
+    else:
+        email = user.email
+
+    check_out_query = Workday.query(Workday.employee.email == email,
+                                    Workday.date == current_date).get()
 
     # Error - Check out after check out
     if check_out_query.checkout is not None:
@@ -26,12 +32,12 @@ def check_out(user):
                                        text="You can't check out without checking in")
 
     else:
-        now = datetime.datetime.now()
+        now = current_date
         check_out_min = now.replace(hour=14, minute=00, second=0, microsecond=0)
         check_out_max = now.replace(hour=19, minute=00, second=0, microsecond=0)
         #lunch_time = now.replace(hour=15, minute=00, second=0, microsecond=0)
 
-        check_out_query.checkout = datetime.datetime.now()
+        check_out_query.checkout = current_date
         check_out_query.total = (check_out_query.checkout - check_out_query.checkin).seconds / 60
 
         # Issue - Check out too soon

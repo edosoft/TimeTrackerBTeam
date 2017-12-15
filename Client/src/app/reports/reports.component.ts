@@ -26,15 +26,17 @@ export class ReportsComponent {
     this.reportType = this.server.reportType;
 
     if (this.reportType === 0) {
+
       this.buttonTitle = 'Get Weekly Report';
       this.infoText = 'Select a week to get the report';
     } else {
+
       this.buttonTitle = 'Get Monthly Report';
       this.infoText = 'Select a month to get the report';
     }
-
-    this.selectedDate = this.server.getUserWorkday().date;
-    this.getReport();
+  // this.selectedDate = this.server.getUserWorkday().date;
+  // this.selectedDate = '2017-W46';
+  // this.getReport();
   }
 
 
@@ -67,22 +69,8 @@ export class ReportsComponent {
       const arrayWorkdaysByEmployee: Workday[] = [];
 
       for (let y = 0; y < limitDaysForRow; y++) {
-        let existent_work;
-
-        if (arrayReports[x].workday === undefined) {
-          existent_work = undefined;
-        } else {
-          existent_work = this.getCorrectWorkday(arrayReports[x].workday, y);
-        }
-
-        if (existent_work === undefined) {
-          const workday = new Workday();
-          workday.day_of_week = y + 1;
-          workday.total = 0;
-          arrayWorkdaysByEmployee.push(workday);
-        } else {
-          arrayWorkdaysByEmployee.push(existent_work);
-        }
+        const existent_work = this.getCorrectWorkday(arrayReports[x].workday, y);
+        arrayWorkdaysByEmployee.push(existent_work);
       }
       arrayReports[x].workday = arrayWorkdaysByEmployee;
     }
@@ -96,7 +84,6 @@ export class ReportsComponent {
       this.invalidDate = true;
       this.selectedDate = this.server.getUserWorkday().date;
     } else {
-
       const body = {
         date: this.selectedDate,
         report_type: this.reportType
@@ -108,12 +95,6 @@ export class ReportsComponent {
           this.selectedDate = this.server.getUserWorkday().date;
         } else {
           this.noRecordsFound = false;
-          /*
-          if (this.reportType == 1) {
-            this.generateMonthlyWorkdays(response);
-          } else {
-            this.generateWeeklyWorkdays(response);
-          }*/
           this.generateWorkdays(response);
         }
       });

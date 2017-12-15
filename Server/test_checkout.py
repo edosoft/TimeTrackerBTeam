@@ -7,58 +7,7 @@ import datetime
 from messages import CheckoutResponseMessage
 from models import User, Workday
 
-
-def check_out(self, request, date):
-        # A function which updates the Workday with the check out date and the total hours
-        user = request
-
-        querycheckout = Workday.query(Workday.employee.email == user.email,
-                                      Workday.date == date).get()
-
-        if querycheckout.checkout is not None:
-            # Error - Check out after check out
-            return CheckoutResponseMessage(response_code=400,
-                                           text="You can't check out if you checked out already")
-
-        if querycheckout.checkin is None:
-            # Error - Check out without check in
-            return CheckoutResponseMessage(response_code=400,
-                                           text="You can't check out without checking in")
-        else:
-            now = date
-            checkmin = now.replace(hour=13, minute=00, second=0, microsecond=0)
-            checkmax = now.replace(hour=19, minute=00, second=0, microsecond=0)
-            checknoon = now.replace(hour=15, minute=00, second=0, microsecond=0)
-
-            querycheckout.checkout = datetime.datetime.now()
-            querycheckout.total = (querycheckout.checkout - querycheckout.checkin).seconds / 60
-            if now < checkmin:
-                querycheckout.put()
-                # Issue - Check out too soon
-                return CheckoutResponseMessage(response_code=200,
-                                               text="You checked out too early",
-                                               checkout=str(querycheckout.checkout),
-                                               total=querycheckout.total)
-            else:
-                if now > checknoon:  # If you go out after 15:00, a hour is substracted from the total
-                    querycheckout.total = querycheckout.total - 60
-
-                if now < checkmax:
-                    querycheckout.put()
-                    # OK
-                    return CheckoutResponseMessage(response_code=200,
-                                                   text="Checkout Ok. Have a nice day :)",
-                                                   checkout=str(querycheckout.checkout),
-                                                   total=querycheckout.total)
-                else:
-                    querycheckout.checkout = checkmax
-                    querycheckout.put()
-                    # Issue - Check out too late.
-                    return CheckoutResponseMessage(response_code=200,
-                                                   text="Check out out of time",
-                                                   checkout=str(querycheckout.checkout),
-                                                   total=querycheckout.total)
-
+from checkout import check_out
 
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
@@ -92,7 +41,7 @@ class DatastoreTestCase(unittest.TestCase):
         test = User(email="lelele")
         work = Workday(employee=test, date=date, checkin=date, checkout=None, total=0)
         work.put()
-        result = checkout(self, test, date)
+        result = check_out(test, date)
         self.assertEqual(result.text, "Checkout Ok. Have a nice day :)")
 
     def testcheckoutearly(self):
@@ -100,7 +49,7 @@ class DatastoreTestCase(unittest.TestCase):
         test = User(email="lelele")
         work = Workday(employee=test, date=date, checkin=date, checkout=None, total=0)
         work.put()
-        result = checkout(self, test, date)
+        result = check_out(test, date)
         self.assertEqual(result.text, "You checked out too early")
 
     def testcheckoutlate(self):
@@ -109,7 +58,7 @@ class DatastoreTestCase(unittest.TestCase):
         test = User(email="lelele")
         work = Workday(employee=test, date=date, checkin=date, checkout=None, total=0)
         work.put()
-        result = checkout(self, test, date)
+        result = check_out(test, date)
         self.assertEqual(result.text, "Check out out of time")
 
     def testcheckoutwithanother(self):
@@ -118,7 +67,7 @@ class DatastoreTestCase(unittest.TestCase):
         test = User(email="lelele")
         work = Workday(employee=test, date=date, checkin=date, checkout=date, total=0)
         work.put()
-        result = checkout(self, test, date)
+        result = check_out(test, date)
         self.assertEqual(result.text, "You can't check out if you checked out already")
 # [END   Check Out Tests]
 

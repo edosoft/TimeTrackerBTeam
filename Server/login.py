@@ -4,7 +4,7 @@ from messages import WorkdayResponseMessage
 from models import User, Workday
 
 
-def log_in(user):
+def log_in(user, current_date=None):
     """
     A function which validates the login. It creates a new User if it doesn't exist in the DB,
     and new Workday entities if the valid user hasn't logged in that day. If it's a returning user,
@@ -23,20 +23,28 @@ def log_in(user):
         if (verify_email != 'edosoft.es'):
             return WorkdayResponseMessage(text="Error: Invalid Domain", response_code=400)
         '''
-        user_query = User.query(User.email == user.email()).get()
+        if current_date is None:
+            current_date = datetime.datetime.now()
+            email = user.email()
+        else:
+            email = user.email
+        
+
+
+        user_query = User.query(User.email == email).get()
 
         # If the user doesn't exist, it inserts it to the database.
         if user_query is None:
-            auth = User(email=user.email())
+            auth = User(email=email)
             auth.put()
 
-        workday_query = Workday.query(Workday.employee == User(email=user.email()),
-                                      Workday.date == datetime.datetime.now()).get()
+        workday_query = Workday.query(Workday.employee == User(email=email),
+                                      Workday.date == current_date).get()
 
         # If there is no workday, a new one is created and added to the DB.
         if workday_query is None:
             work = Workday()
-            work.employee = User(email=user.email())
+            work.employee = User(email=email)
             work.checkin = None
             work.checkout = None
             work.total = 0
