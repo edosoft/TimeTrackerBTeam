@@ -2,6 +2,7 @@ from functools import reduce
 from models import Workday, User
 from datetime import timedelta, datetime
 from messages import WeekTotalMessage, CheckinResponseMessage
+from messages import CurrentDateResponseMessage, RequestCurrentDate
 
 
 def get_week_total(user):
@@ -23,6 +24,23 @@ def get_week_total(user):
                             user=user.email(),
                             hours=week_total)
 
+
+def current_date(report_type):
+
+    year = datetime.now()
+    year = str(year.isocalendar()[0])
+
+    if report_type is 0:
+        week = datetime.now()
+        week = str(week.isocalendar()[1]) 
+        week_calendar = str(year + '-W' + week) #return the current week with this format: YYYY-WW
+        return CurrentDateResponseMessage(response_code=200, text="Saved initial week for the calendar",date=week_calendar)
+
+    else: 
+        month = datetime.now()
+        month = str(month.month) 
+        month_calendar = str(year + '-' + month) #return the current week with this format: YYYY-MM
+        return CurrentDateResponseMessage(response_code=200, text="Saved initial week for the calendar", date=month_calendar)
 
 def create_mock_user():
     # user = endpoints.get_current_user()
