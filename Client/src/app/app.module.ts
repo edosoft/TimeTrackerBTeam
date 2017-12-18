@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { CheckComponent } from './check/check.component';
 import { ReportsComponent } from './reports/reports.component';
 import { CanActivateViaUserWorkdayGuard } from './provider/guard.provider';
+import { AdminComponent } from './admin/admin.component';
 
 
 
@@ -18,7 +19,8 @@ import { CanActivateViaUserWorkdayGuard } from './provider/guard.provider';
     AppComponent,
     LoginComponent,
     CheckComponent,
-    ReportsComponent
+    ReportsComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
