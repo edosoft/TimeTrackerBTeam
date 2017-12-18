@@ -1,9 +1,9 @@
 <div class="button-report row">
   <div class="input-group col-sm-4">
-    <input *ngIf = "reportType == 1" [(ngModel)]="selectedDate" [value]="selectedDate" class="form-control" type="month" id="dateInput" max="todayDate"
-    required/>
-    <input *ngIf = "reportType == 0"[(ngModel)]="selectedDate" [value]="selectedDate" class="form-control" type="week" id="dateInput" max="todayDate"
-    required/>
+    <input *ngIf="reportType == 1" [(ngModel)]="selectedDate" [value]="selectedDate" class="form-control" type="month" id="dateInput"
+      max="todayDate" required/>
+    <input *ngIf="reportType == 0" [(ngModel)]="selectedDate" [value]="selectedDate" class="form-control" type="week" id="dateInput"
+      max="todayDate" required/>
     <div class="input-group-btn">
       <button (click)="getReport()" type="button" class="btn btn-primary">{{buttonTitle}}</button>
     </div>
