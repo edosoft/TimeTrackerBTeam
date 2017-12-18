@@ -62,12 +62,28 @@ header {
                         display: block;
                     }
                 }
+                &.mobile {
+                    @media (min-width: 768px) {
+                        display: none;
+                    }
+                }
             }
-            .navbar-toggle {
+            .navbar-toggler {
                 border: 1px solid #fff;
                 margin: 0px;
+                padding: 6px 9px;
+                outline: none;
+                &:hover {
+                    cursor: pointer;
+                }
+                @media (min-width: 768px) {
+                    display: none;
+                }
                 .icon-bar {
+                    display: block;
                     background-color: #fff;
+                    margin-top: 4px;
+                    margin-bottom: 4px;
                     height: 2px;
                     width: 24px;
                     border-radius: 0px;
@@ -82,13 +98,19 @@ header {
                 border-top: 1px solid #fff;
                 @media (min-width: 768px) {
                     border-top: none;
+                    margin-left: 15px;
+                    @include display-flex(true);
                 }
                 .main-menu {
                     .nav {
+                        @include flex-direction(column);
+                        @media (min-width: 768px) {
+                            @include flex-direction(row);
+                        }
                         li {
                             list-style: none;
                             display: block;
-                            margin: 20px 0px;
+                            margin: 15px 0px;
                             @media (min-width: 768px) {
                                 display: inline-block;
                                 margin: 0px;
@@ -154,9 +176,5 @@ header {
 }
 
 .container-general {
-    margin: 100px 0px;
     height: 100vh;
-    @media (min-width: 768px) {
-        margin: 0px 0px 0px -15px;
-    }
 }

@@ -10,14 +10,14 @@
             </div>
             <!-- .logo -->
 
-            <div *ngIf="isLogged" class="welcome hidden-sm hidden-md hidden-lg">
+            <div *ngIf="isLogged" class="welcome d-md-none d-lg-none">
                 <p>Welcome, </p>
                 <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
             </div>
             <!-- .welcome (mobile) -->
 
             <!-- Menu Mobile -->
-            <button *ngIf="isLogged" class="navbar-toggle collpased" (click)="isCollapsed = !isCollapsed" data-toggle="collapse" data-target="#mydropdown">
+            <button *ngIf="isLogged" class="navbar-toggler collapsed" (click)="isCollapsed = !isCollapsed" data-toggle="collapse" data-target="#mydropdown">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -61,7 +61,7 @@
         </div>
         <!-- .container-menu-->
 
-        <div *ngIf="isLogged" class="welcome hidden-xs">
+        <div *ngIf="isLogged" class="welcome d-none d-sm-none d-md-flex">
             <p>Welcome, </p>
             <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
             <button (click)="logOut()" class="logout">
