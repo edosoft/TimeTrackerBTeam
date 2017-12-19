@@ -1,4 +1,5 @@
 *.pyc
+/Server/public
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json
