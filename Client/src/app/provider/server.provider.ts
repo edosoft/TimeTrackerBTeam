@@ -220,4 +220,10 @@ export class ServerProvider {
     return `${d.getHours()}:${d.getMinutes()}`;
   }
 
+  returnToAdmin() {
+    this.zone.run(() => {
+      this.router.navigate(['/admin']);
+    });
+  }
+
 }
