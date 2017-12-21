@@ -132,7 +132,7 @@ export class ReportsComponent {
   }
 
   hoursFormat(time) {
-    const hours = time / 60;
+    const hours = Math.trunc(time / 60);
     const mins = time % 60;
 
     const hoursStr = hours < 10 ? `0${hours}` : hours.toString();
