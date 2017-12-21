@@ -64,3 +64,26 @@ class WeekTotalMessage(messages.Message):
     response_code = messages.IntegerField(2)
     user = messages.StringField(1)
     hours = messages.IntegerField(3)
+
+
+class IssueMessage(messages.Message):
+    employee = messages.StringField(1)
+    date = messages.StringField(2)
+    issue_type = messages.StringField(3)
+    non_viewed = messages.IntegerField(4)
+    non_solved = messages.IntegerField(5)
+
+
+class IssuesPerEmployeeMessage(messages.Message):
+    employee = messages.StringField(1)
+    issues = messages.MessageField(IssueMessage, 2, repeated=True)
+    total_unsolved_peremp = messages.IntegerField(3)
+    total_unviewed_peremp = messages.IntegerField(4)
+
+
+class IssueResponseMessage (messages.Message):
+    issues_per_employee = messages.MessageField(IssuesPerEmployeeMessage, 1, repeated=True)
+    response_code = messages.IntegerField(2)
+    text = messages.StringField(3)
+    total_unsolved = messages.IntegerField(4)
+    total_unviewed = messages.IntegerField(5)

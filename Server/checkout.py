@@ -1,7 +1,7 @@
 import datetime
 
 from messages import CheckoutResponseMessage
-from models import Workday
+from models import Workday, Issue
 
 
 def check_out(user, current_date=None):
@@ -43,6 +43,13 @@ def check_out(user, current_date=None):
         # Issue - Check out too soon
         if now < check_out_min:
             check_out_query.put()
+            issue = Issue()    
+            issue.employee = check_out_query.employee
+            issue.date = check_out_query.checkout
+            issue.issue_type = "Early Check Out"
+            issue.non_viewed = 1
+            issue.non_solved = 1
+            issue.put()
             return CheckoutResponseMessage(response_code=200,
                                            text="You checked out too early",
                                            checkout=str(check_out_query.checkout),
@@ -67,6 +74,12 @@ def check_out(user, current_date=None):
             else:
                 check_out_query.checkout = check_out_max
                 check_out_query.put()
+                issue = Issue()
+                issue.employee = check_out_query.employee
+                issue.issue_type = "Automatic Check Out"
+                issue.non_viewed = 1
+                issue.non_solved = 1
+                issue.put()
                 return CheckoutResponseMessage(response_code=200,
                                                text="Check out out of time",
                                                checkout=str(check_out_query.checkout),

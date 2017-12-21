@@ -16,4 +16,14 @@ class Workday(ndb.Model):
     checkin = ndb.DateTimeProperty()
     checkout = ndb.DateTimeProperty()
     total = ndb.IntegerProperty()
+
+class Issue(ndb.Model):
+    """ Model to represent an issue of an employee."""
+    employee = ndb.StructuredProperty(User)
+    date = ndb.DateTimeProperty()
+    issue_type = ndb.StringProperty()
+    non_viewed = ndb.IntegerProperty()
+    non_solved = ndb.IntegerProperty()
+
+    
 # [END Models]

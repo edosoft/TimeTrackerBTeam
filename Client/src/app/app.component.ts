@@ -38,4 +38,7 @@ export class AppComponent implements DoCheck, OnInit {
   monthlyReport() {
     this.server.monthlyReport();
   }
+  issuesReport() {
+    this.server.issuesReport();
+  }
 }

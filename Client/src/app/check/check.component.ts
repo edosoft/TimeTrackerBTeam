@@ -10,7 +10,7 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe]
 })
 export class CheckComponent implements OnInit {
-
+  
   currentUserWorkday: any;
   checkInTime: string;
   checkOutTime: string;
@@ -54,6 +54,7 @@ export class CheckComponent implements OnInit {
   ngOnInit() {
     this.date = this.datePipe.transform(new Date(), 'EEEE, MMMM d, y');
     this.currentUserWorkday = this.server.getUserWorkday();
+    console.log("usuario: " + this.server.getUserWorkday().id);
     this.currentHour = +(this.datePipe.transform(new Date(), 'HH'));
     this.currentMinutes = +(this.datePipe.transform(new Date(), 'mm'));
 

@@ -66,7 +66,7 @@ export class ServerProvider {
         this.userWorkday.date = response.result.date;
         this.userWorkday.checkin = this.returnDate(response.result.checkin);
         this.userWorkday.checkout = this.returnDate(response.result.checkout);
-        this.userWorkday.id = response.result.employeeid;
+        this.userWorkday.id = response.result.employee;
         this.userWorkday.total = response.result.total;
         this.logged = true;
 
@@ -99,6 +99,11 @@ export class ServerProvider {
       }
     });
   }
+  issuesReport() {
+    this.zone.run(() => {
+      this.router.navigate(['/issues']);
+    });
+  }
 
   weeklyReport() {
     this.createMockUser();
@@ -113,6 +118,20 @@ export class ServerProvider {
     this.reportType = 1;
     this.zone.run(() => {
       this.router.navigate(['/monthlyreport']);
+    });
+  }
+
+  getUserWithIssues() {
+    return new Promise<any>((resolve) => {
+      gapi.client.timetrackerApi.issues().execute((response: any) => {
+        if (response.error) {
+          console.log(response.response_code);
+          resolve(response.result);
+        } else {
+          console.log(response.result);
+          resolve(response.result);
+        }
+      });
     });
   }
 
@@ -212,7 +231,6 @@ export class ServerProvider {
     }
 
     const d = new Date(date);
-
     if (d.getMinutes() < 10) {
       return `${d.getHours()}:0${d.getMinutes()}`;
     }
