@@ -1,16 +1,24 @@
-<table class="table table-bordered table-striped table-responsive table-desktop">
-    <thead class="thead-dark">
-      <tr class="header-row">
-        <th>Name</th>
-        <th>Unsolved</th>
-        <th>Unviewed</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor='let row of issues_per_employee'>
-        <td nowrap>{{(row.employee.split("@", 1)[0]).replace(".", " ")}}</td>
-        <td>{{row.total_unsolved_peremp}}</td>
-        <td>{{row.total_unviewed_peremp}}</td>
-    </tr>
-    </tbody>
-  </table>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="list-log-checks">
+      <table class="table table-bordered table-striped table-desktop">
+        <thead class="thead-dark">
+          <tr class="header-row">
+            <th>Name</th>
+            <th>Unsolved</th>
+            <th>Unviewed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let row of issues_per_employee'>
+            <td nowrap>{{(row.employee.split("@", 1)[0]).replace(".", " ")}}</td>
+            <td>{{row.total_unsolved_peremp}}</td>
+            <td>{{row.total_unviewed_peremp}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
