@@ -21,45 +21,51 @@
   <strong>Please, insert a valid date.</strong>
 </div>
 
-<div *ngIf="!noRecordsFound" class="container-table-report">
-  <table class="table table-bordered table-striped table-responsive table-desktop">
-    <thead class="thead-dark">
-      <tr class="header-row">
-        <th>Name</th>
-        <th *ngIf="reportType == 1">Days</th>
-        <th>Hours</th>
-        <th *ngFor="let day of daysList" [ngStyle]="weekendColumn()">
-          {{day}}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="report-row" *ngFor="let report of results">
-        <td nowrap>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
-        <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
-        <td [ngStyle]="hoursColor(report)">{{hoursFormat(report.total)}}</td>
-        <td *ngFor="let num of report.workday" [ngStyle]="weekendColumn()">
-          {{Math.floor(num.total/60)}}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div *ngIf="!noRecordsFound" class="reports-table">
+        <table class="table table-bordered table-striped table-desktop">
+          <thead class="thead-dark">
+            <tr class="header-row">
+              <th>Name</th>
+              <th *ngIf="reportType == 1">Days</th>
+              <th>Hours</th>
+              <th *ngFor="let day of daysList" [ngStyle]="weekendColumn()">
+                {{day}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="report-row" *ngFor="let report of results">
+              <td nowrap>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
+              <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
+              <td [ngStyle]="hoursColor(report)">{{hoursFormat(report.total)}}</td>
+              <td *ngFor="let num of report.workday" [ngStyle]="weekendColumn()">
+                {{Math.floor(num.total/60)}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-  <table class="table table-bordered table-striped table-mobile-tablet">
-    <thead class="thead-dark">
-      <tr class="header-row">
-        <th>Name</th>
-        <th *ngIf="reportType == 1">Days</th>
-        <th>Hours</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="report-row" *ngFor="let report of results">
-        <td>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
-        <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
-        <td [ngStyle]="hoursColor(report)">{{hoursFormat(report.total)}}</td>
-      </tr>
-    </tbody>
-  </table>
+        <table class="table table-bordered table-striped table-mobile-tablet">
+          <thead class="thead-dark">
+            <tr class="header-row">
+              <th>Name</th>
+              <th *ngIf="reportType == 1">Days</th>
+              <th>Hours</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="report-row" *ngFor="let report of results">
+              <td>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
+              <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
+              <td [ngStyle]="hoursColor(report)">{{hoursFormat(report.total)}}</td>
+            </tr>
+          </tbody>
+        </table>
 
+      </div>
+    </div>
+  </div>
 </div>

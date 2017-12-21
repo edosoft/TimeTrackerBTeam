@@ -2,7 +2,7 @@
 
 @import './variables';
 @import './mixins';
-
 body {
-    background-color: #f3f3f4 !important;
+  background-color: #f3f3f4 !important;
+  overflow-x: hidden;
 }

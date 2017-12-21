@@ -11,23 +11,6 @@
   }
 }
 
-.container-table-report {
-  overflow-x: auto;
-  margin: 20px auto;
-  text-align: center;
-  .table-desktop {
-    display: none;
-    @media (min-width: 992px) {
-      display: block;
-    }
-  }
-  .table-mobile-tablet {
-    @media (min-width: 992px) {
-      display: none;
-    }
-  }
-}
-
 .mssg {
   text-align: center;
   width: 400px;
@@ -36,4 +19,24 @@
 
 .close {
   cursor: pointer;
+}
+
+.reports-table {
+  margin-top: 20px;
+  overflow-x: auto;
+  table {
+    width: 100%;
+    box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
+  }
+  .table-desktop {
+    display: none;
+    @media (min-width: 992px) {
+      display: table;
+    }
+  }
+  .table-mobile-tablet {
+    @media (min-width: 992px) {
+      display: none;
+    }
+  }
 }
