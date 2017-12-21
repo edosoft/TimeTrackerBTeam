@@ -7,6 +7,7 @@ from login import log_in
 from checkin import check_in
 from checkout import check_out
 from reports import get_report
+from issues import get_user_with_issues
 
 import util
 
@@ -16,7 +17,7 @@ from protorpc import message_types
 from protorpc import remote
 
 from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
-from messages import RequestReport, ReportResponseMessage, WeekTotalMessage
+from messages import RequestReport, ReportResponseMessage, WeekTotalMessage , IssueResponseMessage
 
 from models import User, Workday
 
@@ -109,5 +110,11 @@ class MainPage(remote.Service):
 
         return util.create_mock_user()
 
+    @endpoints.method(message_types.VoidMessage, IssueResponseMessage, path='issues', http_method='POST', name='issues')
+    def issues(self, request):
+        '''
+        A function who will get issues
+        '''
+        return get_user_with_issues()
 
 app = endpoints.api_server([MainPage], restricted=False)

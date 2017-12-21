@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CheckComponent } from '../check/check.component';
 import { LoginComponent } from '../login/login.component';
+import { IssuesComponent } from '../issues/issues.component';
 import { ReportsComponent } from '../reports/reports.component';
 import { CanActivateViaUserWorkdayGuard } from './guard.provider';
 
@@ -23,6 +24,12 @@ const appRoutes: Routes = [{
 }, {
   path: 'monthlyreport',
   component: ReportsComponent,
+  canActivate: [
+    CanActivateViaUserWorkdayGuard
+  ]
+}, {
+  path: 'issues',
+  component: IssuesComponent,
   canActivate: [
     CanActivateViaUserWorkdayGuard
   ]

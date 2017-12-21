@@ -1,7 +1,7 @@
 import datetime
 
 from messages import CheckinResponseMessage
-from models import Workday
+from models import Workday, Issue
 
 
 def check_in(user, current_date=None):
@@ -47,6 +47,13 @@ def check_in(user, current_date=None):
 
             # Issue - Check in too late.
             else:
+                issue = Issue()
+                issue.employee = check_in_query.employee
+                issue.date = check_in_query.checkin
+                issue.issue_type = "Late Check In"
+                issue.non_viewed = 1
+                issue.non_solved = 1
+                issue.put()
                 return CheckinResponseMessage(response_code=200,
                                               text="Check in out of time",
                                               checkin=str(check_in_query.checkin))
