@@ -10,7 +10,7 @@ declare const gapi: any;
 @Injectable()
 export class ServerProvider {
 
-  constructor (private router: Router, private zone: NgZone) {}
+  constructor(private router: Router, private zone: NgZone) { }
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
   L = 'http://localhost:8080/_ah/api';
@@ -97,7 +97,7 @@ export class ServerProvider {
       } else {
         console.log(JSON.stringify(response.result));
       }
-      });
+    });
   }
   issuesReport() {
     this.zone.run(() => {
@@ -141,7 +141,7 @@ export class ServerProvider {
       const content = {
         date: body.date,
         report_type: body.report_type
-    };
+      };
       gapi.client.timetrackerApi.report(content).execute((response: any) => {
         if (response.error) {
           console.log(response.error);
@@ -153,6 +153,29 @@ export class ServerProvider {
     });
   }
 
+  currentDate(reportType) {
+    return new Promise<any>((resolve) => {
+
+      const content = {
+        report_type: reportType
+      };
+      gapi.client.timetrackerApi.date(content).execute((response: any) => {
+        if (response.error) {
+          console.log(response.error);
+          resolve(response.result);
+        } else {
+          resolve(response.result);
+        }
+      });
+    });
+  }
+  /*
+    currentDate() {
+      gapi.client.timetrackerApi.date() {
+        return = response.result;
+      }
+    }
+  */
   logOut() {
     this.logged = false;
     this.auth2 = gapi.auth2.getAuthInstance();

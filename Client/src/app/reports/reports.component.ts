@@ -34,9 +34,12 @@ export class ReportsComponent {
       this.buttonTitle = 'Get Monthly Report';
       this.infoText = 'Select a month to get the report';
     }
-  // this.selectedDate = this.server.getUserWorkday().date;
-  // this.selectedDate = '2017-W46';
-  // this.getReport();
+
+    this.server.currentDate(this.reportType).then((response) => {
+      this.selectedDate = response.date;
+      this.getReport();
+    });
+    //this.getReport();
   }
 
 

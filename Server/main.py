@@ -17,7 +17,7 @@ from protorpc import message_types
 from protorpc import remote
 
 from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
-from messages import RequestReport, ReportResponseMessage, WeekTotalMessage , IssueResponseMessage
+from messages import RequestReport, ReportResponseMessage, WeekTotalMessage , IssueResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
 
 from models import User, Workday
 
@@ -88,6 +88,15 @@ class MainPage(remote.Service):
         automatic_checkout_helper()
         return message_types.VoidMessage()
 
+    @endpoints.method(RequestCurrentDate, CurrentDateResponseMessage,
+                      path='date', http_method='POST', name='date')
+    def date(self, request):
+        """
+        A function which retuns the current week and the current month with the 
+        apropiate format to use in calendar. This function don't return any error.
+        """
+        return util.current_date(request.report_type)
+
     @endpoints.method(RequestReport, ReportResponseMessage,
                       path='report', http_method='POST', name='report')
     def report(self, request):
@@ -100,6 +109,8 @@ class MainPage(remote.Service):
 
         # user = endpoints.get_current_user()
         return get_report(request.date, request.report_type)
+
+
 
     @endpoints.method(message_types.VoidMessage, CheckinResponseMessage,
                       path='create', http_method='POST', name='create')

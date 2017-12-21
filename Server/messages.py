@@ -27,6 +27,15 @@ class ReportResponseMessage(messages.Message):
     text = messages.StringField(3, required=True)
     month = messages.IntegerField(4, required=False)
 
+class RequestCurrentDate(messages.Message):
+    report_type = messages.IntegerField(2)
+
+
+class CurrentDateResponseMessage(messages.Message):
+    response_code = messages.IntegerField(2, required=True)
+    text = messages.StringField(3, required=True)
+    date = messages.StringField(4, required=True)
+
 
 class WorkdayResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
