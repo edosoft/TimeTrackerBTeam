@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 from protorpc import messages
-
-
+from protorpc import message_types
 class WorkdayMessage (messages.Message):
     date = messages.StringField(1)
     day_of_week = messages.IntegerField(2)
@@ -41,8 +40,8 @@ class WorkdayResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
     employee = messages.StringField(3)
     date = messages.StringField(4)
-    checkin = messages.StringField(5)
-    checkout = messages.StringField(6)
+    checkin = messages.StringField(5, repeated=True)
+    checkout = messages.StringField(6, repeated=True)
     total = messages.IntegerField(7)
     text = messages.StringField(1)
 
@@ -51,6 +50,7 @@ class CheckinResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
     text = messages.StringField(1)
     checkin = messages.StringField(3)
+    number = messages.IntegerField(4)
 
 
 class CheckoutResponseMessage(messages.Message):
@@ -58,6 +58,7 @@ class CheckoutResponseMessage(messages.Message):
     text = messages.StringField(1)
     checkout = messages.StringField(3)
     total = messages.IntegerField(4)
+    number = messages.IntegerField(5)
 
 
 class WeekTotalMessage(messages.Message):

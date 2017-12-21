@@ -5,6 +5,9 @@ import unittest
 from datetime import datetime, date
 from models import Workday, User
 from tasks import automatic_checkout_helper
+from login import log_in
+from checkin import check_in
+from checkout import check_out
 
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
@@ -31,29 +34,28 @@ class DatastoreTestCase(unittest.TestCase):
     # [END datastore_example_teardown]
 
     def test_auto_checkout(self):
-        fake_date = datetime.now()
+        fake_date = datetime.now().replace(hour=8, minute=0)
         fake_user = User(email="prueba")
-        fake_work = Workday(employee=fake_user, date=fake_date,
-                            checkin=fake_date, checkout=None, total=0)
-        fake_work.put()
+        log_in(fake_user, fake_date)
+        check_in(fake_user, fake_date)
+    
         automatic_checkout_helper()
 
         queryWorkday = Workday.query(Workday.date == date.today(),
                                      Workday.employee.email == "prueba").get()
-        print (queryWorkday)
-        self.assertTrue(queryWorkday.checkout, "checkout not closed")
+        #print (queryWorkday)
+        self.assertTrue(queryWorkday.checkout[-1], "checkout not closed")
 
     def test_auto_checkout_with_false_checkin(self):
         fake_date = datetime.now()
         fake_user = User(email="prueba")
         fake_work = Workday(employee=fake_user, date=fake_date,
-                            checkin=None, checkout=None, total=0)
+                            total=0)
         fake_work.put()
         automatic_checkout_helper()
 
         queryWorkday = Workday.query(Workday.date == date.today(),
                                      Workday.employee.email == "prueba").get()
-        print (queryWorkday)
         self.assertFalse(queryWorkday.checkout, "checkout not closed")
 
 

@@ -20,9 +20,8 @@ def check_in(user, current_date=None):
 
     check_in_query = Workday.query(Workday.employee.email == email,
                                    Workday.date == current_date).get()
-
     # check_in_query has the Workday of the employee in the proper day.
-    if check_in_query.checkin is None:
+    if len(check_in_query.checkin) is 0:
         now = current_date
         check_in_min = now.replace(hour=7, minute=30, second=59, microsecond=0)
         check_in_max = now.replace(hour=9, minute=00, second=59, microsecond=0)
@@ -36,30 +35,45 @@ def check_in(user, current_date=None):
             return CheckinResponseMessage(response_code=400,
                                           text="You can't check in after 19:00 pm")
         else:
-            check_in_query.checkin = now
+            check_in_query.checkin.append(now)
             check_in_query.put()
-
             # Ok
             if now < check_in_max:
                 return CheckinResponseMessage(response_code=200,
                                               text="Successful Check in",
-                                              checkin=str(check_in_query.checkin))
+                                              checkin=str(now),
+                                              number=len(check_in_query.checkin))
 
             # Issue - Check in too late.
             else:
                 issue = Issue()
                 issue.employee = check_in_query.employee
-                issue.date = check_in_query.checkin
+                issue.date = check_in_query.checkin[-1]
                 issue.issue_type = "Late Check In"
                 issue.non_viewed = 1
                 issue.non_solved = 1
                 issue.put()
                 return CheckinResponseMessage(response_code=200,
                                               text="Check in out of time",
-                                              checkin=str(check_in_query.checkin))
+                                              checkin=str(now),
+                                              number=len(check_in_query.checkin))
 
     # Error - Check in after check in
     else:
-        return CheckinResponseMessage(response_code=400,
-                                      checkin=str(check_in_query.checkin),
-                                      text="You can't check in again today")
+         # Error - As many checks out as checks in
+        if len(check_in_query.checkin) > 2:
+            return CheckinResponseMessage(response_code=400,
+                                          text="You can't check in more than 3 times")
+        
+        elif len(check_in_query.checkin) is not len(check_in_query.checkout):
+            return CheckinResponseMessage(response_code=400,
+                                          text="You can't check in again without checking out before")
+
+        else:
+            now = current_date                           
+            check_in_query.checkin.append(now)
+            check_in_query.put()
+            return CheckinResponseMessage(response_code=200,
+                                            text="Successful Check in",
+                                            checkin=str(now),
+                                            number=len(check_in_query.checkin))

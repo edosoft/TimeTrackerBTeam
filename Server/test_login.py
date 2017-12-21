@@ -67,13 +67,18 @@ class DatastoreTestCase(unittest.TestCase):
         result = log_in(self.user, date)
         self.assertEqual(result.text, "Creating Workday")
 
+    def test_returning_user(self):
+        date = datetime.datetime.now()
+        log_in(self.user, date)
+        result = log_in(self.user, date)
+        self.assertEqual(result.text, "Returning Workday")
+
     def test_multiple_user(self):
         date = datetime.datetime.now()
-        result = log_in(self.user, date)
-        result = log_in(User(email="lelele@edosoft.es"), date)
+        log_in(self.user, date)
+        log_in(User(email="lelele@edosoft.es"), date)
         result = log_in(User(email="lelele2@edosoft.es"), date)
         self.assertEqual(3, len(User.query().fetch(10)))
-
 # [END   User Tests]
 
 

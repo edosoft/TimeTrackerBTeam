@@ -13,8 +13,8 @@ class Workday(ndb.Model):
     """ Model to represent the workday of an employee."""
     employee = ndb.StructuredProperty(User)
     date = ndb.DateProperty(auto_now_add=True)
-    checkin = ndb.DateTimeProperty()
-    checkout = ndb.DateTimeProperty()
+    checkin = ndb.DateTimeProperty(repeated=True)
+    checkout = ndb.DateTimeProperty(repeated=True)
     total = ndb.IntegerProperty()
 
 class Issue(ndb.Model):

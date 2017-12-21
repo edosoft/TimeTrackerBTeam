@@ -25,7 +25,7 @@
           <strong>You can't check in, its too early!</strong>
         </div>
 
-        <div *ngIf="checkInLate" class="mssg alert alert-warning alert-dismissable">
+        <div *ngIf="checkInLate && currentUserWorkday.checkin_number == 1" class="mssg alert alert-warning alert-dismissable">
           <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
           <strong>You checked in too late!</strong>
         </div>
@@ -35,17 +35,15 @@
           <strong>You checked out too early.</strong>
         </div>
 
-        <div class="container-general-check-buttons">
-          <div class="checkbtns">
-            <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="checkInTime != 'None' || checkInOutofRange">Check In</button>
-            <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="checkOutTime != 'None' || checkInTime == 'None'">Check Out</button>
-          </div>
+        <div *ngIf="checkWait" class="mssg alert alert-warning alert-dismissable">
+          <a class="close" data-dismiss="alert" aria-label="close" (click)="closeWait()">×</a>
+          <strong>You need to wait at least 5 minutes before a checkout.</strong>
         </div>
 
-        <div *ngIf="checkIndone == true" class="worked-timesheet">
-          <div class="time-worked">
-            <p>Daily Time:</p>
-            <p>{{dailytotaltime}}</p>
+        <div class="container-general-check-buttons">
+          <div class="checkbtns">
+            <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="currentUserWorkday.checkin >=3 || checkInOutofRange || !checkInActive">Check In</button>
+            <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="currentUserWorkday.checkout >=3 || checkInTime == 'None' || !checkOutActive">Check Out</button>
           </div>
         </div>
 

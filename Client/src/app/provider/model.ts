@@ -4,6 +4,8 @@ export class User {
   date: string;
   checkin: string;
   checkout: string;
+  checkin_number: number;
+  checkout_number: number;
   total: number;
 }
 

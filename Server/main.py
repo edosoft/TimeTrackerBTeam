@@ -101,13 +101,12 @@ class MainPage(remote.Service):
                       path='report', http_method='POST', name='report')
     def report(self, request):
         """
-        A function which updates the Workday with the checkout date and the total hours.
-        If the checkout is made in a valid time, the system returns updates the Workday entity
-        with the checkout date and total. If not, the system returns an error or raises an issue
-        if necessary
+        A function which returns the reports of a selected date. It returns the user, 
+        total hours per day and total hours in the range of selected dates. 
+        Needs - The date and the type of the report
+        Returns - ReportResponseMessage, an array of ReportMessages
         """
 
-        # user = endpoints.get_current_user()
         return get_report(request.date, request.report_type)
 
 

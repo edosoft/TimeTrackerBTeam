@@ -11,6 +11,7 @@ from messages import ReportMessage, ReportResponseMessage, WorkdayMessage
 from models import User, Workday
 
 from reports import get_report
+from login import log_in
 
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
@@ -50,7 +51,7 @@ class DatastoreTestCase(unittest.TestCase):
 
         for x in range(6, 11):
             date = datetime.now().replace(month = 11, day = x)
-            work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=480)
+            work = Workday(employee=user1,date=date, total=480)
             work.put()
 
         result = get_report(first, 0)
@@ -69,20 +70,20 @@ class DatastoreTestCase(unittest.TestCase):
         user2 = User(email="hmr@edosoft.es")
         user2.put()
         date = datetime.now().replace(month = 11,day = 5)
-        work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=300)
+        work = Workday(employee=user1,date=date, total=300)
         work.put()
         for x in range(21, 23):
             date = datetime.now().replace(month = 11,day = x)
-            work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=300)
+            work = Workday(employee=user1,date=date, total=300)
             work.put()
 
         date = datetime.now().replace(month = 11,day = 23)
-        work = Workday(employee=user1,date=date, checkin=None, checkout=None, total=500)
+        work = Workday(employee=user1,date=date, total=500)
         work.put()
 
         for x in range(20, 24):
             date = datetime.now().replace(month = 11,day = x)
-            work = Workday(employee=user2,date=date, checkin=None, checkout=None, total=480)
+            work = Workday(employee=user2,date=date, total=480)
             work.put()
 
         first = "2017-11"

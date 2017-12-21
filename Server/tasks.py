@@ -10,6 +10,6 @@ def automatic_checkout_helper():
 
     # Updates checkout for each workday
     for workday in workday_query:
-        if workday.checkin is not None and workday.checkout is None:
-            workday.checkout = datetime.datetime.now()
+        if len(workday.checkin) is not len(workday.checkout):
+            workday.checkout.append(datetime.datetime.now())
             workday.put()

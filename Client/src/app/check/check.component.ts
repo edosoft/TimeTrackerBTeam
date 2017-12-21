@@ -22,39 +22,21 @@ export class CheckComponent implements OnInit {
   checkInSoon = false;
   checkInLate = false;
 
+  checkWait: boolean;
   checkOutHour: number;
   checkOutSoon: boolean;
   currentHour: any;
   currentMinutes: any;
   checkInOutofRange: boolean;
 
-  /* Variables for dailyWorkedTime function */
-
-  checkIndone = false;
-  checkOutdone = false;
-  currentTime: any;
-  currentTimeMinutes: any;
-  currentTimeHour: any;
-  timeCheckIn: any;
-  timecheckInHour: any;
-  timecheckInMinutes: any;
-  timeCheckOut: any;
-  timecheckOutHour: any;
-  timecheckOutMinutes: any;
-  dailytotalTimeMinutes: any;
-  dailytotaltime: any;
-  dailyWorkedTimeHour: any;
-  dailyWorkedTimeMinutes: any;
-  timer: any = null;
-
-  /* END Variables for dailyWorkedTime function */
+  checkInActive;
+  checkOutActive;
 
   constructor(private server: ServerProvider, private datePipe: DatePipe) {}
 
   ngOnInit() {
     this.date = this.datePipe.transform(new Date(), 'EEEE, MMMM d, y');
     this.currentUserWorkday = this.server.getUserWorkday();
-    console.log("usuario: " + this.server.getUserWorkday().id);
     this.currentHour = +(this.datePipe.transform(new Date(), 'HH'));
     this.currentMinutes = +(this.datePipe.transform(new Date(), 'mm'));
 
@@ -73,23 +55,30 @@ export class CheckComponent implements OnInit {
     }else {
       this.checkOutTime = this.currentUserWorkday.checkout;
     }
-    if (this.checkInTime != 'None') {
-      this.checkIndone = true;
-      if (this.checkOutTime == 'None') {
-        this.timer = setInterval(this.dailyWorkedTime.bind(this), 60 * 1000);
-        this.dailytotaltime = this.dailyWorkedTime();
-      }else {
-        clearInterval(this.timer);
-        this.checkOutdone = true;
-        this.dailytotaltime = this.dailyWorkedTime();
-      }
-    }
 
+    this.checkActiveLogic();
+
+  }
+
+
+  checkActiveLogic() {
+    if ((this.currentUserWorkday.checkin_number == this.currentUserWorkday.checkout_number) &&
+    this.currentUserWorkday.checkin_number < 3) {
+    this.checkInActive = true;
+    this.checkOutActive = false;
+    } else if ((this.currentUserWorkday.checkin_number - this.currentUserWorkday.checkout_number) == 1) {
+        this.checkInActive = false;
+        this.checkOutActive = true;
+    }else {
+      this.checkInActive = false;
+      this.checkOutActive = false;
+    }
   }
 
   async checkIn() {
     await this.server.checkIn();
-    this.checkIndone = true;
+    // this.checkIndone = true;
+    this.checkActiveLogic();
     this.checkInTime = this.server.getUserWorkday().checkin;
     this.checkInClock = (this.checkInTime).split(':', 2);
     this.checkInHour = +this.checkInClock[0];
@@ -102,22 +91,26 @@ export class CheckComponent implements OnInit {
         this.checkInLate = true;
       }
     }
-    this.dailytotaltime = '00:00';
-    this.timer = setInterval(this.dailyWorkedTime.bind(this), 60 * 1000);
   }
 
   async checkOut() {
-    await this.server.checkOut();
-    this.checkOutdone = true;
-    this.checkOutTime = this.server.getUserWorkday().checkout;
-    // Coge las cifras de horas y las convierte en numero
-    this.checkOutHour = +this.checkOutTime.split(':', 1).join();
+    const checkOutOk = await this.server.checkOut();
+    if (checkOutOk) {
+      this.checkWait = false;
+      this.checkActiveLogic();
 
-    if (this.checkOutHour < 14) {
-      this.checkOutSoon = true;
+      this.checkOutTime = this.server.getUserWorkday().checkout;
+      // Coge las cifras de horas y las convierte en numero
+      this.checkOutHour = +this.checkOutTime.split(':', 1).join();
+
+      if (this.checkOutHour < 14) {
+        this.checkOutSoon = true;
+      }
+    }else {
+      if (this.server.getUserWorkday().checkout == 'Wait5') {
+        this.checkWait = true;
+      }
     }
-    clearInterval(this.timer);
-    this.dailyWorkedTime();
   }
 
   async getWeekTotal() {
@@ -133,71 +126,7 @@ export class CheckComponent implements OnInit {
     this.checkOutSoon = false;
   }
 
-
-  dailyWorkedTime() {
-
-    /**
-     * Calculate the daily time worked when has done check in and check out.
-     */
-
-    this.timeCheckIn = this.server.getUserWorkday().checkin;
-    this.timeCheckIn = this.timeCheckIn.split(':');
-    this.timecheckInHour = parseInt(this.timeCheckIn[0], 10);
-    this.timecheckInMinutes = parseInt(this.timeCheckIn[1], 10);
-
-    if ((this.checkIndone == true) && (this.checkOutdone == false)) {
-
-      this.currentTimeHour = new Date().getHours();
-      this.currentTimeMinutes = new Date().getMinutes();
-
-      this.currentTime = (this.currentTimeHour * 60) + this.currentTimeMinutes;
-      this.timeCheckIn = (this.timecheckInHour * 60) + this.timecheckInMinutes;
-
-      this.dailytotalTimeMinutes = this.currentTime - this.timeCheckIn;
-
-      this.dailyWorkedTimeMinutes = this.dailytotalTimeMinutes % 60;
-      this.dailyWorkedTimeHour = (this.dailytotalTimeMinutes - this.dailyWorkedTimeMinutes) / 60;
-
-      if (this.dailyWorkedTimeHour < 10) {
-        this.dailyWorkedTimeHour = '0' + this.dailyWorkedTimeHour;
-      }
-
-      if (this.dailyWorkedTimeMinutes < 10) {
-        this.dailyWorkedTimeMinutes = '0' + this.dailyWorkedTimeMinutes;
-      }
-
-      this.dailytotaltime = this.dailyWorkedTimeHour + ':' + this.dailyWorkedTimeMinutes;
-
-    }else if ((this.checkIndone == true) && (this.checkOutdone == true)) {
-
-      this.timeCheckOut = this.server.getUserWorkday().checkout;
-      this.timeCheckOut = this.timeCheckOut.split(':');
-      this.timecheckOutHour = parseInt(this.timeCheckOut[0], 10);
-      this.timecheckOutMinutes = parseInt(this.timeCheckOut[1], 10);
-
-      this.timeCheckIn = (this.timecheckInHour * 60) + this.timecheckInMinutes;
-      this.timeCheckOut = (this.timecheckOutHour * 60) + this.timecheckOutMinutes;
-
-      this.dailytotalTimeMinutes = this.timeCheckOut - this.timeCheckIn;
-
-      this.dailyWorkedTimeMinutes = this.dailytotalTimeMinutes % 60;
-      this.dailyWorkedTimeHour = (this.dailytotalTimeMinutes - this.dailyWorkedTimeMinutes) / 60;
-
-      if (this.dailyWorkedTimeHour < 10) {
-        this.dailyWorkedTimeHour = '0' + this.dailyWorkedTimeHour;
-      }
-
-      if (this.dailyWorkedTimeMinutes < 10) {
-        this.dailyWorkedTimeMinutes = '0' + this.dailyWorkedTimeMinutes;
-      }
-
-      this.dailytotaltime = this.dailyWorkedTimeHour + ':' + this.dailyWorkedTimeMinutes;
-
-    }
-
-    return this.dailytotaltime;
-
+  closeWait() {
+    this.checkWait = false;
   }
-
-
 }

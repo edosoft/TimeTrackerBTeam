@@ -45,19 +45,26 @@ def log_in(user, current_date=None):
         if workday_query is None:
             work = Workday()
             work.employee = User(email=email)
-            work.checkin = None
-            work.checkout = None
+            work.checkin = []
+            work.checkout = []
             work.total = 0
             work.put()
             return WorkdayResponseMessage(text="Creating Workday", employee=work.employee.email,
-                                          date=str(work.date), checkin=str(work.checkin),
-                                          checkout=str(work.checkout), total=work.total,
+                                          date=str(work.date), checkin=work.checkin,
+                                          checkout=work.checkout, total=work.total,
                                           response_code=200)
 
         # Ok - Returning existent
         else:
             work = workday_query
+            strcin = []
+            strcout = []
+            for cin in work.checkin:
+                strcin.append(str(cin))
+            for cout in work.checkout:
+                strcout.append(str(cout))
+            
             return WorkdayResponseMessage(text="Returning Workday", employee=work.employee.email,
-                                          date=str(work.date), checkin=str(work.checkin),
-                                          checkout=str(work.checkout), total=work.total,
+                                          date=str(work.date), checkin=strcin,
+                                          checkout=strcout, total=work.total,
                                           response_code=200)

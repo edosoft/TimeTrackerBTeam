@@ -28,7 +28,7 @@ def get_report(date, report_type=None):
 
     requested_workdays = Workday.query(Workday.date >= start_date, Workday.date <= end_date)
 
-    if len(requested_workdays.fetch()) < 1:
+    if len(requested_workdays.fetch(10)) < 1:
         return ReportResponseMessage(response_code=400, text="There are no records in the selected date")
 
     else:
@@ -71,7 +71,6 @@ def get_report(date, report_type=None):
             #if len(workdays_by_employee.fetch()):
             #    result.append(employee_report)
             result.append(employee_report)
-            
         return ReportResponseMessage(response_code=200, text="Returning report",
                                      reports=result, month=cal[1])
 

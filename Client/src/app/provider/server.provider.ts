@@ -68,6 +68,11 @@ export class ServerProvider {
         this.userWorkday.checkout = this.returnDate(response.result.checkout);
         this.userWorkday.id = response.result.employee;
         this.userWorkday.total = response.result.total;
+
+        this.userWorkday.checkin_number = this.returnNumber(response.result.checkin);
+        this.userWorkday.checkout_number = this.returnNumber(response.result.checkout);
+
+        console.log (JSON.stringify(this.userWorkday));
         this.logged = true;
 
         this.zone.run(() => {
@@ -195,6 +200,7 @@ export class ServerProvider {
         } else {
           console.log(JSON.stringify(response.result));
           this.userWorkday.checkin = this.returnDate(response.result.checkin);
+          this.userWorkday.checkin_number = response.result.number;
           resolve(true);
         }
       });
@@ -207,11 +213,15 @@ export class ServerProvider {
         if (response.result.response_code === '400') {
           this.userWorkday.checkout = 'None';
           resolve(false);
-        } else {
+        } else if (response.result.response_code === '300') {
+          this.userWorkday.checkout = 'Wait5';
+          resolve(false);
+        }else {
           console.log(JSON.stringify(response.result));
           this.userWorkday.checkout = this.returnDate(response.result.checkout);
+          this.userWorkday.checkout_number = response.result.number;
           this.userWorkday.total = response.result.total;
-          resolve(false);
+          resolve(true);
         }
       });
     });
@@ -226,16 +236,24 @@ export class ServerProvider {
   }
 
   returnDate(date) {
-    if (date === 'None') {
+    let time;
+    if (date == undefined) {
       return 'None';
+    } else if (typeof(date) === 'string') {
+      time = date;
+    } else  if (typeof(date) === 'object') {
+      time = date[date.length - 1];
     }
+    // 2017-12-21 15:43:34.251013
+    time = (time.split(' ', 2)[1]).split(':', 2);
+    return `${time[0]}:${time[1]}`;
+  }
 
-    const d = new Date(date);
-    if (d.getMinutes() < 10) {
-      return `${d.getHours()}:0${d.getMinutes()}`;
+  returnNumber(array) {
+    if (array == undefined) {
+      return 0;
     }
-
-    return `${d.getHours()}:${d.getMinutes()}`;
+    return array.length;
   }
 
 }
