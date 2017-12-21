@@ -50,7 +50,6 @@ export class ServerProvider {
         const profile = googleUser.getBasicProfile();
 
         this.userWorkday = new User();
-        this.userWorkday.name = profile.getName();
         this.logIn();
       }, (error) => {
         alert(JSON.stringify(error, undefined, 2));
@@ -63,13 +62,15 @@ export class ServerProvider {
       if (response.result.response_code === '400') {
         window.alert(response.result.text);
       } else {
+        this.userWorkday.id = response.result.email;
+        this.userWorkday.name = response.result.name;
+        this.userWorkday.hrm = response.result.hrm;
+        this.userWorkday.admin = response.result.admin;
         this.userWorkday.date = response.result.date;
         this.userWorkday.checkin = this.returnDate(response.result.checkin);
         this.userWorkday.checkout = this.returnDate(response.result.checkout);
-        this.userWorkday.id = response.result.employeeid;
         this.userWorkday.total = response.result.total;
         this.logged = true;
-
         this.zone.run(() => {
           this.router.navigate(['/check']);
         });

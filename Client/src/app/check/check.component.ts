@@ -49,11 +49,12 @@ export class CheckComponent implements OnInit {
 
   /* END Variables for dailyWorkedTime function */
 
-  constructor(private server: ServerProvider, private datePipe: DatePipe) {}
+  constructor(private server: ServerProvider, private datePipe: DatePipe) { }
 
   ngOnInit() {
     this.date = this.datePipe.transform(new Date(), 'EEEE, MMMM d, y');
     this.currentUserWorkday = this.server.getUserWorkday();
+    console.log("usuario: " + this.server.getUserWorkday().id);
     this.currentHour = +(this.datePipe.transform(new Date(), 'HH'));
     this.currentMinutes = +(this.datePipe.transform(new Date(), 'mm'));
 
@@ -63,13 +64,13 @@ export class CheckComponent implements OnInit {
 
     if (this.currentUserWorkday === undefined) {
       this.checkInTime = 'None';
-    }else {
+    } else {
       this.checkInTime = this.currentUserWorkday.checkin;
     }
 
     if (this.currentUserWorkday === undefined) {
       this.checkOutTime = 'None';
-    }else {
+    } else {
       this.checkOutTime = this.currentUserWorkday.checkout;
     }
     if (this.checkInTime != 'None') {
@@ -77,7 +78,7 @@ export class CheckComponent implements OnInit {
       if (this.checkOutTime == 'None') {
         this.timer = setInterval(this.dailyWorkedTime.bind(this), 60 * 1000);
         this.dailytotaltime = this.dailyWorkedTime();
-      }else {
+      } else {
         clearInterval(this.timer);
         this.checkOutdone = true;
         this.dailytotaltime = this.dailyWorkedTime();
@@ -167,7 +168,7 @@ export class CheckComponent implements OnInit {
 
       this.dailytotaltime = this.dailyWorkedTimeHour + ':' + this.dailyWorkedTimeMinutes;
 
-    }else if ((this.checkIndone == true) && (this.checkOutdone == true)) {
+    } else if ((this.checkIndone == true) && (this.checkOutdone == true)) {
 
       this.timeCheckOut = this.server.getUserWorkday().checkout;
       this.timeCheckOut = this.timeCheckOut.split(':');
