@@ -12,11 +12,53 @@
 
       <div *ngIf="isLogged" class="welcome d-md-none d-lg-none">
         <p>Welcome, </p>
-        <p>{{currentUserWorkday.name}}</p>
+        <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
       </div>
       <!-- .welcome (mobile) -->
 
-      <<<<<<< Updated upstream <div *ngIf="isLogged" class="collapse navbar-collapse custom-menu">
+      <!-- Menu Mobile -->
+      <button *ngIf="isLogged" class="navbar-toggler collapsed" (click)="isCollapsed = !isCollapsed" data-toggle="collapse" data-target="#mydropdown">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <!-- .Menu Mobile -->
+
+      <div class="container-menu desktop">
+
+        <div *ngIf="isLogged" class="collapse navbar-collapse custom-menu">
+          <div class="main-menu">
+            <ul class="nav">
+              <li class="nav-item">
+                <button (click)="returnToCheck()">Check</button>
+              </li>
+              <li class="nav-item">
+                <button (click)="weeklyReport()">Weekly Report</button>
+              </li>
+              <li class="nav-item">
+                <button (click)="monthlyReport()">Monthly Report</button>
+              </li>
+              <li class="nav-item">
+                <button (click)="returnToAdmin()">Admin</button>
+              </li>
+              <li class="nav-item logout-item desktop">
+                <button (click)="logOut()">
+                  <i class="fa fa-power-off"></i>Log Out</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- .navbar-collapse -->
+
+      </div>
+      <!-- .container-menu dekstop-->
+
+    </div>
+    <!-- .navbar-header -->
+
+    <div *ngIf="isLogged" class="container-menu mobile">
+
+      <div *ngIf="isLogged" id="mydropdown" [ngbCollapse]="isCollapsed" class="collapse navbar-collapse custom-menu">
         <div class="main-menu">
           <ul class="nav">
             <li class="nav-item">
@@ -37,104 +79,21 @@
             </li>
           </ul>
         </div>
-    </div>
-    <!-- .navbar-collapse -->
-    =======
-    <!-- Menu Mobile -->
-    <button *ngIf="isLogged" class="navbar-toggler collapsed" (click)="isCollapsed = !isCollapsed" data-toggle="collapse" data-target="#mydropdown">
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <!-- .Menu Mobile -->
-    >>>>>>> Stashed changes
-
-    <div class="container-menu desktop">
-
-      <div *ngIf="isLogged" class="collapse navbar-collapse custom-menu">
-        <div class="main-menu">
-          <ul class="nav">
-            <li class="nav-item">
-              <button (click)="returnToCheck()">Check</button>
-            </li>
-            <li class="nav-item">
-              <button (click)="weeklyReport()">Weekly Report</button>
-            </li>
-            <li class="nav-item">
-              <button (click)="monthlyReport()">Monthly Report</button>
-            </li>
-            <li class="nav-item logout-item desktop">
-              <button (click)="logOut()">
-                <i class="fa fa-power-off"></i>Log Out</button>
-            </li>
-          </ul>
-        </div>
       </div>
       <!-- .navbar-collapse -->
 
     </div>
-    <!-- .container-menu dekstop-->
+    <!-- .container-menu-->
 
-  </div>
-  <!-- .navbar-header -->
-
-  <div *ngIf="isLogged" id="mydropdown" [ngbCollapse]="isCollapsed" class="collapse navbar-collapse custom-menu">
-    <div class="main-menu">
-      <ul class="nav">
-        <li class="nav-item">
-          <button (click)="returnToCheck()">Check</button>
-        </li>
-        <li class="nav-item">
-          <button (click)="weeklyReport()">Weekly Report</button>
-        </li>
-        <li class="nav-item">
-          <button (click)="monthlyReport()">Monthly Report</button>
-        </li>
-        <li class="nav-item">
-          <button (click)="returnToAdmin()">Admin</button>
-        </li>
-        <li class="nav-item logout-item desktop">
-          <button (click)="logOut()">
-            <i class="fa fa-power-off"></i>Log Out</button>
-        </li>
-      </ul>
+    <div *ngIf="isLogged" class="welcome d-none d-sm-none d-md-flex">
+      <p>Welcome, </p>
+      <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
+      <button (click)="logOut()" class="logout">
+        <p>
+          <i class="fa fa-power-off"></i>Log Out</p>
+      </button>
     </div>
-  </div>
-  <!-- .navbar-collapse -->
-
-  <div *ngIf="isLogged" id="mydropdown" [ngbCollapse]="isCollapsed" class="collapse navbar-collapse custom-menu">
-    <div class="main-menu">
-      <ul class="nav">
-        <li class="nav-item">
-          <button (click)="returnToCheck()">Check</button>
-        </li>
-        <li class="nav-item">
-          <button (click)="weeklyReport()">Weekly Report</button>
-        </li>
-        <li class="nav-item">
-          <button (click)="monthlyReport()">Monthly Report</button>
-        </li>
-        <li class="nav-item logout-item desktop">
-          <button (click)="logOut()">
-            <i class="fa fa-power-off"></i>Log Out</button>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <!-- .navbar-collapse -->
-
-  </div>
-  <!-- .container-menu-->
-
-  <div *ngIf="isLogged" class="welcome d-none d-sm-none d-md-flex">
-    <p>Welcome, </p>
-    <p>{{currentUserWorkday.name}}</p>
-    <button (click)="logOut()" class="logout">
-      <p>
-        <i class="fa fa-power-off"></i>Log Out</p>
-    </button>
-  </div>
-  <!-- .welcome (desktop) -->
+    <!-- .welcome (desktop) -->
 
   </div>
   <!-- .container-header -->
