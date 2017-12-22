@@ -2,41 +2,82 @@
 @import '~sass/mixins';
 .container-admin {
     margin-top: 25px;
-    @include display-flex();
-    @include justify-content(center);
-    table {
-        text-align: center;
-        max-width: 1200px;
-        thead {
-            tr {
-                th {
-                    border: 1px solid #e9ecef;
+    .container-list-users {
+        @include display-flex();
+        @include justify-content(center);
+        table {
+            text-align: center;
+            max-width: 1200px;
+            thead {
+                tr {
+                    th {
+                        border: 1px solid #e9ecef;
+                    }
                 }
             }
-        }
-        tbody {
-            tr {
-                &:nth-child(2n) {
-                    background-color: #fff;
-                }
-                &:nth-child(2n + 1) {
-                    background-color: rgba(0, 0, 0, .05);
-                }
-                td {
-                    vertical-align: baseline;
-                    padding: 10px;
+            tbody {
+                tr {
+                    &:nth-child(2n) {
+                        background-color: #fff;
+                    }
+                    &:nth-child(2n + 1) {
+                        background-color: rgba(0, 0, 0, .05);
+                    }
+                    td {
+                        vertical-align: baseline;
+                        padding: 10px;
+                    }
                 }
             }
-        }
-        &.desktop {
-            display: none;
-            @media (min-width: 768px) {
-                display: table;
-            }
-        }
-        &.mobile {
-            @media (min-width: 768px) {
+            &.desktop {
                 display: none;
+                @media (min-width: 768px) {
+                    display: table;
+                }
+            }
+            &.mobile {
+                @media (min-width: 768px) {
+                    display: none;
+                }
+            }
+        }
+    }
+    .container-personal-user {
+        @include display-flex();
+        @include justify-content(center);
+        .personal-user {
+            position: relative;
+            border-radius: 3px;
+            box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
+            background-color: #fff;
+            padding: 30px;
+            width: 600px;
+            max-width: 100%;
+            .close {
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                margin: 7px 7px 0px 0px;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+            .form-roles {
+                .select-roles {
+                    margin-bottom: 15px;
+                    @include display-flex();
+                    @include justify-content(space-around);
+                    div {
+                        margin-right: 15px;
+                        @include display-flex();
+                        input {
+                            margin-right: 7px;
+                        }
+                    }
+                }
+                .submit-roles {
+                    text-align: center;
+                }
             }
         }
     }

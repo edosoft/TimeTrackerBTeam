@@ -1,104 +1,104 @@
 <header>
-  <div class="container-header">
+    <div class="container-header">
 
-    <div class="navbar-header">
-      <div class="logo-title-app">
-        <img src="../assets/images/stopwatch.png" title="time tracker" alt="White Watch">
-        <div *ngIf="!isLogged" class="title-app">
-          <h2>Time Tracking Application</h2>
-        </div>
-      </div>
-      <!-- .logo -->
+        <div class="navbar-header">
+            <div class="logo-title-app">
+                <img src="../assets/images/stopwatch.png" title="time tracker" alt="White Watch">
+                <div *ngIf="!isLogged" class="title-app">
+                    <h2>Time Tracking Application</h2>
+                </div>
+            </div>
+            <!-- .logo -->
 
-      <div *ngIf="isLogged" class="welcome d-md-none d-lg-none">
-        <p>Welcome, </p>
-        <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
-      </div>
-      <!-- .welcome (mobile) -->
+            <div *ngIf="isLogged" class="welcome d-md-none d-lg-none">
+                <p>Welcome, </p>
+                <p>{{currentUserWorkday.name}}</p>
+            </div>
+            <!-- .welcome (mobile) -->
 
-      <!-- Menu Mobile -->
-      <button *ngIf="isLogged" class="navbar-toggler collapsed" (click)="isCollapsed = !isCollapsed" data-toggle="collapse" data-target="#mydropdown">
+            <!-- Menu Mobile -->
+            <button *ngIf="isLogged" class="navbar-toggler collapsed" (click)="isCollapsed = !isCollapsed" data-toggle="collapse" data-target="#mydropdown">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <!-- .Menu Mobile -->
+            <!-- .Menu Mobile -->
 
-      <div class="container-menu desktop">
+            <div class="container-menu desktop">
 
-        <div *ngIf="isLogged" class="collapse navbar-collapse custom-menu">
-          <div class="main-menu">
-            <ul class="nav">
-              <li class="nav-item">
-                <button (click)="returnToCheck()">Check</button>
-              </li>
-              <li class="nav-item">
-                <button (click)="weeklyReport()">Weekly Report</button>
-              </li>
-              <li class="nav-item">
-                <button (click)="monthlyReport()">Monthly Report</button>
-              </li>
-              <li class="nav-item">
-                <button (click)="returnToAdmin()">Admin</button>
-              </li>
-              <li class="nav-item logout-item desktop">
-                <button (click)="logOut()">
+                <div *ngIf="isLogged" class="collapse navbar-collapse custom-menu">
+                    <div class="main-menu">
+                        <ul class="nav">
+                            <li class="nav-item">
+                                <button (click)="returnToCheck()">Check</button>
+                            </li>
+                            <li class="nav-item">
+                                <button (click)="weeklyReport()">Weekly Report</button>
+                            </li>
+                            <li class="nav-item">
+                                <button (click)="monthlyReport()">Monthly Report</button>
+                            </li>
+                            <li class="nav-item">
+                                <button (click)="returnToAdmin()">Admin</button>
+                            </li>
+                            <li class="nav-item logout-item desktop">
+                                <button (click)="logOut()">
                   <i class="fa fa-power-off"></i>Log Out</button>
-              </li>
-            </ul>
-          </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- .navbar-collapse -->
+
+            </div>
+            <!-- .container-menu dekstop-->
+
         </div>
-        <!-- .navbar-collapse -->
+        <!-- .navbar-header -->
 
-      </div>
-      <!-- .container-menu dekstop-->
+        <div *ngIf="isLogged" class="container-menu mobile">
 
-    </div>
-    <!-- .navbar-header -->
-
-    <div *ngIf="isLogged" class="container-menu mobile">
-
-      <div *ngIf="isLogged" id="mydropdown" [ngbCollapse]="isCollapsed" class="collapse navbar-collapse custom-menu">
-        <div class="main-menu">
-          <ul class="nav">
-            <li class="nav-item">
-              <button (click)="returnToCheck()">Check</button>
-            </li>
-            <li class="nav-item">
-              <button (click)="weeklyReport()">Weekly Report</button>
-            </li>
-            <li class="nav-item">
-              <button (click)="monthlyReport()">Monthly Report</button>
-            </li>
-            <li class="nav-item">
-              <button (click)="returnToAdmin()">Admin</button>
-            </li>
-            <li class="nav-item logout-item desktop">
-              <button (click)="logOut()">
+            <div *ngIf="isLogged" id="mydropdown" [ngbCollapse]="isCollapsed" class="collapse navbar-collapse custom-menu">
+                <div class="main-menu">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <button (click)="returnToCheck()">Check</button>
+                        </li>
+                        <li class="nav-item">
+                            <button (click)="weeklyReport()">Weekly Report</button>
+                        </li>
+                        <li class="nav-item">
+                            <button (click)="monthlyReport()">Monthly Report</button>
+                        </li>
+                        <li class="nav-item">
+                            <button (click)="returnToAdmin()">Admin</button>
+                        </li>
+                        <li class="nav-item logout-item desktop">
+                            <button (click)="logOut()">
                 <i class="fa fa-power-off"></i>Log Out</button>
-            </li>
-          </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- .navbar-collapse -->
+
         </div>
-      </div>
-      <!-- .navbar-collapse -->
+        <!-- .container-menu-->
 
-    </div>
-    <!-- .container-menu-->
-
-    <div *ngIf="isLogged" class="welcome d-none d-sm-none d-md-flex">
-      <p>Welcome, </p>
-      <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
-      <button (click)="logOut()" class="logout">
+        <div *ngIf="isLogged" class="welcome d-none d-sm-none d-md-flex">
+            <p>Welcome, </p>
+            <p>{{currentUserWorkday.name}}</p>
+            <button (click)="logOut()" class="logout">
         <p>
           <i class="fa fa-power-off"></i>Log Out</p>
       </button>
-    </div>
-    <!-- .welcome (desktop) -->
+        </div>
+        <!-- .welcome (desktop) -->
 
-  </div>
-  <!-- .container-header -->
+    </div>
+    <!-- .container-header -->
 </header>
 
 <div class="container-fluid container-general">
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 </div>

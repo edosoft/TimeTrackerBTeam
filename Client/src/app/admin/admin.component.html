@@ -1,67 +1,65 @@
 <div class="container-admin">
-    <table class="table desktop">
-        <thead class="thead-dark">
-            <tr>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>#</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Deyán Guacarán</td>
-                <td>deyan.guacaran@edosoft.com</td>
-                <td>Employee</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>Nestor Marin</td>
-                <td>nestor.marin@edosoft.com</td>
-                <td>Human Resource Manager</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>María Ramos</td>
-                <td>maria.ramos@edosoft.com</td>
-                <td>Administrator</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>Javier Hernández</td>
-                <td>javier.hernandez@edosoft.com</td>
-                <td>Human Resource Manager, Administrator</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-        </tbody>
-    </table>
+    <div *ngIf="isUserList" class="container-list-users">
 
+        <table class="table desktop">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{user.name}}</td>
+                    <td>{{user.email}}</td>
+                    <td *ngIf="user.admin == 0 && user.hrm == 0">Employee</td>
+                    <td *ngIf="user.admin == 1 && user.hrm == 0">Administrator</td>
+                    <td *ngIf="user.admin == 0 && user.hrm == 1">Human Resource Manager</td>
+                    <td *ngIf="user.admin == 1 && user.hrm == 1">Administrator, Human Resource Manager</td>
+                    <td><button type="button" class="btn btn-primary" (click)="setUserRole()">Edit</button></td>
+                </tr>
+            </tbody>
+        </table>
 
-    <table class="table mobile">
-        <thead class="thead-dark">
-            <tr>
-                <th>Nombre</th>
-                <th>#</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Deyán Guacarán</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>Nestor Marin</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>María Ramos</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>Javier Hernández</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table mobile">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{user.name}}</td>
+                    <td><button type="button" class="btn btn-primary">Edit</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <!-- .container-list-user -->
+
+    <div *ngIf="isSetRole" class="container-personal-user">
+        <div class="personal-user">
+            <div class="close" (click)="backToListUser()"><i class="fa fa-times" aria-hidden="true"></i></div>
+            <p>Deyán Guacarán</p>
+            <p>deyan.guacaran@edosoft.es</p>
+            <p>Employee</p>
+            <div class="form-roles">
+                <div class="select-roles">
+                    <div><input type="checkbox" [checked]="checkedAdmin" (change)="checkedAdmin = !checkedAdmin">Administrator</div>
+                    <div><input type="checkbox" [checked]="checkedHRM" (change)="checkedHRM = !checkedHRM">Human Resource Manager</div>
+                </div>
+                <div class="submit-roles">
+                    <button type="button" class="btn btn-primary" (click)="sendRole()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- .container-personal-user -->
+
 
 </div>
+<!-- .container-admin -->

@@ -95,7 +95,7 @@ export class ServerProvider {
     gapi.client.timetrackerApi.create().execute((response: any) => {
       if (response.error) {
         console.log(response.error);
-      } else {
+      } else {alert('The role has been changed to HRM');
         console.log(JSON.stringify(response.result));
       }
     });
@@ -224,6 +224,38 @@ export class ServerProvider {
   returnToAdmin() {
     this.zone.run(() => {
       this.router.navigate(['/admin']);
+    });
+  }
+
+  assignRole(email, hrm, admin) {
+    return new Promise<any>((resolve) => {
+      const content = {
+        user_email: email,
+        hrm_value: hrm,
+        admin_value: admin
+      };
+      gapi.client.timetrackerApi.change_role(content).execute((response: any) => {
+      if (response.error) {
+        console.log(response.error);
+        resolve(response.result);
+      } else {
+        resolve(response.result);
+      }
+      });
+    });
+  }
+
+  getUserList() {
+    return new Promise<any>((resolve, reject) => {
+      gapi.client.timetrackerApi.user_list().execute((response: any) => {
+        if (response.error) {
+          console.log(response.error);
+          resolve(response.result);
+        } else {
+          console.log(response.result);
+          resolve(response.result);
+        }
+      });
     });
   }
 
