@@ -10,7 +10,7 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe]
 })
 export class CheckComponent implements OnInit {
-  
+
   currentUserWorkday: any;
   checkInTime: string;
   checkOutTime: string;
@@ -32,7 +32,7 @@ export class CheckComponent implements OnInit {
   checkInActive;
   checkOutActive;
 
-  constructor(private server: ServerProvider, private datePipe: DatePipe) {}
+  constructor(private server: ServerProvider, private datePipe: DatePipe) { }
 
   ngOnInit() {
     this.date = this.datePipe.transform(new Date(), 'EEEE, MMMM d, y');
@@ -46,13 +46,13 @@ export class CheckComponent implements OnInit {
 
     if (this.currentUserWorkday === undefined) {
       this.checkInTime = 'None';
-    }else {
+    } else {
       this.checkInTime = this.currentUserWorkday.checkin;
     }
 
     if (this.currentUserWorkday === undefined) {
       this.checkOutTime = 'None';
-    }else {
+    } else {
       this.checkOutTime = this.currentUserWorkday.checkout;
     }
 
@@ -63,13 +63,13 @@ export class CheckComponent implements OnInit {
 
   checkActiveLogic() {
     if ((this.currentUserWorkday.checkin_number == this.currentUserWorkday.checkout_number) &&
-    this.currentUserWorkday.checkin_number < 3) {
-    this.checkInActive = true;
-    this.checkOutActive = false;
+      this.currentUserWorkday.checkin_number < 3) {
+      this.checkInActive = true;
+      this.checkOutActive = false;
     } else if ((this.currentUserWorkday.checkin_number - this.currentUserWorkday.checkout_number) == 1) {
-        this.checkInActive = false;
-        this.checkOutActive = true;
-    }else {
+      this.checkInActive = false;
+      this.checkOutActive = true;
+    } else {
       this.checkInActive = false;
       this.checkOutActive = false;
     }
@@ -106,7 +106,7 @@ export class CheckComponent implements OnInit {
       if (this.checkOutHour < 14) {
         this.checkOutSoon = true;
       }
-    }else {
+    } else {
       if (this.server.getUserWorkday().checkout == 'Wait5') {
         this.checkWait = true;
       }

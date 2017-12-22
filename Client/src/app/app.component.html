@@ -41,6 +41,9 @@
               <li class="nav-item">
                 <button (click)="issuesReport()">Issues</button>
               </li>
+              <li class="nav-item">
+                <button (click)="returnToAdmin()">Admin</button>
+              </li>
               <li class="nav-item logout-item desktop">
                 <button (click)="logOut()">
                   <i class="fa fa-power-off"></i>Log Out</button>
@@ -58,7 +61,7 @@
 
     <div *ngIf="isLogged" class="container-menu mobile">
 
-      <div *ngIf="isLogged" id="mydropdown" [ngbCollapse]="!isCollapsed" class="collapse navbar-collapse custom-menu">
+      <div *ngIf="isLogged" id="mydropdown" [ngbCollapse]="isCollapsed" class="collapse navbar-collapse custom-menu">
         <div class="main-menu">
           <ul class="nav">
             <li class="nav-item">
@@ -72,6 +75,9 @@
             </li>
             <li class="nav-item">
               <button (click)="issuesReport()">Issues</button>
+            </li>
+            <li class="nav-item">
+              <button (click)="returnToAdmin()">Admin</button>
             </li>
             <li class="nav-item logout-item desktop">
               <button (click)="logOut()">

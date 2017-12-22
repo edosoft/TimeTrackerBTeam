@@ -4,6 +4,7 @@ import { CheckComponent } from '../check/check.component';
 import { LoginComponent } from '../login/login.component';
 import { IssuesComponent } from '../issues/issues.component';
 import { ReportsComponent } from '../reports/reports.component';
+import { AdminComponent } from '../admin/admin.component';
 import { CanActivateViaUserWorkdayGuard } from './guard.provider';
 
 const appRoutes: Routes = [{
@@ -29,7 +30,11 @@ const appRoutes: Routes = [{
   ]
 }, {
   path: 'issues',
-  component: IssuesComponent,
+  component: IssuesComponent
+}, {
+  path: 'admin',
+  component: AdminComponent,
+
   canActivate: [
     CanActivateViaUserWorkdayGuard
   ]

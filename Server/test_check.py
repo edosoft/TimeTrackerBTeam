@@ -3,6 +3,7 @@ from google.appengine.ext import testbed
 
 import unittest
 import datetime
+import admin
 
 from messages import CheckinResponseMessage, CheckoutResponseMessage
 from models import User, Workday
@@ -27,6 +28,7 @@ class DatastoreTestCase(unittest.TestCase):
         # Alternatively, you could disable caching by
         # using ndb.get_context().set_cache_policy(False)
         ndb.get_context().clear_cache()
+        admin.create_user()
 
 # [END datastore_example_test]
 
@@ -39,7 +41,7 @@ class DatastoreTestCase(unittest.TestCase):
     def testcheckinok(self):
         date = datetime.datetime.now()
         date = date.replace(hour=8, minute=30)
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date)
         result = check_in(user, date)
         self.assertEqual(result.text, "Successful Check in")
@@ -47,7 +49,7 @@ class DatastoreTestCase(unittest.TestCase):
 
     def testcheckinearly(self):
         date = datetime.datetime.now().replace(hour=6)
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date)
         result = check_in(user, date)
         self.assertEqual(result.text, "You can't check in before 7:30 am")
@@ -55,7 +57,7 @@ class DatastoreTestCase(unittest.TestCase):
     def testcheckinlate(self):
         date = datetime.datetime.now()
         date = date.replace(hour=10)
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date)
         result = check_in(user, date)
         self.assertEqual(result.text, "Check in out of time")
@@ -64,7 +66,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = datetime.datetime.now()
         date_in = date.replace(hour=8)
         date_out = date.replace(hour=9)
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date)
         check_in(user, date)
         result = check_in(user, date)
@@ -75,7 +77,7 @@ class DatastoreTestCase(unittest.TestCase):
         date_in = date.replace(hour=8)
         date_out = date.replace(hour=9)
 
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
         check_in(user, date_in)
         check_out(user, date_out)
@@ -105,7 +107,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = date.replace(hour=15, minute=30)
         date_in = date.replace(hour=15)
         date_out = date.replace(hour=16)
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
         result = check_out(user, date_out)
         self.assertEqual(result.text, "You can't check out without checking in")
@@ -115,7 +117,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = date.replace(hour=15, minute=30)
         date_in = date.replace(hour=15, minute=0)
         date_out = date.replace(hour=16, minute=0)
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
         check_in(user, date_in)
         early_result = check_out(user, date)
@@ -128,7 +130,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = date.replace(hour=15, minute=30)
         date_in = date.replace(hour=15)
         date_out = date.replace(hour=16)
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
         check_in(user, date_in)
         result = check_out(user, date_out)
@@ -138,7 +140,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = datetime.datetime.now().replace(hour=11)
         date_in = date.replace(hour=8)
         date_out = date.replace(hour=9)
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
         check_in(user, date_in)
         result = check_out(user, date_out)
@@ -148,7 +150,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = datetime.datetime.now()
         date = date.replace(hour=20)
         date_in = date.replace(hour=15)
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
         check_in(user, date_in)
         result = check_out(user, date)
@@ -159,7 +161,7 @@ class DatastoreTestCase(unittest.TestCase):
         date_in = date.replace(hour=8, minute=0)
         date_out = date.replace(hour=8, minute=3)
 
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
         check_in(user, date_in)
 
@@ -172,7 +174,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = date.replace(hour=15, minute=30)
         date_in = date.replace(hour=15)
         date_out = date.replace(hour=16)
-        user = User(email="lelele")
+        user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
         check_in(user, date_in)
         check_out(user, date_out)

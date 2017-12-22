@@ -1,0 +1,43 @@
+@import '~sass/variables';
+@import '~sass/mixins';
+.container-admin {
+    margin-top: 25px;
+    @include display-flex();
+    @include justify-content(center);
+    table {
+        text-align: center;
+        max-width: 1200px;
+        thead {
+            tr {
+                th {
+                    border: 1px solid #e9ecef;
+                }
+            }
+        }
+        tbody {
+            tr {
+                &:nth-child(2n) {
+                    background-color: #fff;
+                }
+                &:nth-child(2n + 1) {
+                    background-color: rgba(0, 0, 0, .05);
+                }
+                td {
+                    vertical-align: baseline;
+                    padding: 10px;
+                }
+            }
+        }
+        &.desktop {
+            display: none;
+            @media (min-width: 768px) {
+                display: table;
+            }
+        }
+        &.mobile {
+            @media (min-width: 768px) {
+                display: none;
+            }
+        }
+    }
+}

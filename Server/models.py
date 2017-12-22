@@ -7,7 +7,10 @@ from google.appengine.ext import ndb
 class User(ndb.Model):
     """ Model to store an employee's valid login."""
     email = ndb.StringProperty(indexed=True)
-
+    name = ndb.StringProperty()
+    admin = ndb.IntegerProperty()
+    hrm = ndb.IntegerProperty()
+    
 
 class Workday(ndb.Model):
     """ Model to represent the workday of an employee."""

@@ -65,3 +65,4 @@ def create_mock_user():
 
     return CheckinResponseMessage(response_code=200,
                                   text="Mock workdays returned")
+

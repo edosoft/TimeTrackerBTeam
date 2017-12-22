@@ -50,7 +50,6 @@ export class ServerProvider {
         const profile = googleUser.getBasicProfile();
 
         this.userWorkday = new User();
-        this.userWorkday.name = profile.getName();
         this.logIn();
       }, (error) => {
         alert(JSON.stringify(error, undefined, 2));
@@ -63,18 +62,20 @@ export class ServerProvider {
       if (response.result.response_code === '400') {
         window.alert(response.result.text);
       } else {
+        this.userWorkday.id = response.result.email;
+        this.userWorkday.name = response.result.name;
+        this.userWorkday.hrm = response.result.hrm;
+        this.userWorkday.admin = response.result.admin;
         this.userWorkday.date = response.result.date;
         this.userWorkday.checkin = this.returnDate(response.result.checkin);
         this.userWorkday.checkout = this.returnDate(response.result.checkout);
-        this.userWorkday.id = response.result.employee;
         this.userWorkday.total = response.result.total;
 
         this.userWorkday.checkin_number = this.returnNumber(response.result.checkin);
         this.userWorkday.checkout_number = this.returnNumber(response.result.checkout);
 
-        console.log (JSON.stringify(this.userWorkday));
+        console.log(JSON.stringify(this.userWorkday));
         this.logged = true;
-
         this.zone.run(() => {
           this.router.navigate(['/check']);
         });
@@ -216,7 +217,7 @@ export class ServerProvider {
         } else if (response.result.response_code === '300') {
           this.userWorkday.checkout = 'Wait5';
           resolve(false);
-        }else {
+        } else {
           console.log(JSON.stringify(response.result));
           this.userWorkday.checkout = this.returnDate(response.result.checkout);
           this.userWorkday.checkout_number = response.result.number;
@@ -239,9 +240,9 @@ export class ServerProvider {
     let time;
     if (date == undefined) {
       return 'None';
-    } else if (typeof(date) === 'string') {
+    } else if (typeof (date) === 'string') {
       time = date;
-    } else  if (typeof(date) === 'object') {
+    } else if (typeof (date) === 'object') {
       time = date[date.length - 1];
     }
     // 2017-12-21 15:43:34.251013
@@ -254,6 +255,12 @@ export class ServerProvider {
       return 0;
     }
     return array.length;
+  }
+
+  returnToAdmin() {
+    this.zone.run(() => {
+      this.router.navigate(['/admin']);
+    });
   }
 
 }

@@ -35,8 +35,7 @@ def log_in(user, current_date=None):
 
         # If the user doesn't exist, it inserts it to the database.
         if user_query is None:
-            auth = User(email=email)
-            auth.put()
+            return WorkdayResponseMessage(text="Error: Invalid user", response_code=400)
 
         workday_query = Workday.query(Workday.employee == User(email=email),
                                       Workday.date == current_date).get()
@@ -44,12 +43,14 @@ def log_in(user, current_date=None):
         # If there is no workday, a new one is created and added to the DB.
         if workday_query is None:
             work = Workday()
-            work.employee = User(email=email)
+            work.employee = user_query
             work.checkin = []
             work.checkout = []
             work.total = 0
             work.put()
-            return WorkdayResponseMessage(text="Creating Workday", employee=work.employee.email,
+            return WorkdayResponseMessage(text="Creating Workday", email=work.employee.email,
+                                          name=work.employee.name, hrm=work.employee.hrm,
+                                          admin=work.employee.admin,
                                           date=str(work.date), checkin=work.checkin,
                                           checkout=work.checkout, total=work.total,
                                           response_code=200)
@@ -64,7 +65,9 @@ def log_in(user, current_date=None):
             for cout in work.checkout:
                 strcout.append(str(cout))
             
-            return WorkdayResponseMessage(text="Returning Workday", employee=work.employee.email,
+            return WorkdayResponseMessage(text="Returning Workday", email=work.employee.email,
+                                          name=work.employee.name, hrm=work.employee.hrm,
+                                          admin=work.employee.admin,
                                           date=str(work.date), checkin=strcin,
                                           checkout=strcout, total=work.total,
                                           response_code=200)

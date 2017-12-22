@@ -3,6 +3,7 @@ from google.appengine.ext import testbed
 
 import unittest
 import datetime
+import admin
 
 from messages import WorkdayResponseMessage
 from models import User, Workday
@@ -25,7 +26,8 @@ class DatastoreTestCase(unittest.TestCase):
         # Alternatively, you could disable caching by
         # using ndb.get_context().set_cache_policy(False)
         ndb.get_context().clear_cache()
-        self.user = User(email="email@edosoft.es")
+        admin.create_user()
+        self.user = User(email="hrm@edosoft.es")
         self.date = datetime.datetime.now()
 
 # [START Workday Tests]

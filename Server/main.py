@@ -2,6 +2,7 @@
 
 import endpoints
 import datetime
+from time import sleep
 
 from login import log_in
 from checkin import check_in
@@ -10,6 +11,7 @@ from reports import get_report
 from issues import get_user_with_issues
 
 import util
+import admin
 
 from tasks import automatic_checkout_helper
 
@@ -18,6 +20,8 @@ from protorpc import remote
 
 from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
 from messages import RequestReport, ReportResponseMessage, WeekTotalMessage , IssueResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
+from messages import RequestChangeRole, ChangeRoleResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
+from messages import GetUserListResponseMessage, GetUserListMessage
 
 from models import User, Workday
 
@@ -38,7 +42,8 @@ class MainPage(remote.Service):
         Needs - User verified by Google.
         Returns - WorkdayResponseMessage.
         """
-
+        admin.create_user()
+        sleep(0.5)
         user = endpoints.get_current_user()
         return log_in(user)
 
@@ -96,6 +101,25 @@ class MainPage(remote.Service):
         apropiate format to use in calendar. This function don't return any error.
         """
         return util.current_date(request.report_type)
+
+    @endpoints.method(RequestChangeRole, ChangeRoleResponseMessage,
+                      path='change_role', http_method='POST', name='change_role')
+    def change_role(self, request):
+        """
+        A function which change the role in an employee.
+        This function don't return any error.
+        """
+        return admin.change_role(request.user_email, request.hrm_value, request.admin_value,endpoints.get_current_user().email())
+
+    @endpoints.method(message_types.VoidMessage, GetUserListResponseMessage,
+                        path='user_list', http_method='POST', name='user_list')
+    def user_list(self, request):
+        """
+        A function which returns a users list. This list has email, name, hrm value 
+        and admin value of all employee.
+        """
+
+        return admin.get_user_list()
 
     @endpoints.method(RequestReport, ReportResponseMessage,
                       path='report', http_method='POST', name='report')

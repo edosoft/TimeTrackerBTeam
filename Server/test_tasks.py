@@ -8,6 +8,7 @@ from tasks import automatic_checkout_helper
 from login import log_in
 from checkin import check_in
 from checkout import check_out
+import admin
 
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
@@ -25,6 +26,7 @@ class DatastoreTestCase(unittest.TestCase):
         # Alternatively, you could disable caching by
         # using ndb.get_context().set_cache_policy(False)
         ndb.get_context().clear_cache()
+        admin.create_user()
 
 # [END datastore_example_test]
 
@@ -35,27 +37,27 @@ class DatastoreTestCase(unittest.TestCase):
 
     def test_auto_checkout(self):
         fake_date = datetime.now().replace(hour=8, minute=0)
-        fake_user = User(email="prueba")
+        fake_user = User(email="hrm@edosoft.es")
         log_in(fake_user, fake_date)
         check_in(fake_user, fake_date)
     
         automatic_checkout_helper()
 
         queryWorkday = Workday.query(Workday.date == date.today(),
-                                     Workday.employee.email == "prueba").get()
+                                     Workday.employee.email == "hrm@edosoft.es").get()
         #print (queryWorkday)
         self.assertTrue(queryWorkday.checkout[-1], "checkout not closed")
 
     def test_auto_checkout_with_false_checkin(self):
         fake_date = datetime.now()
-        fake_user = User(email="prueba")
+        fake_user = User(email="hrm@edosoft.es")
         fake_work = Workday(employee=fake_user, date=fake_date,
                             total=0)
         fake_work.put()
         automatic_checkout_helper()
 
         queryWorkday = Workday.query(Workday.date == date.today(),
-                                     Workday.employee.email == "prueba").get()
+                                     Workday.employee.email == "hrm@edosoft.es").get()
         self.assertFalse(queryWorkday.checkout, "checkout not closed")
 
 

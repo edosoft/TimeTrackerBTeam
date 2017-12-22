@@ -26,6 +26,29 @@ class ReportResponseMessage(messages.Message):
     text = messages.StringField(3, required=True)
     month = messages.IntegerField(4, required=False)
 
+
+class GetUserListMessage(messages.Message):
+    email = messages.StringField(1, required = True)
+    name = messages.StringField(2, required = True)
+    hrm = messages.IntegerField(3, required = True)
+    admin = messages.IntegerField(4, required = True)
+
+class GetUserListResponseMessage(messages.Message):
+    user_list = messages.MessageField(GetUserListMessage, 1, repeated=True)
+    response_code = messages.IntegerField(2, required=True)
+    text = messages.StringField(3, required=True)
+
+
+class RequestChangeRole(messages.Message):
+    user_email = messages.StringField(1, required=True)
+    hrm_value = messages.IntegerField(2, required=True)
+    admin_value = messages.IntegerField(3, required=True)
+
+class ChangeRoleResponseMessage(messages.Message):
+    response_code = messages.IntegerField(1, required=True)
+    text = messages.StringField(2, required=True)
+
+
 class RequestCurrentDate(messages.Message):
     report_type = messages.IntegerField(2)
 
@@ -35,16 +58,17 @@ class CurrentDateResponseMessage(messages.Message):
     text = messages.StringField(3, required=True)
     date = messages.StringField(4, required=True)
 
-
 class WorkdayResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
-    employee = messages.StringField(3)
+    email = messages.StringField(3)
     date = messages.StringField(4)
     checkin = messages.StringField(5, repeated=True)
     checkout = messages.StringField(6, repeated=True)
     total = messages.IntegerField(7)
     text = messages.StringField(1)
-
+    name = messages.StringField(8)
+    hrm = messages.IntegerField(9)
+    admin = messages.IntegerField(10)   
 
 class CheckinResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)

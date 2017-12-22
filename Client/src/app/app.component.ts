@@ -13,7 +13,7 @@ export class AppComponent implements DoCheck, OnInit {
   isLogged: any;
   currentUserWorkday: any;
 
-  constructor(private server: ServerProvider) {}
+  constructor(private server: ServerProvider) { }
 
   ngOnInit() {
     this.currentUserWorkday = this.server.getUserWorkday();
@@ -40,5 +40,9 @@ export class AppComponent implements DoCheck, OnInit {
   }
   issuesReport() {
     this.server.issuesReport();
+  }
+
+  returnToAdmin() {
+    this.server.returnToAdmin();
   }
 }

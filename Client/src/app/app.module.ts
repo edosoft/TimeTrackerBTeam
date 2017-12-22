@@ -11,6 +11,7 @@ import { CheckComponent } from './check/check.component';
 import { ReportsComponent } from './reports/reports.component';
 import { CanActivateViaUserWorkdayGuard } from './provider/guard.provider';
 import { IssuesComponent } from './issues/issues.component';
+import { AdminComponent } from './admin/admin.component';
 
 
 
@@ -20,7 +21,8 @@ import { IssuesComponent } from './issues/issues.component';
     LoginComponent,
     CheckComponent,
     ReportsComponent,
-    IssuesComponent
+    IssuesComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
