@@ -108,9 +108,9 @@ class MainPage(remote.Service):
         A function which change the role in an employee.
         This function don't return any error.
         """
-        return admin.change_role(request.user_email, request.hrm_value, request.admin_value)
+        return admin.change_role(request.user_email, request.hrm_value, request.admin_value,endpoints.get_current_user().email())
 
-    @endpoints.method(GetUserListResponseMessage,
+    @endpoints.method(message_types.VoidMessage, GetUserListResponseMessage,
                         path='user_list', http_method='POST', name='user_list')
     def user_list(self, request):
         """
@@ -118,7 +118,7 @@ class MainPage(remote.Service):
         and admin value of all employee.
         """
 
-        return get_user_list()
+        return admin.get_user_list()
 
     @endpoints.method(RequestReport, ReportResponseMessage,
                       path='report', http_method='POST', name='report')

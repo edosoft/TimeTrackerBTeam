@@ -1,5 +1,6 @@
 from models import User
 from messages import ChangeRoleResponseMessage, RequestChangeRole
+from messages import GetUserListResponseMessage, GetUserListMessage
 
 
 def create_user():
@@ -23,9 +24,9 @@ def create_user():
 
 
 def get_user_list():
-    user_query = User.query().fetch()
+    user_query = User.query()
 
-    if len(user_query < 1):
+    if len(user_query.fetch()) < 1:
         return GetUserListResponseMessage(response_code=400, text="Error: Users not found")
 
     else:
@@ -44,15 +45,18 @@ def get_user_list():
         return GetUserListResponseMessage(response_code=200, text="Returning users list",
                                      user_list=result)            
 
-def change_role(user_email, hrm_value, admin_value):
+def change_role(user_email, hrm_value, admin_value, user):
+   
     user_query_change = User.query(User.email == user_email).get()
 
-    if user_query is None:
+    if user_query_change is None:
         return ChangeRoleResponseMessage(response_code=400, 
                                             text="User not found")
     
     if type(hrm_value) is int and type(admin_value) is int:
-        if user_query_change.email is endpoints.get_current_user().email():
+        if user_query_change.email is user:
+            print(user_query_change.admin)
+            print(admin_value)
             if user_query_change.admin is not admin_value:
                 return ChangeRoleResponseMessage(response_code=400, 
                                             text="Error: you can not change your admin role")
