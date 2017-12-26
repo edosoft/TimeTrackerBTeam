@@ -5,7 +5,6 @@ from messages import GetUserListResponseMessage, GetUserListMessage
 
 def create_user():
     user_query_create = User.query(User.email == "admin@edosoft.es").get()
-
     if user_query_create is None:
         auth1 = User(email="hrm@edosoft.es", name="Helena Heras", admin = 0, hrm = 1)
         auth1.put()
@@ -55,8 +54,6 @@ def change_role(user_email, hrm_value, admin_value, user):
     
     if type(hrm_value) is int and type(admin_value) is int:
         if user_query_change.email is user:
-            print(user_query_change.admin)
-            print(admin_value)
             if user_query_change.admin is not admin_value:
                 return ChangeRoleResponseMessage(response_code=400, 
                                             text="Error: you can not change your admin role")
