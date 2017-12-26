@@ -32,6 +32,10 @@ export class CheckComponent implements OnInit {
   checkInActive;
   checkOutActive;
 
+  timerInterval: any;
+  hours: string;
+  minutes: string;
+
   constructor(private server: ServerProvider, private datePipe: DatePipe) { }
 
   ngOnInit() {
@@ -57,7 +61,7 @@ export class CheckComponent implements OnInit {
     }
 
     this.checkActiveLogic();
-
+    this.timer();
   }
 
 
@@ -91,6 +95,7 @@ export class CheckComponent implements OnInit {
         this.checkInLate = true;
       }
     }
+    this.timer();
   }
 
   async checkOut() {
@@ -107,10 +112,9 @@ export class CheckComponent implements OnInit {
         this.checkOutSoon = true;
       }
     } else {
-      if (this.server.getUserWorkday().checkout == 'Wait5') {
         this.checkWait = true;
-      }
     }
+    this.timer();
   }
 
   async getWeekTotal() {
@@ -129,4 +133,54 @@ export class CheckComponent implements OnInit {
   closeWait() {
     this.checkWait = false;
   }
+
+  getProperDate(check): Date {
+    const date = new Date();
+    const hour = check.split(':', 2)[0];
+    const min = check.split(':', 2)[1];
+    date.setMinutes(min);
+    date.setHours(hour);
+    return date;
+  }
+
+  timer() {
+        if (this.server.getUserWorkday().checkin_number != 0 &&
+            this.server.getUserWorkday().checkin_number !=
+            this.server.getUserWorkday().checkout_number) {
+          // const server_time = this.server.getCurrentTime();
+          if (this.timerInterval == undefined) {
+          const server_time = new Date();
+          const timeServer = new Date(server_time);
+          const timeCheckIn = this.getProperDate(this.server.getUserWorkday().checkin);
+
+          const timer = new Date(timeServer.getTime() - timeCheckIn.getTime() + this.server.getUserWorkday().total * 60 * 1000);
+
+          this.timerInterval = setInterval(() => {
+            timer.setSeconds(timer.getSeconds() + 1);
+            const hours = (timer.getHours() < 10 ? '0' : '') + timer.getHours();
+            const minutes = (timer.getMinutes() < 10 ? '0' : '') + timer.getMinutes();
+            const seconds = (timer.getSeconds() < 10 ? '0' : '') + timer.getSeconds();
+            this.hours = hours;
+            this.minutes = minutes;
+            console.log(hours + ':' + minutes + ':' + seconds);
+          }, 1000);
+        }
+        }else if (this.server.getUserWorkday().checkin_number != 0 &&
+                  this.server.getUserWorkday().checkin_number ==
+                  this.server.getUserWorkday().checkout_number) {
+          const timer = new Date(this.server.getUserWorkday().total * 60*1000);
+          const hours = (timer.getHours() < 10 ? '0' : '') + timer.getHours();
+          const minutes = (timer.getMinutes() < 10 ? '0' : '') + timer.getMinutes();
+          this.hours = hours;
+          this.minutes = minutes;
+          console.log(timer);
+          clearInterval(this.timerInterval);
+
+        }else { // No se ha hecho checkin todavía
+          this.hours = '00';
+          this.minutes = '00';
+        }
+
+      }
+
 }

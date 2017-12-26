@@ -58,6 +58,7 @@ def log_in(user, current_date=None):
         # Ok - Returning existent
         else:
             work = workday_query
+            work.employee = user_query
             strcin = []
             strcout = []
             for cin in work.checkin:

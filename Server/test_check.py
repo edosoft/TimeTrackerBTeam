@@ -68,8 +68,8 @@ class DatastoreTestCase(unittest.TestCase):
         date_out = date.replace(hour=9)
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date)
-        check_in(user, date)
-        result = check_in(user, date)
+        check_in(user, date_in)
+        result = check_in(user, date_out)
         self.assertEqual(result.text, "You can't check in again without checking out before")
 
     def testmultiplecheckin(self):

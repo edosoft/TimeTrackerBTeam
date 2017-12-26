@@ -32,16 +32,16 @@
               <li class="nav-item">
                 <button (click)="returnToCheck()">Check</button>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" *ngIf="currentUserWorkday.hrm == 1">
                 <button (click)="weeklyReport()">Weekly Report</button>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" *ngIf="currentUserWorkday.hrm == 1">
                 <button (click)="monthlyReport()">Monthly Report</button>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" *ngIf="currentUserWorkday.hrm == 1">
                 <button (click)="issuesReport()">Issues</button>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" *ngIf="currentUserWorkday.admin == 1">
                 <button (click)="returnToAdmin()">Admin</button>
               </li>
               <li class="nav-item logout-item desktop">

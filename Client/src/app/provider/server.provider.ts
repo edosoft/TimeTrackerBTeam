@@ -62,6 +62,7 @@ export class ServerProvider {
       if (response.result.response_code === '400') {
         window.alert(response.result.text);
       } else {
+        // console.log(JSON.stringify(response.result));
         this.userWorkday.id = response.result.email;
         this.userWorkday.name = response.result.name;
         this.userWorkday.hrm = response.result.hrm;
@@ -74,7 +75,6 @@ export class ServerProvider {
         this.userWorkday.checkin_number = this.returnNumber(response.result.checkin);
         this.userWorkday.checkout_number = this.returnNumber(response.result.checkout);
 
-        console.log(JSON.stringify(this.userWorkday));
         this.logged = true;
         this.zone.run(() => {
           this.router.navigate(['/check']);
@@ -215,7 +215,6 @@ export class ServerProvider {
           this.userWorkday.checkout = 'None';
           resolve(false);
         } else if (response.result.response_code === '300') {
-          this.userWorkday.checkout = 'Wait5';
           resolve(false);
         } else {
           console.log(JSON.stringify(response.result));
