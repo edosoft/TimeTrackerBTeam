@@ -20,6 +20,8 @@ def create_user():
         auth6.put()
         auth7 = User(email="deyan.guacaran@edosoft.es", name="Deyan Guacaran", admin = 1, hrm = 1)
         auth7.put()
+        auth7 = User(email="empleado@edosoft.es", name="Paco Ramirez", admin = 0, hrm = 0)
+        auth7.put()
 
 
 def get_user_list():
@@ -27,7 +29,6 @@ def get_user_list():
 
     if len(user_query.fetch()) < 1:
         return GetUserListResponseMessage(response_code=400, text="Error: Users not found")
-
     else:
         all_users = User.query()
         result = []

@@ -1,67 +1,69 @@
 <div class="container-admin">
-    <table class="table desktop">
-        <thead class="thead-dark">
-            <tr>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>#</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Deyán Guacarán</td>
-                <td>deyan.guacaran@edosoft.com</td>
-                <td>Employee</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>Nestor Marin</td>
-                <td>nestor.marin@edosoft.com</td>
-                <td>Human Resource Manager</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>María Ramos</td>
-                <td>maria.ramos@edosoft.com</td>
-                <td>Administrator</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>Javier Hernández</td>
-                <td>javier.hernandez@edosoft.com</td>
-                <td>Human Resource Manager, Administrator</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-        </tbody>
-    </table>
+    <div *ngIf="isUserList" class="container-list-users">
 
+        <table class="table desktop">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users; let i = index">
+                    <td>{{user.name}}</td>
+                    <td>{{user.email}}</td>
+                    <td *ngIf="user.admin == 0 && user.hrm == 0">Employee</td>
+                    <td *ngIf="user.admin == 1 && user.hrm == 0">Administrator</td>
+                    <td *ngIf="user.admin == 0 && user.hrm == 1">Human Resource Manager</td>
+                    <td *ngIf="user.admin == 1 && user.hrm == 1">Administrator, Human Resource Manager</td>
+                    <td><button type="button" class="btn btn-primary" (click)="setUserRole(user)">Edit</button></td>
+                </tr>
+            </tbody>
+        </table>
 
-    <table class="table mobile">
-        <thead class="thead-dark">
-            <tr>
-                <th>Nombre</th>
-                <th>#</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Deyán Guacarán</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>Nestor Marin</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>María Ramos</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-            <tr>
-                <td>Javier Hernández</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table mobile">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{user.name}}</td>
+                    <td><button type="button" class="btn btn-primary" (click)="setUserRole(user)">Edit</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <!-- .container-list-user -->
+
+    <div *ngIf="isSetRole" class="container-personal-user">
+        <div class="personal-user">
+            <div class="close" (click)="backToListUser()"><i class="fa fa-times" aria-hidden="true"></i></div>
+            <p>{{user.name}}</p>
+            <p>{{user.email}}</p>
+            <p *ngIf="user.admin == 0 && user.hrm == 0">Employee</p>
+            <p *ngIf="user.admin == 1 && user.hrm == 0">Administrator</p>
+            <p *ngIf="user.admin == 0 && user.hrm == 1">Human Resource Manager</p>
+            <p *ngIf="user.admin == 1 && user.hrm == 1">Administrator, Human Resource Manager</p>
+            <div class="form-roles">
+                <p><i class="fa fa-info-circle" aria-hidden="true"></i> Select the roles you want to apply:</p>
+                <div class="select-roles">
+                    <div><input type="checkbox" [checked]="user.admin == 0" [(ngModel)]="checkedAdmin">Administrator</div>
+                    <div><input type="checkbox" [checked]="user.hrm == 0" [(ngModel)]="checkedHRM">Human Resource Manager</div>
+                </div>
+                <div class="submit-roles">
+                    <button type="button" class="btn btn-primary" (click)="sendRole()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- .container-personal-user -->
+
 
 </div>
+<!-- .container-admin -->
