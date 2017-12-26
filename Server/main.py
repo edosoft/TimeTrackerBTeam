@@ -151,4 +151,13 @@ class MainPage(remote.Service):
         '''
         return get_user_with_issues()
 
+    @endpoints.method(message_types.VoidMessage, RequestChangeRole, path='currentuser', http_method='POST', name='currentuser')
+    def get_current_user(self, request):
+        '''
+        A function who will return the user HRM and admin value.
+        '''
+        user = endpoints.get_current_user().email()
+        user_data = User.query(User.email == user).get()
+        return RequestChangeRole(user_email = user, hrm_value = user_data.hrm, admin_value = user_data.admin)
+
 app = endpoints.api_server([MainPage], restricted=False)

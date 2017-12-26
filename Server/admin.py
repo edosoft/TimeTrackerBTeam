@@ -69,6 +69,4 @@ def change_role(user_email, hrm_value, admin_value, user):
 
     return ChangeRoleResponseMessage(response_code=400, 
                                             text="The values of roles are not correct")
-
-    
     

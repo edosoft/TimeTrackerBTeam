@@ -235,6 +235,16 @@ export class ServerProvider {
     });
   }
 
+  getUserPermission() {
+    return new Promise<boolean>((resolve, reject) => {
+      gapi.client.timetrackerApi.currentuser().execute((response: any) => {
+        this.userWorkday.admin = response.result.admin_value;
+        this.userWorkday.hrm = response.result.hrm_value;
+        resolve(true);
+      });
+    });
+  }
+
   returnDate(date) {
     let time;
     if (date == undefined) {

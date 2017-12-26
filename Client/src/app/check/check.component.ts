@@ -162,7 +162,7 @@ export class CheckComponent implements OnInit {
             const seconds = (timer.getSeconds() < 10 ? '0' : '') + timer.getSeconds();
             this.hours = hours;
             this.minutes = minutes;
-            console.log(hours + ':' + minutes + ':' + seconds);
+            // console.log(hours + ':' + minutes + ':' + seconds);
           }, 1000);
         }
         }else if (this.server.getUserWorkday().checkin_number != 0 &&
