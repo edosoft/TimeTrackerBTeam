@@ -8,12 +8,12 @@ handlers:
   script: main.app
 
 - url: /(.*\.(css|eot|gz|html|ico|js|map|png|svg|ttf|woff|woff2))
-  static_files: public/\1
-  upload: public/(.*\.(css|eot|gz|html|ico|js|map|png|svg|ttf|woff|woff2))
+  static_files: dist/\1
+  upload: dist/(.*\.(css|eot|gz|html|ico|js|map|png|svg|ttf|woff|woff2))
 
 - url: /.*
-  static_files: public/index.html
-  upload: public/index.html
+  static_files: dist/index.html
+  upload: dist/index.html
   secure: always
 
 - url: /bootstrap
