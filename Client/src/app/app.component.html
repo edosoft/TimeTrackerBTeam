@@ -12,7 +12,7 @@
 
             <div *ngIf="isLogged" class="welcome d-md-none d-lg-none">
                 <p>Welcome, </p>
-                <p>{{currentUserWorkday.name}}</p>
+                <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
             </div>
             <!-- .welcome (mobile) -->
 
@@ -87,7 +87,7 @@
 
         <div *ngIf="isLogged" class="welcome d-none d-sm-none d-md-flex">
             <p>Welcome, </p>
-            <p>{{currentUserWorkday.name}}</p>
+            <p>{{currentUserWorkday.name.split(" ", 1)}}</p>
             <button (click)="logOut()" class="logout">
         <p>
           <i class="fa fa-power-off"></i>Log Out</p>

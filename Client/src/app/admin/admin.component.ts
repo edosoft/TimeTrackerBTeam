@@ -17,7 +17,8 @@ export class AdminComponent implements OnInit {
   hrmValue: number;
   adminValue: number;
   users: User[];
-
+  user_position: number;
+  user: any;
 
   constructor(private server: ServerProvider) { }
 
@@ -29,9 +30,10 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  setUserRole() {
+  setUserRole(user) {
     this.isSetRole = true;
     this.isUserList = false;
+    this.user = user;
   }
 
   backToListUser() {
@@ -40,7 +42,7 @@ export class AdminComponent implements OnInit {
   }
 
   sendRole() {
-    this.userEmail = this.server.getUserWorkday().id;
+    this.userEmail = this.user.email;
 
     if ((this.checkedAdmin) && (!this.checkedHRM)) {
       this.adminValue = 1;
@@ -58,6 +60,8 @@ export class AdminComponent implements OnInit {
       this.adminValue = 0;
       this.hrmValue = 0;
     }
+    console.log(this.adminValue);
+    console.log(this.hrmValue);
     this.server.assignRole(this.userEmail, this.hrmValue, this.adminValue);
   }
 

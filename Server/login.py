@@ -58,6 +58,7 @@ def log_in(user, current_date=None):
         # Ok - Returning existent
         else:
             work = workday_query
+            work.employee = user_query
             return WorkdayResponseMessage(text="Returning Workday", email=work.employee.email,
                                           name=work.employee.name, hrm=work.employee.hrm,
                                           admin=work.employee.admin,
