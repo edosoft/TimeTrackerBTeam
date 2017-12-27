@@ -1,4 +1,4 @@
-<div class="container">
+<div *ngIf="!personalView" class="container">
   <div class="row">
     <div class="col-md-12">
       <div class="list-log-checks">
@@ -11,8 +11,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor='let row of issues_per_employee'>
-            <td nowrap>{{(row.employee.split("@", 1)[0]).replace(".", " ")}}</td>
+          <tr *ngFor='let row of issues_per_employee' (click)="employeeView(row)">
+            <td nowrap>
+              {{(row.employee.split("@", 1)[0]).replace(".", " ")}}
+            </td>
             <td>{{row.total_unsolved_peremp}}</td>
             <td>{{row.total_unviewed_peremp}}</td>
           </tr>
@@ -22,3 +24,59 @@
   </div>
 </div>
 </div>
+
+<div *ngIf="personalView && !changeViews" class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="list-log-checks">
+          <div class="btn btn-primary" (click)="swapper()"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></div>
+      <table class="table table-bordered table-striped table-desktop">
+        <thead class="thead-dark">
+          <tr class="header-row">
+            <th>Name</th>
+            <th>Issue Type</th>
+            <th>Issue Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let issues of personalArray.issues'>
+            <td nowrap>{{(personalArray.employee.split("@", 1)[0]).replace(".", " ")}}</td>
+            <td>{{issues.issue_type}}</td>
+            <td>{{(issues.date).split(" ", 1)[0]}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+<!-- 
+<div *ngIf="chageViews" class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="list-log-checks">
+            <div class="btn btn-primary" (click)="swapper()"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></div>
+        <table class="table table-bordered table-striped table-desktop">
+          <thead class="thead-dark">
+            <tr class="header-row">
+              <th>Name</th>
+              <th>Issue date</th>
+              <th>Issue Type</th>
+              <th>Issue </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor='let row of issues'>
+              <td (click)="employeeView(row)" data-toggle="modal" data-target="#themodal" nowrap>
+                  {{(personalArray.employee.split("@", 1)[0]).replace(".", " ")}}
+              </td>
+              <td>{{issue.date}}</td>
+              <td>{{issue.issue_type}}</td>
+              <td>{{issue.date}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div> -->
