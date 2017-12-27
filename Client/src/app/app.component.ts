@@ -12,6 +12,7 @@ import { Observable } from 'rxjs/Observable';
 export class AppComponent implements DoCheck, OnInit {
   isLogged: any;
   currentUserWorkday: any;
+  isCollapsed = true;
 
   constructor(private server: ServerProvider) { }
 
