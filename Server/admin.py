@@ -8,7 +8,7 @@ def create_user():
     if user_query_create is None:
         auth1 = User(email="hrm@edosoft.es", name="Helena Heras", admin = 0, hrm = 1)
         auth1.put()
-        auth2 = User(email="admin@edosoft.es", name="Antonio Arbelo", admin = 1, hrm = 0)
+        auth2 = User(email="admin@edosoft.es", name="Aitor Carrera", admin = 1, hrm = 1)
         auth2.put()
         auth3 = User(email="javier.hernandez@edosoft.es", name="Javier Hernandez", admin = 1, hrm = 1)
         auth3.put()
@@ -22,6 +22,14 @@ def create_user():
         auth7.put()
         auth7 = User(email="empleado@edosoft.es", name="Paco Ramirez", admin = 0, hrm = 0)
         auth7.put()
+        auth8 = User(email="juan.vera@edosoft.es", name="Juan Vera", admin = 1, hrm = 1)
+        auth8.put()
+        auth9 = User(email="roberto.gonzalez@edosoft.es", name="Roberto González", admin = 1, hrm = 1)
+        auth9.put()
+        auth10 = User(email="efren.perez@edosoft.es", name="Efrén Pérez", admin = 1, hrm = 1)
+        auth10.put()
+        auth11 = User(email="admin_m@edosoft.es", name="Antonio Arbelo", admin = 1, hrm = 0)
+        auth11.put()
 
 
 def get_user_list():
