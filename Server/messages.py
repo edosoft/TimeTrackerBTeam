@@ -15,6 +15,7 @@ class RequestReport(messages.Message):
 
 class ReportMessage(messages.Message):
     email = messages.StringField(1)
+    name = messages.StringField(5)
     workday = messages.MessageField(WorkdayMessage, 2, repeated=True)
     total = messages.IntegerField(3)
     total_days_worked = messages.IntegerField(4, required=False)

@@ -95,16 +95,14 @@ export class ServerProvider {
       this.router.navigate(['']);
     });
   }
-
+/*
   createMockUser() {
     gapi.client.timetrackerApi.create().execute((response: any) => {
       if (response.error) {
         console.log(response.error);
-      } else {alert('The role has been changed to HRM');
-        console.log(JSON.stringify(response.result));
       }
     });
-  }
+  }*/
   issuesReport() {
     this.zone.run(() => {
       this.router.navigate(['/issues']);
@@ -112,7 +110,7 @@ export class ServerProvider {
   }
 
   weeklyReport() {
-    this.createMockUser();
+    // this.createMockUser();
     this.reportType = 0;
     this.zone.run(() => {
       this.router.navigate(['/weeklyreport']);
@@ -120,7 +118,7 @@ export class ServerProvider {
   }
 
   monthlyReport() {
-    this.createMockUser();
+    // this.createMockUser();
     this.reportType = 1;
     this.zone.run(() => {
       this.router.navigate(['/monthlyreport']);
@@ -197,6 +195,7 @@ export class ServerProvider {
       gapi.client.timetrackerApi.checkin().execute((response: any) => {
         if (response.result.response_code === '400') {
           this.userWorkday.checkin = 'None';
+          console.log(JSON.stringify(response.result));
           resolve(false);
         } else {
           console.log(JSON.stringify(response.result));
@@ -234,7 +233,7 @@ export class ServerProvider {
       });
     });
   }
-
+/*
   getUserPermission() {
     return new Promise<boolean>((resolve, reject) => {
       gapi.client.timetrackerApi.currentuser().execute((response: any) => {
@@ -243,7 +242,7 @@ export class ServerProvider {
         resolve(true);
       });
     });
-  }
+  }*/
 
   returnDate(date) {
     let time;
