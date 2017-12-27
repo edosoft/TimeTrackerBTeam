@@ -16,7 +16,7 @@ export class ServerProvider {
   L = 'http://localhost:8080/_ah/api';
   P = 'https://timetrackerbteam.appspot.com/_ah/api/';
 
-  url: string = this.L;
+  url: string = this.P;
 
   logged = false;
   reportType: number;
@@ -95,14 +95,14 @@ export class ServerProvider {
       this.router.navigate(['']);
     });
   }
-/*
-  createMockUser() {
-    gapi.client.timetrackerApi.create().execute((response: any) => {
-      if (response.error) {
-        console.log(response.error);
-      }
-    });
-  }*/
+  /*
+    createMockUser() {
+      gapi.client.timetrackerApi.create().execute((response: any) => {
+        if (response.error) {
+          console.log(response.error);
+        }
+      });
+    } */
   issuesReport() {
     this.zone.run(() => {
       this.router.navigate(['/issues']);
@@ -233,16 +233,16 @@ export class ServerProvider {
       });
     });
   }
-/*
-  getUserPermission() {
-    return new Promise<boolean>((resolve, reject) => {
-      gapi.client.timetrackerApi.currentuser().execute((response: any) => {
-        this.userWorkday.admin = response.result.admin_value;
-        this.userWorkday.hrm = response.result.hrm_value;
-        resolve(true);
+  /*
+    getUserPermission() {
+      return new Promise<boolean>((resolve, reject) => {
+        gapi.client.timetrackerApi.currentuser().execute((response: any) => {
+          this.userWorkday.admin = response.result.admin_value;
+          this.userWorkday.hrm = response.result.hrm_value;
+          resolve(true);
+        });
       });
-    });
-  }*/
+    }*/
 
   returnDate(date) {
     let time;
@@ -279,12 +279,12 @@ export class ServerProvider {
         admin_value: admin
       };
       gapi.client.timetrackerApi.change_role(content).execute((response: any) => {
-      if (response.error) {
-        console.log(response.error);
-        resolve(response.result);
-      } else {
-        resolve(response.result);
-      }
+        if (response.error) {
+          console.log(response.error);
+          resolve(response.result);
+        } else {
+          resolve(response.result);
+        }
       });
     });
   }
