@@ -38,7 +38,7 @@
           </thead>
           <tbody>
             <tr class="report-row" *ngFor="let report of results">
-              <td nowrap>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
+              <td nowrap>{{(report.name.split(" ", 2)[0] +' ' +  report.name.split(" ", 3)[1])}}</td>
               <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
               <td [ngStyle]="hoursColor(report)">{{hoursFormat(report.total)}}</td>
               <td *ngFor="let num of report.workday" [ngStyle]="weekendColumn()">
@@ -58,7 +58,7 @@
           </thead>
           <tbody>
             <tr class="report-row" *ngFor="let report of results">
-              <td>{{(report.email.split("@", 1)[0]).replace(".", " ")}}</td>
+              <td>{{(report.name.split(" ", 3)[0] + ' ' + report.name.split(" ", 3)[1])}}</td>
               <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
               <td [ngStyle]="hoursColor(report)">{{hoursFormat(report.total)}}</td>
             </tr>

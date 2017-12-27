@@ -44,15 +44,11 @@ def current_date(report_type):
 
 def create_mock_user():
     # user = endpoints.get_current_user()
-    workday_query = Workday.query(Workday.employee.email == "hrm@edosoft.es").get()
+    users = User.query()
 
-    if workday_query is None:   #Workdays for all users are created.
-        users = User.query()
-
-        for user_w in users:
-            '''
-            for day in range(1, 31):
-                first_date = date(2017, 11, day)
+    for user_w in users:
+        for day in range(1, 27):
+                first_date = date(2017, 12, day)
                 
                 day_of_week = first_date.isocalendar()[2]
 
@@ -61,48 +57,26 @@ def create_mock_user():
                     cin = []
                     cout = []
                     work.employee = user_w
-                    work.date = datetime(2017, 11, day)
-                    cin.append(datetime(2017, 11, day, 7, 31))
+                    work.date = datetime(2017, 12, day)
+                    cin.append(datetime(2017, 12, day, 7, 31))
                     work.checkin = cin
-                    cout.append(datetime(2017, 11, day, 15, 2))
+                    cout.append(datetime(2017, 12, day, 15, 2))
                     work.checkout = cout
                     work.total = 480
                     work.put()
-            '''
-            for day in range(1, 26):
-                    first_date = date(2017, 12, day)
-                    
-                    day_of_week = first_date.isocalendar()[2]
 
-                    if day_of_week is not 6 and day_of_week is not 7:
-                        work = Workday()
-                        cin = []
-                        cout = []
-                        work.employee = user_w
-                        work.date = datetime(2017, 12, day)
-                        cin.append(datetime(2017, 12, day, 7, 31))
-                        work.checkin = cin
-                        cout.append(datetime(2017, 12, day, 15, 2))
-                        work.checkout = cout
-                        work.total = 480
-                        work.put()
+    #Mock different values to show
+    date_bad = date(2017, 12, 20)
+    date_exc = date(2017, 12, 14)
+    workday_n_bad = Workday.query(Workday.employee.email == "nestor.marin@edosoft.es",
+                            Workday.date == date_bad).get()
+    workday_n_bad.total = 420
+    workday_n_bad.put()
 
-    else:
-        #Mock different values to show
-        date_bad = date(2017, 12, 20)
-        date_exc = date(2017, 12, 14)
-        workday_n_bad = Workday.query(Workday.employee.email == "nestor.marin@edosoft.es",
-                                  Workday.date == date_bad).get()
-        workday_n_bad.total = 420
-        workday_n_bad.put()
-
-        workday_n_exc = Workday.query(Workday.employee.email == "nestor.marin@edosoft.es",
-                                  Workday.date == date_exc).get()
-        workday_n_exc.total = 547
-        workday_n_exc.put()           
-        return CheckinResponseMessage(response_code=200,
-                                      text="Mock workdays created")
-
+    workday_n_exc = Workday.query(Workday.employee.email == "nestor.marin@edosoft.es",
+                            Workday.date == date_exc).get()
+    workday_n_exc.total = 547
+    workday_n_exc.put()           
     return CheckinResponseMessage(response_code=200,
-                                  text="Mock workdays returned")
+                                text="Mock workdays created")
 

@@ -39,6 +39,7 @@ def get_report(date, report_type=None):
             employee_report = ReportMessage()
             total_hours_per_employee = []
             employee_report.email = user.email
+            employee_report.name = user.name
             workdays_by_employee = requested_workdays.filter(
                 Workday.employee.email == employee_report.email).order(+Workday.date)
 
