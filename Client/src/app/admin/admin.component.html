@@ -55,13 +55,12 @@
                 </div>
                 <div class="submit-roles">
                     <button type="button" class="btn btn-primary" (click)="sendRole()">Submit</button>
-                    <div *ngIf="(response_submit_code == 200)  && ((checkedAdmin == true) || (checkedHRM == true))" class="alert alert-success">
+                    <div *ngIf="response_submit_code == 200" class="alert alert-success">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
                         <strong>Updated!</strong> {{response_submit_message}}
                     </div>
-                    <div *ngIf="(response_submit_code == 200) && (checkedAdmin == false) && (checkedHRM == false)" class="alert alert-success">
-                        <strong>Updated!</strong> This user will be Employee.
-                    </div>
                     <div *ngIf="response_submit_code == 400" class="alert alert-danger">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
                         <strong>Error!</strong> {{response_submit_message}}
                     </div>
                 </div>
