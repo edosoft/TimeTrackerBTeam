@@ -1,59 +1,62 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="list-log-checks">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="list-log-checks">
 
-        <div class="title-date">
-          <h2>{{date}}</h2>
-        </div>
+                <div class="title-date">
+                    <h2>{{date}}</h2>
+                </div>
 
-        <div class="list-log">
-          <div class="content-list-log flexhour">
-            <div *ngIf="checkInTime != 'None'" class="time-check-inout">
-              <p>
-                <i class="fa fa-sign-in" aria-hidden="true"></i>{{checkInTime}}</p>
+                <div class="list-log">
+                    <div class="content-list-log flexhour">
+                        <div *ngIf="checkInTime != 'None'" class="time-check-inout">
+                            <p>
+                                <i class="fa fa-sign-in" aria-hidden="true"></i>{{checkInTime}}</p>
+                        </div>
+                        <div *ngIf="checkOutTime != 'None'" class="time-check-inout">
+                            <p>
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>{{checkOutTime}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-mssg-check">
+                    <div *ngIf="checkInSoon" class="mssg alert alert-warning alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
+                        <strong>You can't check in, its too early!</strong>
+                    </div>
+
+                    <div *ngIf="checkInLate && currentUserWorkday.checkin_number == 1" class="mssg alert alert-warning alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
+                        <strong>You checked in too late!</strong>
+                    </div>
+
+                    <div *ngIf="checkOutSoon" class="mssg alert alert-warning alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="closeOut()">×</a>
+                        <strong>You checked out too early.</strong>
+                    </div>
+
+                    <div *ngIf="checkWait" class="mssg alert alert-warning alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="closeWait()">×</a>
+                        <strong>You need to wait at least 5 minutes before a checkout.</strong>
+                    </div>
+                </div>
+
+
+                <div class="container-general-check-buttons">
+                    <div class="checkbtns">
+                        <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="currentUserWorkday.checkin >=3 || checkInOutofRange || !checkInActive">Check In</button>
+                        <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="currentUserWorkday.checkout >=3 || checkInTime == 'None' || !checkOutActive">Check Out</button>
+                    </div>
+                </div>
+
+                <div class="worked-timesheet">
+                    <div class="time-worked">
+                        <p>Daily Time:</p>
+                        <p>{{hours}}:{{minutes}}</p>
+                    </div>
+                </div>
             </div>
-            <div *ngIf="checkOutTime != 'None'" class="time-check-inout">
-              <p>
-                <i class="fa fa-sign-out" aria-hidden="true"></i>{{checkOutTime}}</p>
-            </div>
-          </div>
         </div>
-
-        <div *ngIf="checkInSoon" class="mssg alert alert-warning alert-dismissable">
-          <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
-          <strong>You can't check in, its too early!</strong>
-        </div>
-
-        <div *ngIf="checkInLate && currentUserWorkday.checkin_number == 1" class="mssg alert alert-warning alert-dismissable">
-          <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
-          <strong>You checked in too late!</strong>
-        </div>
-
-        <div *ngIf="checkOutSoon" class="mssg alert alert-warning alert-dismissable">
-          <a class="close" data-dismiss="alert" aria-label="close" (click)="closeOut()">×</a>
-          <strong>You checked out too early.</strong>
-        </div>
-
-        <div *ngIf="checkWait" class="mssg alert alert-warning alert-dismissable">
-          <a class="close" data-dismiss="alert" aria-label="close" (click)="closeWait()">×</a>
-          <strong>You need to wait at least 5 minutes before a checkout.</strong>
-        </div>
-
-        <div class="container-general-check-buttons">
-          <div class="checkbtns">
-            <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="currentUserWorkday.checkin >=3 || checkInOutofRange || !checkInActive">Check In</button>
-            <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="currentUserWorkday.checkout >=3 || checkInTime == 'None' || !checkOutActive">Check Out</button>
-          </div>
-        </div>
-
-        <div class="worked-timesheet">
-          <div class="time-worked">
-            <p>Daily Time:</p>
-            <p>{{hours}}:{{minutes}}</p>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 </div>

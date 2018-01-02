@@ -8,10 +8,17 @@
     .title-date {
         padding: 15px;
         background-color: $color_1;
+        text-align: center;
+        @media (min-width: 768px) {
+            text-align: left;
+        }
         h2 {
             margin: 0px;
-            font-size: 22px;
+            font-size: 19px;
             color: #fff;
+            @media (min-width: 768px) {
+                font-size: 22px;
+            }
         }
     }
     .list-log {
@@ -37,9 +44,16 @@
     .container-general-check-buttons {
         padding: 15px;
         .checkbtns {
-            display: flex;
+            @include display-flex();
+            // @include flex-wrap(wrap);
             button {
                 width: 50%;
+                font-size: 17px;
+                padding: 10px;
+                @media (min-width: 768px) {
+                    font-size: 20px;
+                    padding: 8x 16px;
+                }
                 &:first-child {
                     margin-right: 15px;
                 }
@@ -72,12 +86,16 @@ button:disabled {
     flex-wrap: wrap;
 }
 
-.close{
+.close {
     cursor: pointer;
 }
 
-.mssg{
-    text-align: center;
-    width: 400px;
-    margin: 20px auto;
+.container-mssg-check {
+    padding: 0px 15px;
+    .mssg {
+        text-align: center;
+        width: 400px;
+        margin: 0px auto;
+        max-width: 100%;
+    }
 }
