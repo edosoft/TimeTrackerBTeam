@@ -89,7 +89,7 @@ class CheckoutResponseMessage(messages.Message):
 class WeekTotalMessage(messages.Message):
     response_code = messages.IntegerField(2)
     user = messages.StringField(1)
-    hours = messages.IntegerField(3)
+    minutes = messages.IntegerField(3)
 
 
 class IssueMessage(messages.Message):

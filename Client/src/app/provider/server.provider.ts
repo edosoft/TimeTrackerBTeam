@@ -236,9 +236,9 @@ export class ServerProvider {
   }
 
   getWeekTotal() {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       gapi.client.timetrackerApi.weektotal().execute((response: any) => {
-        console.log(response);
+          resolve(response.result.minutes);
       });
     });
   }

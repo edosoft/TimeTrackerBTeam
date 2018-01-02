@@ -36,6 +36,9 @@ export class CheckComponent implements OnInit {
   hours: string;
   minutes: string;
 
+  whours: string;
+  wminutes: string;
+
   constructor(private server: ServerProvider, private datePipe: DatePipe) { }
 
   ngOnInit() {
@@ -143,7 +146,7 @@ export class CheckComponent implements OnInit {
     return date;
   }
 
-  timer() {
+  async timer() {
         if (this.server.getUserWorkday().checkin_number != 0 &&
             this.server.getUserWorkday().checkin_number !=
             this.server.getUserWorkday().checkout_number) {
@@ -155,6 +158,11 @@ export class CheckComponent implements OnInit {
 
           const timer = new Date(timeServer.getTime() - timeCheckIn.getTime() + this.server.getUserWorkday().total * 60 * 1000);
 
+          const weekly_hours = await this.server.getWeekTotal();
+          const wtimer = new Date(timeServer.getTime() - timeCheckIn.getTime()
+          + weekly_hours * 60 * 1000);
+
+
           this.timerInterval = setInterval(() => {
             timer.setSeconds(timer.getSeconds() + 1);
             const hours = (timer.getHours() < 10 ? '0' : '') + timer.getHours();
@@ -162,6 +170,15 @@ export class CheckComponent implements OnInit {
             const seconds = (timer.getSeconds() < 10 ? '0' : '') + timer.getSeconds();
             this.hours = hours;
             this.minutes = minutes;
+
+            wtimer.setSeconds(wtimer.getSeconds() + 1);
+            const whours = (wtimer.getHours() < 10 ? '0' : '') + wtimer.getHours();
+            const wminutes = (wtimer.getMinutes() < 10 ? '0' : '') + wtimer.getMinutes();
+            const wseconds = (wtimer.getSeconds() < 10 ? '0' : '') + wtimer.getSeconds();
+
+
+            this.whours = (parseInt(whours, 10) + Math.floor(weekly_hours / 1440) * 24).toString();
+            this.wminutes = wminutes;
             // console.log(hours + ':' + minutes + ':' + seconds);
           }, 1000);
         }
@@ -174,11 +191,26 @@ export class CheckComponent implements OnInit {
           this.hours = hours;
           this.minutes = minutes;
           console.log(timer);
+
+          const weekly_hours = await this.server.getWeekTotal();
+          const wtimer = new Date(weekly_hours * 60*1000);
+          const whours = (wtimer.getHours() < 10 ? '0' : '') + wtimer.getHours();
+          const wminutes = (wtimer.getMinutes() < 10 ? '0' : '') + wtimer.getMinutes();
+          this.whours = (parseInt(whours, 10) + Math.floor(weekly_hours / 1440) * 24).toString();
+          this.wminutes = wminutes;
+          console.log(wtimer);
           clearInterval(this.timerInterval);
 
         }else { // No se ha hecho checkin todavía
           this.hours = '00';
           this.minutes = '00';
+
+          const weekly_hours = await this.server.getWeekTotal();
+          const wtimer = new Date(weekly_hours * 60 * 1000);
+          const whours = (wtimer.getHours() < 10 ? '0' : '') + wtimer.getHours();
+          const wminutes = (wtimer.getMinutes() < 10 ? '0' : '') + wtimer.getMinutes();
+          this.whours = (parseInt(whours, 10) + Math.floor(weekly_hours / 1440) * 24).toString();
+          this.wminutes = wminutes;
         }
 
       }

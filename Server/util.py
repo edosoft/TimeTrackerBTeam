@@ -15,14 +15,16 @@ def get_week_total(user):
     # Query to return all workdays in a week by user
     requested_workdays = Workday.query(Workday.date >= start_date, Workday.date <= end_date)
 
+    selected_user_workdays = requested_workdays.filter(Workday.employee.email == user.email())
+
+
     # From the list of workdays, get another list with each total
-    week_hours = list(map((lambda day: day.total), requested_workdays))
+    week_hours = list(map((lambda day: day.total), selected_user_workdays))
     # Sums each daily total in the list to calc the week total
     week_total = reduce((lambda day_total, week_total: week_total + day_total), week_hours)
-
     return WeekTotalMessage(response_code=200,
                             user=user.email(),
-                            hours=week_total)
+                            minutes=week_total)
 
 
 def current_date(report_type):
