@@ -3,16 +3,18 @@
 header {
   width: 100%;
   background-color: #6C7A89;
+  position: relative;
+  z-index: 20;
   .container-header {
     width: 100%;
+    background-color: #6C7A89;
+    position: fixed;
     @media (min-width: 768px) {
       @include display-flex();
       @include justify-content(space-between);
       @include align-items(center);
     }
     .navbar-header {
-      width: 100%;
-      background-color: #6C7A89;
       @include display-flex();
       @include justify-content(space-between);
       @include align-items(center);
@@ -179,5 +181,6 @@ header {
 }
 
 .container-general {
+  padding-top: 100px;
   height: 100vh;
 }

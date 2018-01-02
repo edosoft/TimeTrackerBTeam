@@ -16,7 +16,7 @@ export class ServerProvider {
   L = 'http://localhost:8080/_ah/api';
   P = 'https://timetrackerbteam.appspot.com/_ah/api/';
 
-  url: string = this.P;
+  url: string = this.L;
 
   logged = false;
   reportType: number;
