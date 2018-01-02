@@ -1,6 +1,10 @@
 @import '~sass/variables';
 @import '~sass/mixins';
 header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
   width: 100%;
   background-color: #6C7A89;
   .container-header {
@@ -113,7 +117,13 @@ header {
               margin: 15px 0px;
               @media (min-width: 768px) {
                 display: inline-block;
-                margin: 0px;
+                margin: 0px 10px;
+              }
+              .link-active {
+                font-weight: bold;
+              }
+              button:hover {
+                cursor: pointer;
               }
               &.logout-item {
                 button {
@@ -179,5 +189,6 @@ header {
 }
 
 .container-general {
+  margin-top: 100px;
   height: 100vh;
 }

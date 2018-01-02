@@ -13,8 +13,11 @@ export class AppComponent implements DoCheck, OnInit {
   isLogged: any;
   currentUserWorkday: any;
   isCollapsed = true;
+  location = location;
 
-  constructor(private server: ServerProvider) { }
+  constructor(private server: ServerProvider) {
+    document.addEventListener('click', () => this.closeNavBar(), true);
+  }
 
   ngOnInit() {
     this.currentUserWorkday = this.server.getUserWorkday();
@@ -25,12 +28,17 @@ export class AppComponent implements DoCheck, OnInit {
     this.currentUserWorkday = this.server.getUserWorkday();
   }
 
+  closeNavBar() {
+    if (this.isCollapsed === false) {
+      this.isCollapsed = true;
+    }
+  }
+
   logOut() {
     this.server.logOut();
     this.server.returnToLogin();
   }
   returnToCheck() {
-    console.log('returntocheck');
     this.server.returnToCheck();
   }
   weeklyReport() {
