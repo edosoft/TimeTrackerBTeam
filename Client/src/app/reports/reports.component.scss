@@ -1,42 +1,31 @@
 .button-report {
-  margin-top: 25px;
-  align-content: center;
-  margin-bottom: 20px;
+    margin-top: 25px;
+    align-content: center;
+    margin-bottom: 20px;
 }
 
 .help {
-  i {
-    margin-right: 5px;
-    color: blue;
-  }
+    i {
+        margin-right: 5px;
+        color: blue;
+    }
 }
 
 .mssg {
-  text-align: center;
-  width: 400px;
-  margin-top: 20px;
+    text-align: center;
+    width: 400px;
+    margin-top: 20px;
 }
 
 .close {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .reports-table {
-  margin-top: 20px;
-  overflow-x: auto;
-  table {
-    width: 100%;
-    box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
-  }
-  .table-desktop {
-    display: none;
-    @media (min-width: 992px) {
-      display: table;
+    margin: 20px 0px;
+    overflow-x: auto;
+    table {
+        width: 100%;
+        box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
     }
-  }
-  .table-mobile-tablet {
-    @media (min-width: 992px) {
-      display: none;
-    }
-  }
 }
