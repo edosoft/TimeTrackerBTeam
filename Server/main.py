@@ -45,9 +45,9 @@ class MainPage(remote.Service):
         admin.create_user()
         sleep(0.5)
 
-        workday_query = Workday.query(Workday.employee.email == "hrm@edosoft.es").get()
-        if workday_query is None:
-            util.create_mock_user()
+        #workday_query = Workday.query(Workday.employee.email == "hrm@edosoft.es").get()
+        #if workday_query is None:
+        #    util.create_mock_user()
         
         user = endpoints.get_current_user()
         return log_in(user)

@@ -10,19 +10,32 @@ declare const gapi: any;
 @Injectable()
 export class ServerProvider {
 
-  constructor(private router: Router, private zone: NgZone) { }
+  constructor(private router: Router, private zone: NgZone) {
+    this.sendLogin.subscribe((value) => {
+      this.wrongAccount = value;
+  });
+   }
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
   L = 'http://localhost:8080/_ah/api';
   P = 'https://timetrackerbteam.appspot.com/_ah/api/';
 
-  url: string = this.P;
-
+  url: string = this.L;
   logged = false;
   reportType: number;
+  public wrongAccount = false;
+  public sendLogin: Subject<boolean>  = new Subject<boolean>();
   public auth2: any;
 
   public userWorkday: User;
+
+  getAccountWrong(): Observable<any> {
+    return this.sendLogin;
+  }
+
+  setAccountWrong() {
+    this.sendLogin.next(true);
+}
 
   getUserWorkday() {
     return this.userWorkday;
@@ -37,6 +50,7 @@ export class ServerProvider {
       });
       this.attachGSuite(document.getElementById('googleBtn'));
     });
+    return this.wrongAccount;
   }
 
   public callback() {
@@ -60,7 +74,8 @@ export class ServerProvider {
   logIn() {
     gapi.client.timetrackerApi.login().execute((response: any) => {
       if (response.result.response_code === '400') {
-        window.alert(response.result.text);
+        this.setAccountWrong();
+        console.log('Invalid user detected.');
       } else {
         // console.log(JSON.stringify(response.result));
         this.userWorkday.id = response.result.email;
@@ -173,13 +188,7 @@ export class ServerProvider {
       });
     });
   }
-  /*
-    currentDate() {
-      gapi.client.timetrackerApi.date() {
-        return = response.result;
-      }
-    }
-  */
+
   logOut() {
     this.logged = false;
     this.auth2 = gapi.auth2.getAuthInstance();

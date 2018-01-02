@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ServerProvider } from '../provider/server.provider';
-import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { AfterViewInit, DoCheck } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-login',
@@ -8,11 +8,20 @@ import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements AfterViewInit {
-
-  constructor(private server: ServerProvider) {}
-
+  wrongAccount = false;
+  constructor(private server: ServerProvider, private zone: NgZone) {
+    this.server.getAccountWrong().subscribe((value) => {
+      this.zone.run(() => { // <== added
+        this.wrongAccount = value;
+        // console.log(this.wrongAccount);
+    });
+    });
+  }
   ngAfterViewInit() {
     this.server.googleInit();
   }
 
+  closeWarning() {
+    this.wrongAccount = false;
+  }
 }

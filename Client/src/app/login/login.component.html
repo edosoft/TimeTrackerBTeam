@@ -20,6 +20,12 @@
   <br>
 
   <div class="button-login">
-    <div id="googleBtn" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <div id="googleBtn" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark" ></div>
   </div>
+
+  <div *ngIf="wrongAccount" class="mssg alert alert-danger alert-dismissable" >
+    <a class="close" data-dismiss="alert" aria-label="close" (click)="closeWarning()">×</a>
+    <strong>Invalid user detected.</strong>
+  </div>
+
 </div>
