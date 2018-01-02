@@ -114,6 +114,7 @@ class MainPage(remote.Service):
         A function which change the role in an employee.
         This function don't return any error.
         """
+        print(endpoints.get_current_user().email())
         return admin.change_role(request.user_email, request.hrm_value, request.admin_value,endpoints.get_current_user().email())
 
     @endpoints.method(message_types.VoidMessage, GetUserListResponseMessage,

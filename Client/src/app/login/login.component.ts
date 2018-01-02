@@ -11,9 +11,8 @@ export class LoginComponent implements AfterViewInit {
   wrongAccount = false;
   constructor(private server: ServerProvider, private zone: NgZone) {
     this.server.getAccountWrong().subscribe((value) => {
-      this.zone.run(() => { // <== added
+      this.zone.run(() => {
         this.wrongAccount = value;
-        // console.log(this.wrongAccount);
     });
     });
   }

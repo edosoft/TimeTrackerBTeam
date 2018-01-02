@@ -56,13 +56,11 @@ def get_user_list():
 def change_role(user_email, hrm_value, admin_value, user):
    
     user_query_change = User.query(User.email == user_email).get()
-
     if user_query_change is None:
         return ChangeRoleResponseMessage(response_code=400, 
                                             text="User not found.")
-    
     if type(hrm_value) is int and type(admin_value) is int:
-        if user_query_change.email is user:
+        if user_query_change.email == user:
             if user_query_change.admin is not admin_value:
                 return ChangeRoleResponseMessage(response_code=400, 
                                             text="You can not change your admin role.")

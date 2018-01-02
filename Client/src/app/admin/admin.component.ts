@@ -82,27 +82,37 @@ export class AdminComponent implements OnInit {
     if ((this.checkedAdmin) && (!this.checkedHRM)) {
       this.adminValue = 1;
       this.hrmValue = 0;
-      this.userRole = 'Administrator';
     }
     if ((!this.checkedAdmin) && (this.checkedHRM)) {
       this.adminValue = 0;
       this.hrmValue = 1;
-      this.userRole = 'Human Resource Manager';
     }
     if ((this.checkedAdmin) && (this.checkedHRM)) {
       this.adminValue = 1;
       this.hrmValue = 1;
-      this.userRole = 'Administrator, Human Resource Manager';
     }
     if ((!this.checkedAdmin) && (!this.checkedHRM)) {
       this.adminValue = 0;
       this.hrmValue = 0;
-      this.userRole = 'Employee';
     }
-    
+
     this.server.assignRole(this.userEmail, this.hrmValue, this.adminValue).then((response) => {
       this.response_submit_code = response.response_code;
       this.response_submit_message = response.text;
+      if (response.response_code == 200) {
+        if ((this.checkedAdmin) && (!this.checkedHRM)) {
+        this.userRole = 'Administrator';
+      }
+      if ((!this.checkedAdmin) && (this.checkedHRM)) {
+        this.userRole = 'Human Resource Manager';
+      }
+      if ((this.checkedAdmin) && (this.checkedHRM)) {
+        this.userRole = 'Administrator, Human Resource Manager';
+      }
+      if ((!this.checkedAdmin) && (!this.checkedHRM)) {
+        this.userRole = 'Employee';
+      }
+    }
     });
   }
 
