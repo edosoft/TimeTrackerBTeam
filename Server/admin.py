@@ -59,13 +59,13 @@ def change_role(user_email, hrm_value, admin_value, user):
 
     if user_query_change is None:
         return ChangeRoleResponseMessage(response_code=400, 
-                                            text="User not found")
+                                            text="User not found.")
     
     if type(hrm_value) is int and type(admin_value) is int:
         if user_query_change.email is user:
             if user_query_change.admin is not admin_value:
                 return ChangeRoleResponseMessage(response_code=400, 
-                                            text="Error: you can not change your admin role")
+                                            text="You can not change your admin role.")
             else:
                 user_query_change.hrm = hrm_value;
         else:
@@ -73,8 +73,8 @@ def change_role(user_email, hrm_value, admin_value, user):
             user_query_change.hrm = hrm_value;
             
         user_query_change.put()
-        return ChangeRoleResponseMessage(response_code=200, text="Correct change")
+        return ChangeRoleResponseMessage(response_code=200, text="You have assigned the roles succesfully.")
 
     return ChangeRoleResponseMessage(response_code=400, 
-                                            text="The values of roles are not correct")
+                                            text="The values of roles are not correct.")
     

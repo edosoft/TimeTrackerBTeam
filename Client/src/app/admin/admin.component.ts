@@ -19,6 +19,9 @@ export class AdminComponent implements OnInit {
   users: User[];
   user_position: number;
   user: any;
+  userRole : string;
+  response_submit_code: number;
+  response_submit_message: string;
 
   constructor(private server: ServerProvider) { }
 
@@ -34,35 +37,73 @@ export class AdminComponent implements OnInit {
     this.isSetRole = true;
     this.isUserList = false;
     this.user = user;
+    if ((user.admin == 0) && (user.hrm == 0)){
+      this.userRole = 'Employee';
+    }
+    if ((user.admin == 0) && (user.hrm == 1)) {
+      this.checkedHRM = true;
+      this.userRole = 'Human Resource Manager';
+    }
+    if ((user.admin == 1) && (user.hrm == 0)) {
+      this.checkedAdmin = true;
+      this.userRole = 'Administrator';
+    }
+    if ((user.admin == 1) && (user.hrm == 1)) {
+      this.checkedAdmin = true;
+      this.checkedHRM = true;
+      this.userRole = 'Administrator, Human Resource Manager';
+    }
+
   }
 
   backToListUser() {
     this.isSetRole = false;
     this.isUserList = true;
+    this.response_submit_code = 0;
+    this.checkedAdmin = false;
+    this.checkedHRM = false;
+    this.server.getUserList().then((response) => {
+      this.users = response.user_list;
+    });
+  }
+
+  adminCheck(){
+    this.checkedAdmin = !this.checkedAdmin;
+  }
+
+  hrmCheck(){
+    this.checkedHRM = !this.checkedHRM;
   }
 
   sendRole() {
+
     this.userEmail = this.user.email;
 
     if ((this.checkedAdmin) && (!this.checkedHRM)) {
       this.adminValue = 1;
       this.hrmValue = 0;
+      this.userRole = 'Administrator';
     }
     if ((!this.checkedAdmin) && (this.checkedHRM)) {
       this.adminValue = 0;
       this.hrmValue = 1;
+      this.userRole = 'Human Resource Manager';
     }
     if ((this.checkedAdmin) && (this.checkedHRM)) {
       this.adminValue = 1;
       this.hrmValue = 1;
+      this.userRole = 'Administrator, Human Resource Manager';
     }
     if ((!this.checkedAdmin) && (!this.checkedHRM)) {
       this.adminValue = 0;
       this.hrmValue = 0;
+      this.userRole = 'Employee';
     }
-    console.log(this.adminValue);
-    console.log(this.hrmValue);
-    this.server.assignRole(this.userEmail, this.hrmValue, this.adminValue);
+    
+    this.server.assignRole(this.userEmail, this.hrmValue, this.adminValue).then((response) => {
+      this.response_submit_code = response.response_code;
+      this.response_submit_message = response.text;
+    });
   }
 
 }

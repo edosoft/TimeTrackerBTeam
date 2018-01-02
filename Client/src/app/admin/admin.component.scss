@@ -65,11 +65,19 @@
             .form-roles {
                 .select-roles {
                     margin-bottom: 15px;
-                    @include display-flex();
-                    @include justify-content(space-around);
-                    div {
-                        margin-right: 15px;
+                    display: block;
+                    @media (min-width: 768px) {
                         @include display-flex();
+                        @include justify-content(space-around);
+                    }
+                    div {
+                        @include display-flex();
+                        @include align-items(center);
+                        margin-bottom: 10px;
+                        @media (min-width: 768px) {
+                            margin-right: 15px;
+                            margin-bottom: 0px;
+                        }
                         input {
                             margin-right: 7px;
                         }
@@ -77,6 +85,9 @@
                 }
                 .submit-roles {
                     text-align: center;
+                    .alert {
+                        margin-top: 16px;
+                    }
                 }
             }
         }
