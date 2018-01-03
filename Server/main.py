@@ -36,11 +36,8 @@ class MainPage(remote.Service):
                       http_method='POST', name='login')
     def login(self, request):
         """
-        A function which validates the login. It creates a new User if it doesn't exist in the DB,
-        and new Workday entities if the valid user hasn't logged in that day. If it's a returning user,
-        this function returns the created Workday, and doesn't create a new User.
-        Needs - User verified by Google.
-        Returns - WorkdayResponseMessage.
+        A function which validates the login. It creates a new Workday entity if the valid user hasn't logged in that day. If it's a returning user,
+        this function returns the created Workday.
         """
         admin.create_user()
         sleep(0.5)
@@ -57,10 +54,7 @@ class MainPage(remote.Service):
     def checkin(self, request):
         """
         A function which updates the Workday with the check in date. If the check in button
-        is pressed in a valid time, the system updates the Workday entity with the date. If not,
-        the function returns an error, or raises an Issue if necessary.
-        Needs - A valid date
-        Returns - CheckinResponseMessage
+        is pressed in a valid time, the system updates the Workday entity with the date.
         """
 
         user = endpoints.get_current_user()
@@ -71,8 +65,7 @@ class MainPage(remote.Service):
     def checkout(self, request):
         """A function which updates the Workday with the checkout date and the total hours.
         If the checkout is made in a valid time, the system returns updates the Workday entity
-        with the checkout date and total. If not, the system returns an error or raises an issue
-        if necessary
+        with the checkout date and total.
         """
 
         user = endpoints.get_current_user()
@@ -82,11 +75,11 @@ class MainPage(remote.Service):
                       path='weektotal', http_method='POST', name='weektotal')
     def weektotal(self, request):
         """
-        Get total worked hours this week
+        A  function which returns the total worked hours of this week.
         """
 
         user = endpoints.get_current_user()
-        return util.get_week_total(user)
+        return util.get_week_total(user.email())
 
     @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
                       path='autocheckout', http_method='GET', name='autocheckout')
@@ -98,12 +91,23 @@ class MainPage(remote.Service):
         automatic_checkout_helper()
         return message_types.VoidMessage()
 
+    #UNUSED
+    @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
+                      path='testprueba', http_method='GET', name='testprueba')
+    def test_prueba(self, request):
+        """
+        An auxiliar function which creates mock workdays.
+        """
+        print (datetime.datetime.now())
+        return message_types.VoidMessage()
+
+
     @endpoints.method(RequestCurrentDate, CurrentDateResponseMessage,
                       path='date', http_method='POST', name='date')
     def date(self, request):
         """
         A function which retuns the current week and the current month with the 
-        apropiate format to use in calendar. This function don't return any error.
+        appropiate format to use in calendar.
         """
         return util.current_date(request.report_type)
 
@@ -111,8 +115,7 @@ class MainPage(remote.Service):
                       path='change_role', http_method='POST', name='change_role')
     def change_role(self, request):
         """
-        A function which change the role in an employee.
-        This function don't return any error.
+        A function which updates the roles of an employee.
         """
         print(endpoints.get_current_user().email())
         return admin.change_role(request.user_email, request.hrm_value, request.admin_value,endpoints.get_current_user().email())
@@ -121,8 +124,8 @@ class MainPage(remote.Service):
                         path='user_list', http_method='POST', name='user_list')
     def user_list(self, request):
         """
-        A function which returns a users list. This list has email, name, hrm value 
-        and admin value of all employee.
+        A function which returns the list of users. This list returns the email, name, hrm value 
+        and admin value of all the employees.
         """
 
         return admin.get_user_list()
@@ -133,37 +136,29 @@ class MainPage(remote.Service):
         """
         A function which returns the reports of a selected date. It returns the user, 
         total hours per day and total hours in the range of selected dates. 
-        Needs - The date and the type of the report
-        Returns - ReportResponseMessage, an array of ReportMessages
+        Depending on the type of report (Weekly or Monthly), it also adds the 
+        total count of days, in the latter case.
         """
 
         return get_report(request.date, request.report_type)
 
 
 
-    @endpoints.method(message_types.VoidMessage, CheckinResponseMessage,
-                      path='create', http_method='POST', name='create')
-    def create(self, request):
-        """
-        An auxiliar function which creates mock users
-        """
-
-        return util.create_mock_user()
 
     @endpoints.method(message_types.VoidMessage, IssueResponseMessage, path='issues', http_method='POST', name='issues')
     def issues(self, request):
         '''
-        A function who will get issues
+        A function which returns the list of issues of all the users.
         '''
         return get_user_with_issues()
 
     @endpoints.method(message_types.VoidMessage, RequestChangeRole, path='currentuser', http_method='POST', name='currentuser')
     def get_current_user(self, request):
         '''
-        A function who will return the user HRM and admin value.
+        A function which returns the user HRM and admin value.
         '''
         user = endpoints.get_current_user().email()
         user_data = User.query(User.email == user).get()
-        return RequestChangeRole(user_email = user, hrm_value = user_data.hrm, admin_value = user_data.admin)
+        return RequestChangeRole(user_email=user, hrm_value=user_data.hrm, admin_value=user_data.admin)
 
 app = endpoints.api_server([MainPage], restricted=False)

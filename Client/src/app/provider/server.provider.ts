@@ -204,10 +204,10 @@ export class ServerProvider {
       gapi.client.timetrackerApi.checkin().execute((response: any) => {
         if (response.result.response_code === '400') {
           this.userWorkday.checkin = 'None';
-          console.log(JSON.stringify(response.result));
+          // console.log(JSON.stringify(response.result));
           resolve(false);
         } else {
-          console.log(JSON.stringify(response.result));
+          // console.log(JSON.stringify(response.result));
           this.userWorkday.checkin = this.returnDate(response.result.checkin);
           this.userWorkday.checkin_number = response.result.number;
           resolve(true);
@@ -225,7 +225,7 @@ export class ServerProvider {
         } else if (response.result.response_code === '300') {
           resolve(false);
         } else {
-          console.log(JSON.stringify(response.result));
+          // console.log(JSON.stringify(response.result));
           this.userWorkday.checkout = this.returnDate(response.result.checkout);
           this.userWorkday.checkout_number = response.result.number;
           this.userWorkday.total = response.result.total;

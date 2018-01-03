@@ -1,27 +1,46 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AppRoutingModule } from './provider/router.provider';
+import { LoginComponent } from './login/login.component';
+import { CheckComponent } from './check/check.component';
+import { ReportsComponent } from './reports/reports.component';
+import { IssuesComponent } from './issues/issues.component';
+import { AdminComponent } from './admin/admin.component';
+import {APP_BASE_HREF} from '@angular/common';
+import { ServerProvider } from './provider/server.provider';
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let compiled;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [FormsModule, NgbModule, AppRoutingModule],
       declarations: [
-        AppComponent
+        AppComponent,
+        LoginComponent,
+        CheckComponent,
+        ReportsComponent,
+        IssuesComponent,
+        AdminComponent
       ],
+      providers: [ServerProvider, {provide: APP_BASE_HREF, useValue : '/' }]
     }).compileComponents();
   }));
-  it('should create the app', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
-  it(`should have as title 'app'`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app');
-  }));
-  it('should render title in a h1 tag', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
+    compiled = fixture.debugElement.nativeElement;
+  });
+
+  fit('should create the app', async(() => {
+    expect(component).toBeTruthy();
+  }));
+  fit(`should have as title 'Time Tracking Application'`, async(() => {
+    // const app = fixture.debugElement.componentInstance;
+    expect(compiled.querySelector('#title')).toBeTruthy();
   }));
 });

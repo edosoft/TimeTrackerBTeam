@@ -15,7 +15,8 @@ def get_week_total(user):
     # Query to return all workdays in a week by user
     requested_workdays = Workday.query(Workday.date >= start_date, Workday.date <= end_date)
 
-    selected_user_workdays = requested_workdays.filter(Workday.employee.email == user.email())
+    # Query to filter all workdays by a specific user
+    selected_user_workdays = requested_workdays.filter(Workday.employee.email == user)
 
 
     # From the list of workdays, get another list with each total
@@ -23,29 +24,27 @@ def get_week_total(user):
     # Sums each daily total in the list to calc the week total
     week_total = reduce((lambda day_total, week_total: week_total + day_total), week_hours)
     return WeekTotalMessage(response_code=200,
-                            user=user.email(),
                             minutes=week_total)
 
 
 def current_date(report_type):
-
     year = datetime.now()
     year = str(year.isocalendar()[0])
 
     if report_type is 0:
         week = datetime.now()
-        week = str(week.isocalendar()[1]) 
-        week_calendar = str(year + '-W' + week) #return the current week with this format: YYYY-WW
-        return CurrentDateResponseMessage(response_code=200, text="Saved initial week for the calendar",date=week_calendar)
-
+        week = str(week.isocalendar()[1])
+        week_calendar = str(year + '-W' + week) # Format: YYYY-WW
+        return CurrentDateResponseMessage(response_code=200, text="Initial week for the calendar",
+                                          date=week_calendar)
     else: 
         month = datetime.now()
-        month = str(month.month) 
-        month_calendar = str(year + '-' + month) #return the current week with this format: YYYY-MM
-        return CurrentDateResponseMessage(response_code=200, text="Saved initial week for the calendar", date=month_calendar)
+        month = str(month.month)
+        month_calendar = str(year + '-' + month) # Format: YYYY-MM
+        return CurrentDateResponseMessage(response_code=200, text="Initial month for the calendar",
+                                          date=month_calendar)
 
 def create_mock_user():
-    # user = endpoints.get_current_user()
     users = User.query()
 
     for user_w in users:
@@ -78,7 +77,4 @@ def create_mock_user():
     workday_n_exc = Workday.query(Workday.employee.email == "nestor.marin@edosoft.es",
                             Workday.date == date_exc).get()
     workday_n_exc.total = 547
-    workday_n_exc.put()           
-    return CheckinResponseMessage(response_code=200,
-                                text="Mock workdays created")
-
+    workday_n_exc.put()

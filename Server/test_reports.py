@@ -50,7 +50,7 @@ class DatastoreTestCase(unittest.TestCase):
         user1.put()
 
         for x in range(6, 11):
-            date = datetime.now().replace(month = 11, day = x)
+            date = datetime.now().replace(year=2017, month=11, day = x)
             work = Workday(employee=user1,date=date, total=480)
             work.put()
 
@@ -69,20 +69,20 @@ class DatastoreTestCase(unittest.TestCase):
         user1.put()
         user2 = User(email="hmr@edosoft.es")
         user2.put()
-        date = datetime.now().replace(month = 11,day = 5)
+        date = datetime.now().replace(year=2017, month=11,day=5)
         work = Workday(employee=user1,date=date, total=300)
         work.put()
         for x in range(21, 23):
-            date = datetime.now().replace(month = 11,day = x)
+            date = datetime.now().replace(year=2017, month=11,day = x)
             work = Workday(employee=user1,date=date, total=300)
             work.put()
 
-        date = datetime.now().replace(month = 11,day = 23)
+        date = datetime.now().replace(year=2017, month=11,day = 23)
         work = Workday(employee=user1,date=date, total=500)
         work.put()
 
         for x in range(20, 24):
-            date = datetime.now().replace(month = 11,day = x)
+            date = datetime.now().replace(year=2017, month=11,day = x)
             work = Workday(employee=user2,date=date, total=480)
             work.put()
 

@@ -103,7 +103,7 @@ export class CheckComponent implements OnInit {
     }
     this.timer();
     const weekly_hours = await this.server.getWeekTotal();
-    this.weeklyLimit(weekly_hours); //Llamada a las notificaciones de limite semanal
+    this.weeklyLimit(weekly_hours); // Llamada a las notificaciones de limite semanal
   }
 
   async checkOut() {
@@ -123,6 +123,8 @@ export class CheckComponent implements OnInit {
       this.checkWait = true;
     }
     this.timer();
+    const weekly_hours = await this.server.getWeekTotal();
+    this.weeklyLimit(weekly_hours); // Llamada a las notificaciones de limite semanal
   }
 
   async getWeekTotal() {
@@ -156,7 +158,7 @@ export class CheckComponent implements OnInit {
       this.server.getUserWorkday().checkin_number !=
       this.server.getUserWorkday().checkout_number) {
       // const server_time = this.server.getCurrentTime();
-      if (this.timerInterval == undefined) {
+
         const server_time = new Date();
         const timeServer = new Date(server_time);
         const timeCheckIn = this.getProperDate(this.server.getUserWorkday().checkin);
@@ -176,16 +178,14 @@ export class CheckComponent implements OnInit {
           this.minutes = minutes;
 
           wtimer.setSeconds(wtimer.getSeconds() + 1);
-          const whours = (wtimer.getHours() < 10 ? '0' : '') + wtimer.getHours();
+          const whours = (wtimer.getHours() + Math.floor(weekly_hours / 1440) * 24);
           const wminutes = (wtimer.getMinutes() < 10 ? '0' : '') + wtimer.getMinutes();
-          const wseconds = (wtimer.getSeconds() < 10 ? '0' : '') + wtimer.getSeconds();
 
-
-          this.whours = (parseInt(whours, 10) + Math.floor(weekly_hours / 1440) * 24).toString();
+          this.whours = (whours < 10 ? '0' : '') + whours;
           this.wminutes = wminutes;
-          // console.log(hours + ':' + minutes + ':' + seconds);
+          console.log(hours + ':' + minutes + ':' + seconds);
         }, 1000);
-      }
+
     } else if (this.server.getUserWorkday().checkin_number != 0 &&
       this.server.getUserWorkday().checkin_number ==
       this.server.getUserWorkday().checkout_number) {
@@ -194,18 +194,15 @@ export class CheckComponent implements OnInit {
       const minutes = (timer.getMinutes() < 10 ? '0' : '') + timer.getMinutes();
       this.hours = hours;
       this.minutes = minutes;
-      console.log(timer);
 
       const weekly_hours = await this.server.getWeekTotal();
       const wtimer = new Date(weekly_hours * 60 * 1000);
-      const whours = (wtimer.getHours() < 10 ? '0' : '') + wtimer.getHours();
+      const whours = (wtimer.getHours() + Math.floor(weekly_hours / 1440) * 24);
       const wminutes = (wtimer.getMinutes() < 10 ? '0' : '') + wtimer.getMinutes();
-      this.whours = (parseInt(whours, 10) + Math.floor(weekly_hours / 1440) * 24).toString();
-      this.wminutes = wminutes;
-      console.log(wtimer);
-      clearInterval(this.timerInterval);
 
-      this.weeklyLimit(weekly_hours); //Llamada a las notificaciones de limite semanal
+      this.whours = (whours < 10 ? '0' : '') + whours;
+      this.wminutes = wminutes;
+      clearInterval(this.timerInterval);
 
     } else { // No se ha hecho checkin todavía
       this.hours = '00';
@@ -213,9 +210,10 @@ export class CheckComponent implements OnInit {
 
       const weekly_hours = await this.server.getWeekTotal();
       const wtimer = new Date(weekly_hours * 60 * 1000);
-      const whours = (wtimer.getHours() < 10 ? '0' : '') + wtimer.getHours();
+      const whours = (wtimer.getHours() + Math.floor(weekly_hours / 1440) * 24);
       const wminutes = (wtimer.getMinutes() < 10 ? '0' : '') + wtimer.getMinutes();
-      this.whours = (parseInt(whours, 10) + Math.floor(weekly_hours / 1440) * 24).toString();
+
+      this.whours = (whours < 10 ? '0' : '') + whours;
       this.wminutes = wminutes;
     }
 
@@ -224,22 +222,22 @@ export class CheckComponent implements OnInit {
   weeklyLimit(weeklyTotalHours) {
     const today = new Date(this.currentUserWorkday.date);
     const dayWeek = today.getDay();
-    console.log("Dia de la semana: " + dayWeek);
+    console.log('Dia de la semana: ' + dayWeek);
     const remainingDay = 5 - dayWeek;
-    console.log("Remaining Day: " + remainingDay);
+    console.log('Remaining Day: ' + remainingDay);
     if ((weeklyTotalHours / 60) + ((remainingDay - 1) * 10.5) + 7.5 < 40) {
       this.fewerHours = true;
-      console.log("No has alcanzado el limite");
+      console.log('No has alcanzado el limite');
     } else {
       this.fewerHours = false;
-      console.log("Has alcanzado el limite");
+      console.log('Has alcanzado el limite');
     }
     if ((weeklyTotalHours / 60) + ((remainingDay - 1) * 5) + 5 >= 40) {
       this.higherHours = true;
-      console.log("Te has pasado");
+      console.log('Te has pasado');
     } else {
       this.higherHours = false;
-      console.log("No te has pasado");
+      console.log('No te has pasado');
     }
   }
 
@@ -247,6 +245,4 @@ export class CheckComponent implements OnInit {
     this.fewerHours = false;
     this.higherHours = false;
   }
-
-
 }

@@ -75,7 +75,7 @@ class DatastoreTestCase(unittest.TestCase):
         result2 = change_role(auth2.email, 1,0, auth2.email)
         q2=User.query(User.email == auth2.email).get()
         self.assertEqual(q2.admin, 1, "Not changed")
-        self.assertEqual(result2.text, "Error: you can not change your admin role")
+        self.assertEqual(result2.text, "You can not change your admin role.")
 
 # [END   Report Tests]
 
