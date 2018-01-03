@@ -1,51 +1,53 @@
 <div class="button-report row">
-    <div class="input-group col-sm-4">
-        <input *ngIf="reportType == 1" [(ngModel)]="selectedDate" [value]="selectedDate" class="form-control" type="month" id="dateInput" max="todayDate" required/>
-        <input *ngIf="reportType == 0" [(ngModel)]="selectedDate" [value]="selectedDate" class="form-control" type="week" id="dateInput" max="todayDate" required/>
-        <div class="input-group-btn">
-            <button (click)="getReport()" type="button" class="btn btn-primary">{{buttonTitle}}</button>
-        </div>
+  <div class="input-group col-sm-4">
+    <input *ngIf="reportType == 1" [(ngModel)]="selectedDate" [value]="selectedDate" class="form-control" type="month" id="dateInput"
+      max="todayDate" required/>
+    <input *ngIf="reportType == 0" [(ngModel)]="selectedDate" [value]="selectedDate" class="form-control" type="week" id="dateInput"
+      max="todayDate" required/>
+    <div class="input-group-btn">
+      <button (click)="getReport()" type="button" class="btn btn-primary">{{buttonTitle}}</button>
     </div>
+  </div>
 </div>
 <div class="help">
-    <i class="fa fa-info-circle" aria-hidden="true"></i>{{infoText}}
+  <i class="fa fa-info-circle" aria-hidden="true"></i>{{infoText}}
 </div>
 <div *ngIf="noRecordsFound" class="mssg alert alert-danger alert-dismissable">
-    <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
-    <strong>No records found in the selected date.</strong>
+  <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
+  <strong>No records found in the selected date.</strong>
 </div>
 <div *ngIf="invalidDate" class="mssg alert alert-danger alert-dismissable">
-    <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
-    <strong>Please, insert a valid date.</strong>
+  <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
+  <strong>Please, insert a valid date.</strong>
 </div>
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div *ngIf="!noRecordsFound" class="reports-table">
-                <table class="table table-bordered table-striped">
-                    <thead class="thead-dark">
-                        <tr class="header-row">
-                            <th>Name</th>
-                            <th *ngIf="reportType == 1">Days</th>
-                            <th>Hours</th>
-                            <th *ngFor="let day of daysList" [ngStyle]="weekendColumn()">
-                                {{day}}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="report-row" *ngFor="let report of results">
-                            <td nowrap>{{(report.name.split(" ", 2)[0] +' ' + report.name.split(" ", 3)[1])}}</td>
-                            <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
-                            <td [ngStyle]="hoursColor(report)">{{hoursFormat(report.total)}}</td>
-                            <td *ngFor="let num of report.workday" [ngStyle]="weekendColumn()">
-                                {{Math.floor(num.total/60)}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div *ngIf="!noRecordsFound" class="reports-table">
+        <table class="table table-bordered table-striped">
+          <thead class="thead-dark">
+            <tr class="header-row">
+              <th>Name</th>
+              <th *ngIf="reportType == 1">Days</th>
+              <th>Hours</th>
+              <th *ngFor="let day of daysList" [ngStyle]="weekendColumn()">
+                {{day}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="report-row" *ngFor="let report of results">
+              <td nowrap>{{(report.name.split(" ", 2)[0] +' ' + report.name.split(" ", 3)[1])}}</td>
+              <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
+              <td [ngStyle]="hoursColor(report)">{{hoursFormat(report.total)}}</td>
+              <td *ngFor="let num of report.workday" [ngStyle]="weekendColumn()">
+                {{Math.floor(num.total/60)}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </div>

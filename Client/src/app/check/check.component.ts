@@ -39,6 +39,8 @@ export class CheckComponent implements OnInit {
   whours: string;
   wminutes: string;
 
+  fewerHours: boolean;
+
   constructor(private server: ServerProvider, private datePipe: DatePipe) { }
 
   ngOnInit() {
@@ -115,7 +117,7 @@ export class CheckComponent implements OnInit {
         this.checkOutSoon = true;
       }
     } else {
-        this.checkWait = true;
+      this.checkWait = true;
     }
     this.timer();
   }
@@ -147,72 +149,94 @@ export class CheckComponent implements OnInit {
   }
 
   async timer() {
-        if (this.server.getUserWorkday().checkin_number != 0 &&
-            this.server.getUserWorkday().checkin_number !=
-            this.server.getUserWorkday().checkout_number) {
-          // const server_time = this.server.getCurrentTime();
-          if (this.timerInterval == undefined) {
-          const server_time = new Date();
-          const timeServer = new Date(server_time);
-          const timeCheckIn = this.getProperDate(this.server.getUserWorkday().checkin);
+    if (this.server.getUserWorkday().checkin_number != 0 &&
+      this.server.getUserWorkday().checkin_number !=
+      this.server.getUserWorkday().checkout_number) {
+      // const server_time = this.server.getCurrentTime();
+      if (this.timerInterval == undefined) {
+        const server_time = new Date();
+        const timeServer = new Date(server_time);
+        const timeCheckIn = this.getProperDate(this.server.getUserWorkday().checkin);
 
-          const timer = new Date(timeServer.getTime() - timeCheckIn.getTime() + this.server.getUserWorkday().total * 60 * 1000);
+        const timer = new Date(timeServer.getTime() - timeCheckIn.getTime() + this.server.getUserWorkday().total * 60 * 1000);
 
-          const weekly_hours = await this.server.getWeekTotal();
-          const wtimer = new Date(timeServer.getTime() - timeCheckIn.getTime()
+        const weekly_hours = await this.server.getWeekTotal();
+        const wtimer = new Date(timeServer.getTime() - timeCheckIn.getTime()
           + weekly_hours * 60 * 1000);
 
 
-          this.timerInterval = setInterval(() => {
-            timer.setSeconds(timer.getSeconds() + 1);
-            const hours = (timer.getHours() < 10 ? '0' : '') + timer.getHours();
-            const minutes = (timer.getMinutes() < 10 ? '0' : '') + timer.getMinutes();
-            const seconds = (timer.getSeconds() < 10 ? '0' : '') + timer.getSeconds();
-            this.hours = hours;
-            this.minutes = minutes;
-
-            wtimer.setSeconds(wtimer.getSeconds() + 1);
-            const whours = (wtimer.getHours() < 10 ? '0' : '') + wtimer.getHours();
-            const wminutes = (wtimer.getMinutes() < 10 ? '0' : '') + wtimer.getMinutes();
-            const wseconds = (wtimer.getSeconds() < 10 ? '0' : '') + wtimer.getSeconds();
-
-
-            this.whours = (parseInt(whours, 10) + Math.floor(weekly_hours / 1440) * 24).toString();
-            this.wminutes = wminutes;
-            // console.log(hours + ':' + minutes + ':' + seconds);
-          }, 1000);
-        }
-        }else if (this.server.getUserWorkday().checkin_number != 0 &&
-                  this.server.getUserWorkday().checkin_number ==
-                  this.server.getUserWorkday().checkout_number) {
-          const timer = new Date(this.server.getUserWorkday().total * 60*1000);
+        this.timerInterval = setInterval(() => {
+          timer.setSeconds(timer.getSeconds() + 1);
           const hours = (timer.getHours() < 10 ? '0' : '') + timer.getHours();
           const minutes = (timer.getMinutes() < 10 ? '0' : '') + timer.getMinutes();
+          const seconds = (timer.getSeconds() < 10 ? '0' : '') + timer.getSeconds();
           this.hours = hours;
           this.minutes = minutes;
-          console.log(timer);
 
-          const weekly_hours = await this.server.getWeekTotal();
-          const wtimer = new Date(weekly_hours * 60*1000);
+          wtimer.setSeconds(wtimer.getSeconds() + 1);
           const whours = (wtimer.getHours() < 10 ? '0' : '') + wtimer.getHours();
           const wminutes = (wtimer.getMinutes() < 10 ? '0' : '') + wtimer.getMinutes();
+          const wseconds = (wtimer.getSeconds() < 10 ? '0' : '') + wtimer.getSeconds();
+
+
           this.whours = (parseInt(whours, 10) + Math.floor(weekly_hours / 1440) * 24).toString();
           this.wminutes = wminutes;
-          console.log(wtimer);
-          clearInterval(this.timerInterval);
-
-        }else { // No se ha hecho checkin todavía
-          this.hours = '00';
-          this.minutes = '00';
-
-          const weekly_hours = await this.server.getWeekTotal();
-          const wtimer = new Date(weekly_hours * 60 * 1000);
-          const whours = (wtimer.getHours() < 10 ? '0' : '') + wtimer.getHours();
-          const wminutes = (wtimer.getMinutes() < 10 ? '0' : '') + wtimer.getMinutes();
-          this.whours = (parseInt(whours, 10) + Math.floor(weekly_hours / 1440) * 24).toString();
-          this.wminutes = wminutes;
-        }
-
+          // console.log(hours + ':' + minutes + ':' + seconds);
+        }, 1000);
       }
+    } else if (this.server.getUserWorkday().checkin_number != 0 &&
+      this.server.getUserWorkday().checkin_number ==
+      this.server.getUserWorkday().checkout_number) {
+      const timer = new Date(this.server.getUserWorkday().total * 60 * 1000);
+      const hours = (timer.getHours() < 10 ? '0' : '') + timer.getHours();
+      const minutes = (timer.getMinutes() < 10 ? '0' : '') + timer.getMinutes();
+      this.hours = hours;
+      this.minutes = minutes;
+      console.log(timer);
+
+      const weekly_hours = await this.server.getWeekTotal();
+      const wtimer = new Date(weekly_hours * 60 * 1000);
+      const whours = (wtimer.getHours() < 10 ? '0' : '') + wtimer.getHours();
+      const wminutes = (wtimer.getMinutes() < 10 ? '0' : '') + wtimer.getMinutes();
+      this.whours = (parseInt(whours, 10) + Math.floor(weekly_hours / 1440) * 24).toString();
+      this.wminutes = wminutes;
+      console.log(wtimer);
+      clearInterval(this.timerInterval);
+
+      this.weeklyLimit(weekly_hours); //Llamada a las notificaciones de limite semanal
+
+    } else { // No se ha hecho checkin todavía
+      this.hours = '00';
+      this.minutes = '00';
+
+      const weekly_hours = await this.server.getWeekTotal();
+      const wtimer = new Date(weekly_hours * 60 * 1000);
+      const whours = (wtimer.getHours() < 10 ? '0' : '') + wtimer.getHours();
+      const wminutes = (wtimer.getMinutes() < 10 ? '0' : '') + wtimer.getMinutes();
+      this.whours = (parseInt(whours, 10) + Math.floor(weekly_hours / 1440) * 24).toString();
+      this.wminutes = wminutes;
+    }
+
+  }
+
+  weeklyLimit(weeklyTotalHours) {
+    const today = new Date(this.currentUserWorkday.date);
+    const dayWeek = today.getDay();
+    console.log("Dia de la semana: " + dayWeek);
+    const remainingDay = 5 - dayWeek;
+    console.log("Remaining Day: " + remainingDay);
+    if ((weeklyTotalHours / 60) + ((remainingDay - 1) * 10.5) + 7.5 < 40) {
+      this.fewerHours = true;
+      console.log("No has alcanzado el limite");
+    } else {
+      this.fewerHours = false;
+      console.log("Has alcanzado el limite");
+    }
+  }
+
+  closeLimitHour() {
+    this.fewerHours = false;
+  }
+
 
 }

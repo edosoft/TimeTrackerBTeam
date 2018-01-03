@@ -1,101 +1,106 @@
 @import '~sass/variables';
 @import '~sass/mixins';
 .list-log-checks {
-    margin-top: 200px;
-    background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
-    .title-date {
-        padding: 15px;
-        background-color: $color_1;
-        text-align: center;
+  margin-top: 200px;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
+  .title-date {
+    padding: 15px;
+    background-color: $color_1;
+    text-align: center;
+    @media (min-width: 768px) {
+      text-align: left;
+    }
+    h2 {
+      margin: 0px;
+      font-size: 19px;
+      color: #fff;
+      @media (min-width: 768px) {
+        font-size: 22px;
+      }
+    }
+  }
+  .list-log {
+    padding: 15px;
+    .content-list-log {
+      @include display-flex();
+      @include align-items(center);
+      @include justify-content(space-between);
+      .time-check-inout {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        p {
+          margin: 0px;
+          font-size: 21px;
+          i {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+  .container-general-check-buttons {
+    padding: 15px;
+    .checkbtns {
+      @include display-flex(); // @include flex-wrap(wrap);
+      button {
+        width: 50%;
+        font-size: 17px;
+        padding: 10px;
         @media (min-width: 768px) {
-            text-align: left;
+          font-size: 20px;
+          padding: 8x 16px;
         }
-        h2 {
-            margin: 0px;
-            font-size: 19px;
-            color: #fff;
-            @media (min-width: 768px) {
-                font-size: 22px;
-            }
+        &:first-child {
+          margin-right: 15px;
         }
+      }
     }
-    .list-log {
-        padding: 15px;
-        .content-list-log {
-            @include display-flex();
-            @include align-items(center);
-            @include justify-content(space-between);
-            .time-check-inout {
-                width: 50%;
-                display: flex;
-                justify-content: center;
-                p {
-                    margin: 0px;
-                    font-size: 21px;
-                    i {
-                        margin-right: 5px;
-                    }
-                }
-            }
+  }
+  .worked-timesheet {
+    padding-bottom: 15px;
+    .time-worked {
+      @include display-flex();
+      @include justify-content(center);
+      p {
+        font-weight: 700;
+        font-size: 16px;
+        margin: 0px;
+        &:first-child {
+          margin-right: 5px;
         }
+      }
     }
-    .container-general-check-buttons {
-        padding: 15px;
-        .checkbtns {
-            @include display-flex();
-            // @include flex-wrap(wrap);
-            button {
-                width: 50%;
-                font-size: 17px;
-                padding: 10px;
-                @media (min-width: 768px) {
-                    font-size: 20px;
-                    padding: 8x 16px;
-                }
-                &:first-child {
-                    margin-right: 15px;
-                }
-            }
-        }
-    }
-    .worked-timesheet {
-        padding-bottom: 15px;
-        .time-worked {
-            @include display-flex();
-            @include justify-content(center);
-            p {
-                font-weight: 700;
-                font-size: 16px;
-                margin: 0px;
-                &:first-child {
-                    margin-right: 5px;
-                }
-            }
-        }
-    }
+  }
 }
 
 button:disabled {
-    opacity: 0.2;
+  opacity: 0.2;
 }
 
 .flexhour {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .close {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .container-mssg-check {
-    padding: 0px 15px;
-    .mssg {
-        text-align: center;
-        width: 400px;
-        margin: 0px auto;
-        max-width: 100%;
-    }
+  padding: 10px 15px;
+  .mssg {
+    text-align: center;
+    width: 400px;
+    margin: 0px auto;
+    max-width: 100%;
+  }
+  .mssg2 {
+    text-align: center;
+    width: 600px;
+    margin: 0px auto 15px;
+    max-width: 100%;
+  }
 }
