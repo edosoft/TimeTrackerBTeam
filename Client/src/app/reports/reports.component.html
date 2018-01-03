@@ -29,7 +29,7 @@
                             <th>Name</th>
                             <th *ngIf="reportType == 1">Days</th>
                             <th>Hours</th>
-                            <th *ngFor="let day of daysList" [ngStyle]="weekendColumn()">
+                            <th *ngFor="let day of daysList">
                                 {{day}}
                             </th>
                         </tr>
@@ -39,7 +39,7 @@
                             <td nowrap>{{(report.name.split(" ", 2)[0] +' ' + report.name.split(" ", 3)[1])}}</td>
                             <td *ngIf="reportType == 1">{{report.total_days_worked}}</td>
                             <td [ngStyle]="hoursColor(report)">{{hoursFormat(report.total)}}</td>
-                            <td *ngFor="let num of report.workday" [ngStyle]="weekendColumn()">
+                            <td *ngFor="let num of report.workday" [ngStyle]="weekendColumn(num)">
                                 {{Math.floor(num.total/60)}}
                             </td>
                         </tr>

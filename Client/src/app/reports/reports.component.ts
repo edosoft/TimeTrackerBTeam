@@ -141,10 +141,13 @@ export class ReportsComponent {
     return `${hoursStr}:${minsStr}`;
   }
 
-  weekendColumn() {
-    /*if (this.reportType === 1) {
-      return { 'background-color': 'grey' };
-    }*/
+  weekendColumn(num) {
+    const workday = num.day_of_week;
+    if (this.reportType === 1) {
+      if ((workday == 6) || (workday == 7)){
+        return {'color': '#1e8bc3'};
+      }
+    }
   }
 
   returnToCheck() {
