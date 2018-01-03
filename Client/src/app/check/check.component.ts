@@ -119,10 +119,10 @@ export class CheckComponent implements OnInit {
       if (this.checkOutHour < 14) {
         this.checkOutSoon = true;
       }
+      this.timer();
     } else {
       this.checkWait = true;
     }
-    this.timer();
     const weekly_hours = await this.server.getWeekTotal();
     this.weeklyLimit(weekly_hours); // Llamada a las notificaciones de limite semanal
   }
@@ -183,7 +183,7 @@ export class CheckComponent implements OnInit {
 
           this.whours = (whours < 10 ? '0' : '') + whours;
           this.wminutes = wminutes;
-          console.log(hours + ':' + minutes + ':' + seconds);
+          // console.log(hours + ':' + minutes + ':' + seconds);
         }, 1000);
 
     } else if (this.server.getUserWorkday().checkin_number != 0 &&
