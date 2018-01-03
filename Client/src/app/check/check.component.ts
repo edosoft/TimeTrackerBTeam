@@ -40,6 +40,7 @@ export class CheckComponent implements OnInit {
   wminutes: string;
 
   fewerHours: boolean;
+  higherHours: boolean;
 
   constructor(private server: ServerProvider, private datePipe: DatePipe) { }
 
@@ -101,6 +102,8 @@ export class CheckComponent implements OnInit {
       }
     }
     this.timer();
+    const weekly_hours = await this.server.getWeekTotal();
+    this.weeklyLimit(weekly_hours); //Llamada a las notificaciones de limite semanal
   }
 
   async checkOut() {
@@ -163,7 +166,6 @@ export class CheckComponent implements OnInit {
         const weekly_hours = await this.server.getWeekTotal();
         const wtimer = new Date(timeServer.getTime() - timeCheckIn.getTime()
           + weekly_hours * 60 * 1000);
-
 
         this.timerInterval = setInterval(() => {
           timer.setSeconds(timer.getSeconds() + 1);
@@ -232,10 +234,18 @@ export class CheckComponent implements OnInit {
       this.fewerHours = false;
       console.log("Has alcanzado el limite");
     }
+    if ((weeklyTotalHours / 60) + ((remainingDay - 1) * 5) + 5 >= 40) {
+      this.higherHours = true;
+      console.log("Te has pasado");
+    } else {
+      this.higherHours = false;
+      console.log("No te has pasado");
+    }
   }
 
   closeLimitHour() {
     this.fewerHours = false;
+    this.higherHours = false;
   }
 
 

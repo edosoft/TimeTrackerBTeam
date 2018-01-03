@@ -68,6 +68,10 @@
             <a class="close" data-dismiss="alert" aria-label="close" (click)="closeLimitHour()">×</a>
             <strong>You won't reach your weekly limit if you don't work more this day</strong>
           </div>
+          <div *ngIf="higherHours" class="mssg2 alert alert-warning alert-dismissable">
+            <a class="close" data-dismiss="alert" aria-label="close" (click)="closeLimitHour()">×</a>
+            <strong>If you work the minimun hours per day you will reach your weekly limit</strong>
+          </div>
         </div>
       </div>
     </div>
