@@ -16,7 +16,7 @@ export class AppComponent implements DoCheck, OnInit {
   location = location;
 
   constructor(private server: ServerProvider) {
-    document.addEventListener('click', () => this.closeNavBar(), true);
+    document.addEventListener('click', () => this.closeNavBar());
   }
 
   ngOnInit() {
@@ -32,6 +32,11 @@ export class AppComponent implements DoCheck, OnInit {
     if (this.isCollapsed === false) {
       this.isCollapsed = true;
     }
+  }
+
+  toggleNavBar() {
+    this.isCollapsed = !this.isCollapsed;
+    event.stopPropagation();
   }
 
   logOut() {

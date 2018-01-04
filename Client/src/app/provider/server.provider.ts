@@ -13,8 +13,8 @@ export class ServerProvider {
   constructor(private router: Router, private zone: NgZone) {
     this.sendLogin.subscribe((value) => {
       this.wrongAccount = value;
-  });
-   }
+    });
+  }
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
   L = 'http://localhost:8080/_ah/api';
@@ -24,7 +24,7 @@ export class ServerProvider {
   logged = false;
   reportType: number;
   public wrongAccount = false;
-  public sendLogin: Subject<boolean>  = new Subject<boolean>();
+  public sendLogin: Subject<boolean> = new Subject<boolean>();
   public auth2: any;
 
   public userWorkday: User;
@@ -35,7 +35,7 @@ export class ServerProvider {
 
   setAccountWrong() {
     this.sendLogin.next(true);
-}
+  }
 
   getUserWorkday() {
     return this.userWorkday;
@@ -238,7 +238,7 @@ export class ServerProvider {
   getWeekTotal() {
     return new Promise<any>((resolve, reject) => {
       gapi.client.timetrackerApi.weektotal().execute((response: any) => {
-          resolve(response.result.minutes);
+        resolve(response.result.minutes);
       });
     });
   }
