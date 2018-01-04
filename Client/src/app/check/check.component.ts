@@ -42,6 +42,8 @@ export class CheckComponent implements OnInit {
   fewerHours: boolean;
   higherHours: boolean;
   remainingDayGeneral: number;
+  friday: boolean;
+  totalHoursPerDay: number;
 
   constructor(private server: ServerProvider, private datePipe: DatePipe) { }
 
@@ -224,8 +226,7 @@ export class CheckComponent implements OnInit {
     const today = new Date(this.currentUserWorkday.date);
     const dayWeek = today.getDay();
     if (dayWeek === 5) {
-      this.remainingDayGeneral = 1;
-      return this.remainingDayGeneral;
+      this.friday = true;
     }
     this.remainingDayGeneral = 5 - dayWeek;
     return this.remainingDayGeneral;
@@ -233,19 +234,45 @@ export class CheckComponent implements OnInit {
 
   weeklyLimitHigher(weeklyTotalHours) {
     const remainingDay = this.getRemainingDay();
-    if ((weeklyTotalHours / 60) + ((remainingDay - 1) * 5) + 5 >= 40) {
-      this.higherHours = true;
+    this.totalHoursPerDay = this.server.getUserWorkday().total;
+    if (this.totalHoursPerDay < 5) {
+      if (this.friday === false) {
+        if (((weeklyTotalHours / 60) + (remainingDay * 5) + (5 - this.totalHoursPerDay)) >= 40) {
+          this.higherHours = true;
+        } else {
+          this.higherHours = false;
+        }
+      } else {
+        if (((weeklyTotalHours / 60) + (remainingDay * 5) + this.totalHoursPerDay) >= 40) {
+          this.higherHours = true;
+        } else {
+          this.higherHours = false;
+        }
+      }
     } else {
-      this.higherHours = false;
+      if (((weeklyTotalHours / 60) + (remainingDay * 5)) >= 40) {
+        this.higherHours = true;
+      } else {
+        this.higherHours = false;
+      }
     }
   }
 
   weeklyLimitFewer(weeklyTotalHours) {
     const remainingDay = this.getRemainingDay();
-    if ((weeklyTotalHours / 60) + ((remainingDay - 1) * 10.5) + 7.5 < 40) {
-      this.fewerHours = true;
+    this.totalHoursPerDay = this.server.getUserWorkday().total;
+    if (this.friday === false) {
+      if ((weeklyTotalHours / 60) + ((remainingDay - 1) * 10.5) + (10.5 - this.totalHoursPerDay) + 7.5 < 40) {
+        this.fewerHours = true;
+      } else {
+        this.fewerHours = false;
+      }
     } else {
-      this.fewerHours = false;
+      if ((weeklyTotalHours / 60) + (7.5 - this.totalHoursPerDay) < 40) {
+        this.fewerHours = true;
+      } else {
+        this.fewerHours = false;
+      }
     }
   }
 

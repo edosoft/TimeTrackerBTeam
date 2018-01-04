@@ -20,7 +20,7 @@
           </div>
         </div>
 
-        <div class="container-mssg-check">
+        <div *ngIf="checkInSoon|| (checkInLate && currentUserWorkday.checkin_number == 1) || checkOutSoon || checkWait" class="container-mssg-check">
           <div *ngIf="checkInSoon" class="mssg alert alert-warning alert-dismissable">
             <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
             <strong>You can't check in, its too early!</strong>
@@ -49,26 +49,27 @@
             <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="currentUserWorkday.checkout >=3 || checkInTime == 'None' || !checkOutActive">Check Out</button>
           </div>
         </div>
-
-        <div class="worked-timesheet">
-          <div class="time-worked">
-            <p>Daily Time:</p>
-            <p>{{hours}}:{{minutes}}</p>
+        <div class="time-div">
+          <div class="worked-timesheet">
+            <div class="time-worked">
+              <p>Daily Time:</p>
+              <p>{{hours}}:{{minutes}}</p>
+            </div>
           </div>
-        </div>
 
-        <div class="worked-timesheet">
-          <div class="time-worked">
-            <p>Weekly Time:</p>
-            <p>{{whours}}:{{wminutes}}</p>
+          <div class="worked-timesheet">
+            <div class="time-worked">
+              <p>Weekly Time:</p>
+              <p>{{whours}}:{{wminutes}}</p>
+            </div>
           </div>
         </div>
         <div class="container-mssg-check">
-          <div *ngIf="fewerHours" class="mssg2 alert alert-danger alert-dismissable">
+          <div *ngIf="fewerHours" class="mssg3 alert alert-danger alert-dismissable">
             <a class="close" data-dismiss="alert" aria-label="close" (click)="closeLimitHour()">×</a>
             <strong>You won't reach your weekly limit if you don't work more this day</strong>
           </div>
-          <div *ngIf="higherHours" class="mssg2 alert alert-warning alert-dismissable">
+          <div *ngIf="higherHours" class="mssg3 alert alert-warning alert-dismissable">
             <a class="close" data-dismiss="alert" aria-label="close" (click)="closeLimitHour()">×</a>
             <strong>If you work the minimun hours per day you will reach your weekly limit</strong>
           </div>

@@ -22,7 +22,7 @@
     }
   }
   .list-log {
-    padding: 15px;
+    padding: 15px 15px 7.5px;
     .content-list-log {
       @include display-flex();
       @include align-items(center);
@@ -42,7 +42,7 @@
     }
   }
   .container-general-check-buttons {
-    padding: 15px;
+    padding: 7.5px 15px;
     .checkbtns {
       @include display-flex(); // @include flex-wrap(wrap);
       button {
@@ -59,17 +59,19 @@
       }
     }
   }
-  .worked-timesheet {
-    padding-bottom: 15px;
-    .time-worked {
-      @include display-flex();
-      @include justify-content(center);
-      p {
-        font-weight: 700;
-        font-size: 16px;
-        margin: 0px;
-        &:first-child {
-          margin-right: 5px;
+  .time-div {
+    padding: 7.5px 15px;
+    .worked-timesheet {
+      .time-worked {
+        @include display-flex();
+        @include justify-content(center);
+        p {
+          font-weight: 700;
+          font-size: 16px;
+          margin: 0px;
+          &:first-child {
+            margin-right: 5px;
+          }
         }
       }
     }
@@ -90,7 +92,7 @@ button:disabled {
 }
 
 .container-mssg-check {
-  padding: 10px 15px;
+  padding: 7.5px 15px;
   .mssg {
     text-align: center;
     width: 400px;
@@ -100,7 +102,13 @@ button:disabled {
   .mssg2 {
     text-align: center;
     width: 600px;
-    margin: 0px auto 15px;
+    margin: 0px auto;
+    max-width: 100%;
+  }
+  .mssg3 {
+    text-align: center;
+    width: 600px;
+    margin: 0px auto 7.5px;
     max-width: 100%;
   }
 }
