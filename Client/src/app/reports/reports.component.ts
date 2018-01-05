@@ -23,7 +23,7 @@ export class ReportsComponent {
 
   constructor(private server: ServerProvider) {
     this.todayDate = this.server.getUserWorkday().date;
-    this.reportType = this.server.reportType;
+    this.reportType = this.server.getReportType();
 
     if (this.reportType === 0) {
 
@@ -39,7 +39,6 @@ export class ReportsComponent {
       this.selectedDate = response.date;
       this.getReport();
     });
-    //this.getReport();
   }
 
 
@@ -91,7 +90,6 @@ export class ReportsComponent {
         date: this.selectedDate,
         report_type: this.reportType
       };
-
       this.server.getReport(body).then((response) => {
         if (response.response_code == 400) {
           this.noRecordsFound = true;

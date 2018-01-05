@@ -47,9 +47,11 @@ export class CheckComponent implements OnInit {
 
   forgetcheckin: boolean = false;
 
-  constructor(private server: ServerProvider, private datePipe: DatePipe) { }
+  constructor(private server: ServerProvider, private datePipe: DatePipe) {
+  }
 
   ngOnInit() {
+    console.log('Check onInit');
     this.date = this.datePipe.transform(new Date(), 'EEEE, MMMM d, y');
     this.currentUserWorkday = this.server.getUserWorkday();
     this.currentHour = +(this.datePipe.transform(new Date(), 'HH'));
@@ -59,13 +61,13 @@ export class CheckComponent implements OnInit {
       this.checkInOutofRange = true;
     }
 
-    if (this.currentUserWorkday === undefined) {
+    if (this.currentUserWorkday == undefined) {
       this.checkInTime = 'None';
     } else {
       this.checkInTime = this.currentUserWorkday.checkin;
     }
 
-    if (this.currentUserWorkday === undefined) {
+    if (this.currentUserWorkday == undefined) {
       this.checkOutTime = 'None';
     } else {
       this.checkOutTime = this.currentUserWorkday.checkout;

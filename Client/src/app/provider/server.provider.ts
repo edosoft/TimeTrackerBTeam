@@ -4,16 +4,33 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { User } from '../provider/model';
 import { Router } from '@angular/router';
+import { SessionStorageService } from 'ngx-webstorage';
+import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
 declare const gapi: any;
+
+
+function getWindow(): any {
+  return window;
+}
 
 @Injectable()
 export class ServerProvider {
 
-  constructor(private router: Router, private zone: NgZone) {
+  constructor(private router: Router, private zone: NgZone, private store: SessionStorageService) {
     this.sendLogin.subscribe((value) => {
       this.wrongAccount = value;
     });
+
+    this.store.observe('key')
+    .subscribe((value) => console.log('new value', value));
+
+    this.initGapi();
+
+    const thatw = this;
+    this.nativeWindow.onbeforeunload = function ()  {
+      thatw.saveUser();
+    };
   }
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
@@ -29,6 +46,31 @@ export class ServerProvider {
 
   public userWorkday: User;
 
+  get nativeWindow (): any {
+    return getWindow();
+}
+
+  saveUser() {
+    this.store.store('savedUser', this.userWorkday);
+  }
+
+  getReportType(): number {
+    if (this.router.url == '/weeklyreport') {
+      return 0;
+    }else if (this.router.url == '/monthlyreport') {
+      return 1;
+    }
+  }
+
+  retrieveUser(): User {
+    this.userWorkday = this.store.retrieve('savedUser');
+    if (this.userWorkday != undefined) {
+      this.logged = true;
+      return this.userWorkday;
+    }
+  }
+
+
   getAccountWrong(): Observable<any> {
     return this.sendLogin;
   }
@@ -37,32 +79,39 @@ export class ServerProvider {
     this.sendLogin.next(true);
   }
 
-  getUserWorkday() {
+  getUserWorkday(): User {
     return this.userWorkday;
   }
 
-  public googleInit() {
-    gapi.load('client:auth2', () => {
-      this.auth2 = gapi.auth2.init({
-        client_id: '368116371345-ott8mvobq0aqcd8dvpu40b5n2fdjgs8v.apps.googleusercontent.com',
-        cookiepolicy: 'single_host_origin',
-        scope: 'profile email'
+  public initGapi() {
+      gapi.load('client:auth2', async () => {
+        this.auth2 = gapi.auth2.init({
+          client_id: '368116371345-ott8mvobq0aqcd8dvpu40b5n2fdjgs8v.apps.googleusercontent.com',
+          cookiepolicy: 'single_host_origin',
+          scope: 'profile email'
+        });
+        const that = this;
+        gapi.client.load('timetrackerApi', 'v1', this.callback(that), this.url);
       });
-      this.attachGSuite(document.getElementById('googleBtn'));
-    });
+  }
+
+  public googleInit() {
+    this.attachGSuite(document.getElementById('googleBtn'));
     return this.wrongAccount;
   }
 
-  public callback() {
+  public callback(that) {
     console.log('gapi loaded');
+    if (this.store.retrieve('savedUser') == undefined) {
+    that.googleInit();
+    }
   }
 
   public attachGSuite(element) {
-    gapi.client.load('timetrackerApi', 'v1', this.callback, this.url);
+    // gapi.client.load('timetrackerApi', 'v1', this.callback, this.url);
     this.auth2.attachClickHandler(element, {},
       (googleUser) => {
         const profile = googleUser.getBasicProfile();
-
         this.userWorkday = new User();
         this.logIn();
       }, (error) => {
@@ -90,6 +139,7 @@ export class ServerProvider {
         this.userWorkday.checkin_number = this.returnNumber(response.result.checkin);
         this.userWorkday.checkout_number = this.returnNumber(response.result.checkout);
 
+        this.saveUser();
         this.logged = true;
         this.zone.run(() => {
           this.router.navigate(['/check']);
@@ -197,6 +247,12 @@ export class ServerProvider {
     });
     window.location.reload();
     console.log('reload page');
+    this.clearItem();
+  }
+
+  clearItem() {
+    this.store.clear();
+    // this.storage.clear(); //clear all the managed storage items
   }
 
   checkIn() {

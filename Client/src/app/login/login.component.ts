@@ -7,17 +7,20 @@ import { AfterViewInit, DoCheck } from '@angular/core/src/metadata/lifecycle_hoo
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements AfterViewInit {
+export class LoginComponent implements OnInit {
   wrongAccount = false;
   constructor(private server: ServerProvider, private zone: NgZone) {
+
     this.server.getAccountWrong().subscribe((value) => {
       this.zone.run(() => {
         this.wrongAccount = value;
     });
     });
   }
-  ngAfterViewInit() {
-    this.server.googleInit();
+  ngOnInit() {
+    if (this.server.logged == true) {
+      this.server.returnToCheck();
+    }
   }
 
   closeWarning() {

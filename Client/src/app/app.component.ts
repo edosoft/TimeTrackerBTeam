@@ -3,6 +3,7 @@ import { ServerProvider } from './provider/server.provider';
 import { DoCheck } from '@angular/core';
 import { User } from './provider/model';
 import { Observable } from 'rxjs/Observable';
+import { SessionStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,12 @@ export class AppComponent implements DoCheck, OnInit {
   }
 
   ngOnInit() {
-    this.currentUserWorkday = this.server.getUserWorkday();
+    // this.currentUserWorkday = this.server.getUserWorkday();
+    this.retrieveValue();
+  }
+
+  retrieveValue() {
+    this.currentUserWorkday = this.server.retrieveUser();
   }
 
   ngDoCheck() {
