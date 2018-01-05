@@ -1,79 +1,85 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="list-log-checks">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="list-log-checks">
 
-        <div class="title-date">
-          <h2>{{date}}</h2>
-        </div>
+                <div class="title-date">
+                    <h2>{{date}}</h2>
+                </div>
 
-        <div class="list-log">
-          <div class="content-list-log flexhour">
-            <div *ngIf="checkInTime != 'None'" class="time-check-inout">
-              <p>
-                <i class="fa fa-sign-in" aria-hidden="true"></i>{{checkInTime}}</p>
+                <div class="list-log">
+                    <div class="content-list-log flexhour">
+                        <div *ngIf="checkInTime != 'None'" class="time-check-inout">
+                            <p>
+                                <i class="fa fa-sign-in" aria-hidden="true"></i>{{checkInTime}}</p>
+                        </div>
+                        <div *ngIf="checkOutTime != 'None'" class="time-check-inout">
+                            <p>
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>{{checkOutTime}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="forgetcheckin || checkInSoon || (checkInLate && currentUserWorkday.checkin_number == 1) || checkOutSoon || checkWait" class="container-mssg-check">
+                    <div *ngIf="checkInSoon" class="mssg alert alert-warning alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
+                        <strong>You can't check in, its too early!</strong>
+                    </div>
+
+                    <div *ngIf="checkInLate && currentUserWorkday.checkin_number == 1" class="mssg alert alert-warning alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
+                        <strong>You checked in too late!</strong>
+                    </div>
+
+                    <div *ngIf="checkOutSoon" class="mssg alert alert-warning alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="closeOut()">×</a>
+                        <strong>You checked out too early.</strong>
+                    </div>
+
+                    <div *ngIf="checkWait" class="mssg2 alert alert-warning alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="closeWait()">×</a>
+                        <strong>You need to wait at least 5 minutes before a checkout.</strong>
+                    </div>
+
+                    <div *ngIf="forgetcheckin" class="mssg2 alert alert-warning alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="closeCheckInNotify()">×</a>
+                        <strong>Take Care! It's after 9:00. You haven't done check in yet.</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="container-general-check-buttons">
+                    <div class="checkbtns">
+                        <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="currentUserWorkday.checkin >=3 || checkInOutofRange || !checkInActive">Check In</button>
+                        <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="currentUserWorkday.checkout >=3 || checkInTime == 'None' || !checkOutActive">Check Out</button>
+                    </div>
+                </div>
+                <div class="time-div">
+                    <div class="worked-timesheet">
+                        <div class="time-worked">
+                            <p>Daily Time:</p>
+                            <p>{{hours}}:{{minutes}}</p>
+                        </div>
+                    </div>
+
+                    <div class="worked-timesheet">
+                        <div class="time-worked">
+                            <p>Weekly Time:</p>
+                            <p>{{whours}}:{{wminutes}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-mssg-check">
+                    <div *ngIf="fewerHours" class="mssg3 alert alert-danger alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="closeLimitHour()">×</a>
+                        <strong>You won't reach your weekly limit if you don't work more this day</strong>
+                    </div>
+                    <div *ngIf="higherHours" class="mssg3 alert alert-warning alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close" (click)="closeLimitHour()">×</a>
+                        <strong>If you work the minimun hours per day you will reach your weekly limit</strong>
+                    </div>
+                </div>
             </div>
-            <div *ngIf="checkOutTime != 'None'" class="time-check-inout">
-              <p>
-                <i class="fa fa-sign-out" aria-hidden="true"></i>{{checkOutTime}}</p>
-            </div>
-          </div>
         </div>
-
-        <div *ngIf="checkInSoon|| (checkInLate && currentUserWorkday.checkin_number == 1) || checkOutSoon || checkWait" class="container-mssg-check">
-          <div *ngIf="checkInSoon" class="mssg alert alert-warning alert-dismissable">
-            <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
-            <strong>You can't check in, its too early!</strong>
-          </div>
-
-          <div *ngIf="checkInLate && currentUserWorkday.checkin_number == 1" class="mssg alert alert-warning alert-dismissable">
-            <a class="close" data-dismiss="alert" aria-label="close" (click)="closeIn()">×</a>
-            <strong>You checked in too late!</strong>
-          </div>
-
-          <div *ngIf="checkOutSoon" class="mssg alert alert-warning alert-dismissable">
-            <a class="close" data-dismiss="alert" aria-label="close" (click)="closeOut()">×</a>
-            <strong>You checked out too early.</strong>
-          </div>
-
-          <div *ngIf="checkWait" class="mssg2 alert alert-warning alert-dismissable">
-            <a class="close" data-dismiss="alert" aria-label="close" (click)="closeWait()">×</a>
-            <strong>You need to wait at least 5 minutes before a checkout.</strong>
-          </div>
-        </div>
-
-
-        <div class="container-general-check-buttons">
-          <div class="checkbtns">
-            <button (click)="checkIn()" type="button" class="btn btn-primary btn-lg" [disabled]="currentUserWorkday.checkin >=3 || checkInOutofRange || !checkInActive">Check In</button>
-            <button (click)="checkOut()" type="button" class="btn btn-primary btn-lg" [disabled]="currentUserWorkday.checkout >=3 || checkInTime == 'None' || !checkOutActive">Check Out</button>
-          </div>
-        </div>
-        <div class="time-div">
-          <div class="worked-timesheet">
-            <div class="time-worked">
-              <p>Daily Time:</p>
-              <p>{{hours}}:{{minutes}}</p>
-            </div>
-          </div>
-
-          <div class="worked-timesheet">
-            <div class="time-worked">
-              <p>Weekly Time:</p>
-              <p>{{whours}}:{{wminutes}}</p>
-            </div>
-          </div>
-        </div>
-        <div class="container-mssg-check">
-          <div *ngIf="fewerHours" class="mssg3 alert alert-danger alert-dismissable">
-            <a class="close" data-dismiss="alert" aria-label="close" (click)="closeLimitHour()">×</a>
-            <strong>You won't reach your weekly limit if you don't work more this day</strong>
-          </div>
-          <div *ngIf="higherHours" class="mssg3 alert alert-warning alert-dismissable">
-            <a class="close" data-dismiss="alert" aria-label="close" (click)="closeLimitHour()">×</a>
-            <strong>If you work the minimun hours per day you will reach your weekly limit</strong>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>

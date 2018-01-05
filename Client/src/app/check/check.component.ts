@@ -45,6 +45,8 @@ export class CheckComponent implements OnInit {
   friday: boolean;
   totalHoursPerDay: number;
 
+  forgetcheckin: boolean = false;
+
   constructor(private server: ServerProvider, private datePipe: DatePipe) { }
 
   ngOnInit() {
@@ -71,6 +73,8 @@ export class CheckComponent implements OnInit {
 
     this.checkActiveLogic();
     this.timer();
+    this.sendNotifyCheckIn();
+
   }
 
 
@@ -280,4 +284,20 @@ export class CheckComponent implements OnInit {
     this.fewerHours = false;
     this.higherHours = false;
   }
+
+  sendNotifyCheckIn() {
+    // Send Notification when has forgot to do checkin after 09:00
+    this.currentHour = +(this.datePipe.transform(new Date(), 'HH'));
+    this.currentMinutes = +(this.datePipe.transform(new Date(), 'mm'));
+    if ((this.currentHour >= 9) && (this.currentMinutes >= 1)) {
+      if (this.server.getUserWorkday().checkin_number == 0){
+        this.forgetcheckin = true;
+      }
+    }
+  }
+
+  closeCheckInNotify() {
+    this.forgetcheckin = !this.forgetcheckin;
+  }
+
 }
