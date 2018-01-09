@@ -13,6 +13,7 @@ export class IssuesComponent implements OnInit {
   personalView= false;
   changeViews= false;
   personalArray: any = [];
+  personalIssue: any;
 
   constructor(private server: ServerProvider) { }
 
@@ -22,12 +23,13 @@ export class IssuesComponent implements OnInit {
   employeeView(row) {
     this.personalView = true;
     this.personalArray = row;
-    console.log(this.personalArray.issues);
+    console.log(this.personalArray);
   }
-  changeView(issue) {
+  changeView(issues) {
     this.changeViews = true;
     this.personalView = false;
-    console.log(issue);
+    this.personalIssue = issues;
+    console.log(this.personalIssue);
   }
   swapper() {
     if (this.changeViews == true) {

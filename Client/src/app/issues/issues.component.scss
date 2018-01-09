@@ -1,23 +1,28 @@
-.container-table-report {
+@import '~sass/variables';
+@import '~sass/mixins';
+.container {
     overflow-x: auto;
     margin: 20px auto;
     text-align: center;
-    .table-desktop {
-    display: none;
-    @media (min-width: 992px) {
-        display: block;
-    }
-    }
-    .table-mobile-tablet {
-    @media (min-width: 992px) {
-        display: none;
-    }
+    .list-log-checks {
+        margin-top: 80px;
+        box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
+        @include display-flex();
+        @include justify-content(center);
+        table {
+            width: 100%;
+            text-align: center;
+            &.desktop {
+                display: none;
+                @media (min-width: 768px) {
+                    display: table;                    }
+            }
+            &.mobile {
+                @media (min-width: 768px) {
+                    display: none;
+                }
+            }
+        }
     }
 }
-.list-log-checks {
-    margin-top: 80px;
-    box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
-    table {
-        width: 100%;
-    }
-}
+

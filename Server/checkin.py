@@ -49,6 +49,7 @@ def check_in(user, current_date=None):
                 issue = Issue()
                 issue.employee = check_in_query.employee
                 issue.date = check_in_query.checkin[-1]
+                issue.created = current_date.date()
                 issue.issue_type = "Late Check In"
                 issue.non_viewed = 1
                 issue.non_solved = 1

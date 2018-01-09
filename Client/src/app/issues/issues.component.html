@@ -1,8 +1,9 @@
-<div *ngIf="!personalView" class="container">
+
+<div *ngIf="!personalView && !changeViews" class="container">
   <div class="row">
     <div class="col-md-12">
       <div class="list-log-checks">
-      <table class="table table-bordered table-striped table-desktop">
+      <table class="desktop table table-bordered table-striped">
         <thead class="thead-dark">
           <tr class="header-row">
             <th>Name</th>
@@ -11,12 +12,30 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor='let row of issues_per_employee' (click)="employeeView(row)">
+          <tr *ngFor='let row of issues_per_employee'>
             <td nowrap>
-              {{(row.employee.split("@", 1)[0]).replace(".", " ")}}
+              {{row.employee}}
             </td>
             <td>{{row.total_unsolved_peremp}}</td>
-            <td>{{row.total_unviewed_peremp}}</td>
+            <td>{{row.total_unviewed_peremp}} <div class="btn btn-primary" (click)="employeeView(row)">View</div></td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="mobile table table-bordered table-striped">
+        <thead class="thead-dark">
+          <tr class="header-row">
+            <th>Name</th>
+            <th>Unsolved</th>
+            <th>View</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let row of issues_per_employee'>
+            <td nowrap>
+              {{row.employee}}
+            </td>
+            <td>{{row.total_unsolved_peremp}}</td>
+            <td><div class="btn btn-primary" (click)="employeeView(row)">View</div></td>
           </tr>
         </tbody>
       </table>
@@ -29,7 +48,6 @@
   <div class="row">
     <div class="col-md-12">
       <div class="list-log-checks">
-          <div class="btn btn-primary" (click)="swapper()"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></div>
       <table class="table table-bordered table-striped table-desktop">
         <thead class="thead-dark">
           <tr class="header-row">
@@ -40,43 +58,42 @@
         </thead>
         <tbody>
           <tr *ngFor='let issues of personalArray.issues'>
-            <td nowrap>{{(personalArray.employee.split("@", 1)[0]).replace(".", " ")}}</td>
+            <td nowrap>{{personalArray.employee}}</td>
             <td>{{issues.issue_type}}</td>
-            <td>{{(issues.date).split(" ", 1)[0]}}</td>
+            <td>{{(issues.date).split(" ", 1)[0]}}<div class="btn btn-primary" (click)="changeView(issues)">Edit</div></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
+  <div class="btn btn-primary" (click)="swapper()"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></div>
 </div>
 </div>
-<!-- 
-<div *ngIf="chageViews" class="container">
+
+<div *ngIf="changeViews" class="container">
     <div class="row">
       <div class="col-md-12">
         <div class="list-log-checks">
-            <div class="btn btn-primary" (click)="swapper()"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></div>
         <table class="table table-bordered table-striped table-desktop">
           <thead class="thead-dark">
             <tr class="header-row">
               <th>Name</th>
-              <th>Issue date</th>
               <th>Issue Type</th>
+              <th>Issue Date</th>
               <th>Issue </th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor='let row of issues'>
-              <td (click)="employeeView(row)" data-toggle="modal" data-target="#themodal" nowrap>
-                  {{(personalArray.employee.split("@", 1)[0]).replace(".", " ")}}
-              </td>
-              <td>{{issue.date}}</td>
-              <td>{{issue.issue_type}}</td>
-              <td>{{issue.date}}</td>
+            <tr>
+              <td nowrap>{{personalArray.employee}}</td>
+              <td>{{personalIssue.issue_type}}</td>
+              <td>{{(personalIssue.date).split(" ", 1)[0]}}</td>
+              <td></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+    <div class="btn btn-primary btn-format" (click)="swapper()"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></div>
   </div>
-  </div> -->
+  </div> 

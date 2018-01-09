@@ -24,7 +24,7 @@ def get_user_with_issues():
         for user in request_users: 
 
             new_employee = IssuesPerEmployeeMessage()
-            new_employee.employee = user.email
+            new_employee.employee = user.name
             total_issues_nonviewed_peremp = []
             total_issues_nonsolved_peremp = []
             
