@@ -9,6 +9,7 @@ from messages import IssueMessage, IssueResponseMessage, IssuesPerEmployeeMessag
 from models import User, Workday, Issue
 
 from issues import get_user_with_issues
+from datetime import datetime
 
 class DatastoreTestCase(unittest.TestCase):
     
@@ -65,3 +66,81 @@ class DatastoreTestCase(unittest.TestCase):
         self.assertEqual(result.total_unsolved, 3)
         self.assertEqual(result.response_code, 200)
         self.assertEqual(result.text, 'Returning Issues')
+
+    def test_get_issue(self):
+        date = datetime.now()
+
+        user1 = User(email="user@edosoft.es", name='Juan', hrm=0, admin=0)
+        user1.put()
+        
+        wday = Workday()
+        cin = []
+        cin.append(date)
+        wday.employee = user1
+        wday.checkin = cin
+        wday.checkout = []
+        total = 0
+        wday.put()
+
+        issue1 = Issue(employee=user1, non_viewed=1, non_solved=1, issue_type="Check in late", created= date.date(), date=date)
+        issue1.put()
+
+        result = get_workday_from_issue('user@edosoft.es', date)
+        self.assertEqual(result.response_code, 200)
+        self.assertEqual(result.workday.employee.name, 'Juan')
+        self.assertEqual(result.workday.checkin[0], date)
+        self.assertEqual(result.workday.checkout, None)
+
+        # Each time you execute this method, the Issue will change it's non_viewed value to 0. 
+        self.assertEqual(issue1.non_viewed, 0)
+
+
+    def test_get_issue_no_issue(self):
+        date = datetime.now()
+
+        user1 = User(email="user@edosoft.es")
+        user1.put()
+        result = get_workday_from_issue('user@edosoft.es', date)
+        self.assertEqual(result.response_code, 400)
+        self.assertEqual(result.text, 'No issue found')
+
+    def test_wrong_get_issue_no_user(self):
+        date = datetime.now()
+
+        result = get_workday_from_issue('user@edosoft.es', date)
+        self.assertEqual(result.response_code, 400)
+        self.assertEqual(result.text, 'No user found')
+
+
+    def test_correct_issue(self):
+        date = datetime.now()
+        user1 = User(email="user@edosoft.es", name='Juan', hrm=0, admin=0)
+        user1.put()
+        
+        wday = Workday()
+        cin = []
+        cin.append(date)
+        cin.append(date.replace(hour=date.hour+2))
+        cin.append(date.replace(hour=date.hour+4))
+        cout = []
+        cout.append(date.replace(hour=date.hour+1))
+        cout.append(date.replace(hour=date.hour+3))
+        wday.employee = user1
+        wday.checkin = cin
+        wday.checkout = cout
+        total = 0
+        wday.put()
+
+        issue1 = Issue(employee=user1, non_viewed=0, non_solved=1, issue_type="Check in late", created= date.date(), date=date)
+        issue1.put()
+
+        correct_cin = []
+        correct_cin.append(date)
+        correct_cin.append(date)
+        correct_cin.append(date)
+
+        correct_cout = correct_cin
+        result = correct_issue(user1.email, correct_cin, correct_cout)
+        self.assertEqual(result.response_code, 200)
+        self.assertEqual(result.text, 'Updated Workday')
+        self.assertEqual(issue1.non_solved, 0)
