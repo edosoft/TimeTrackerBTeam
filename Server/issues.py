@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from messages import IssueResponseMessage, IssueMessage, IssuesPerEmployeeMessage
+from messages import GetUserListMessage, IssueResponseMessage, IssueMessage, IssuesPerEmployeeMessage, WorkdayIssueMessage, WorkdayIssueResponseMessage
 from models import User, Workday, Issue
 
 def get_user_with_issues():
@@ -55,3 +55,33 @@ def get_user_with_issues():
                                     issues_per_employee = result, 
                                     total_unsolved = total_unsolved,
                                     total_unviewed = total_unviewed)
+
+def get_workday_from_issues(email, date):
+    user = User.query(User.email == email).get()
+    if user is not None:
+        wissue = Issue.query(Issue.employee == user, Issue.created == date).get()
+        if wissue is not None:
+            wissue.non_viewed = 0
+            wissue.put()
+            wday = Workday.query(Workday.employee == user, Workday.date == date).get()
+            workday = WorkdayIssueMessage()
+            employee = GetUserListMessage()
+            employee.email=wday.employee.email
+            employee.name=wday.employee.name
+            employee.admin=wday.employee.admin
+            employee.hrm=wday.employee.hrm
+
+            workday.employee = employee
+            strcin = []
+            strcout = []
+            for cin in wday.checkin:
+                strcin.append(str(cin))
+            for cout in wday.checkout:
+                strcout.append(str(cout))
+            workday.checkin = strcin
+            workday.checkout = strcout
+            return WorkdayIssueResponseMessage(response_code=200, workday=workday)            
+        else:
+            return WorkdayIssueResponseMessage(response_code=400, text='No issue found')
+    else:
+        return WorkdayIssueResponseMessage(response_code=400, text='No user found')

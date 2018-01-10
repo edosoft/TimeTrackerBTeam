@@ -39,4 +39,27 @@ export class IssuesComponent implements OnInit {
       this.personalView = false;
     }
   }
+
+/* 
+  // esta va a ser la funcion que recoja la wday referente a cada issue
+  getReport() {
+    if (this.selectedDate == '') {
+      this.invalidDate = true;
+      this.selectedDate = this.server.getUserWorkday().date;
+    } else {
+      const body = {
+        date: this.selectedDate,
+        report_type: this.reportType
+      };
+      this.server.getReport(body).then((response) => {
+        if (response.response_code == 400) {
+          this.noRecordsFound = true;
+          this.selectedDate = this.server.getUserWorkday().date;
+        } else {
+          this.noRecordsFound = false;
+          this.generateWorkdays(response);
+        }
+      });
+    }
+  } */
 }

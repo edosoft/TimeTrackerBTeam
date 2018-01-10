@@ -5,10 +5,10 @@ from google.appengine.ext import testbed
 
 import unittest
 
-from messages import IssueMessage, IssueResponseMessage, IssuesPerEmployeeMessage
+from messages import IssueMessage, IssueResponseMessage, IssuesPerEmployeeMessage, WorkdayIssueMessage, WorkdayIssueResponseMessage
 from models import User, Workday, Issue
 
-from issues import get_user_with_issues
+from issues import get_user_with_issues, get_workday_from_issues
 from datetime import datetime
 
 class DatastoreTestCase(unittest.TestCase):
@@ -50,7 +50,7 @@ class DatastoreTestCase(unittest.TestCase):
         self.assertEqual(result.response_code, 200)
         self.assertEqual(result.text, 'Returning Issues')
 
-    def test_employees_with_issues(self):
+    def test_employees_with_issues1(self):
         user1 = User(email="user@edosoft.es")
         user1.put()
         user2 = User(email="aser333@edosoft.es")
@@ -85,11 +85,11 @@ class DatastoreTestCase(unittest.TestCase):
         issue1 = Issue(employee=user1, non_viewed=1, non_solved=1, issue_type="Check in late", created= date.date(), date=date)
         issue1.put()
 
-        result = get_workday_from_issue('user@edosoft.es', date)
+        result = get_workday_from_issues('user@edosoft.es', date)
         self.assertEqual(result.response_code, 200)
         self.assertEqual(result.workday.employee.name, 'Juan')
-        self.assertEqual(result.workday.checkin[0], date)
-        self.assertEqual(result.workday.checkout, None)
+        self.assertEqual(result.workday.checkin[0], str(date))
+        self.assertEqual(result.workday.checkout,[] )
 
         # Each time you execute this method, the Issue will change it's non_viewed value to 0. 
         self.assertEqual(issue1.non_viewed, 0)
@@ -100,14 +100,14 @@ class DatastoreTestCase(unittest.TestCase):
 
         user1 = User(email="user@edosoft.es")
         user1.put()
-        result = get_workday_from_issue('user@edosoft.es', date)
+        result = get_workday_from_issues('user@edosoft.es', date)
         self.assertEqual(result.response_code, 400)
         self.assertEqual(result.text, 'No issue found')
 
     def test_wrong_get_issue_no_user(self):
         date = datetime.now()
 
-        result = get_workday_from_issue('user@edosoft.es', date)
+        result = get_workday_from_issues('user@edosoft.es', date)
         self.assertEqual(result.response_code, 400)
         self.assertEqual(result.text, 'No user found')
 

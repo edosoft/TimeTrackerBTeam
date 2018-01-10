@@ -113,3 +113,15 @@ class IssueResponseMessage (messages.Message):
     text = messages.StringField(3)
     total_unsolved = messages.IntegerField(4)
     total_unviewed = messages.IntegerField(5)
+
+
+class WorkdayIssueMessage(messages.Message):
+    employee = messages.MessageField(GetUserListMessage, 1)
+    checkin = messages.StringField(2, repeated=True)
+    checkout = messages.StringField(3, repeated=True)
+
+
+class WorkdayIssueResponseMessage (messages.Message):
+    response_code = messages.IntegerField(1)
+    workday = messages.MessageField(WorkdayIssueMessage, 2)
+    text = messages.StringField(3)

@@ -204,6 +204,25 @@ export class ServerProvider {
     });
   }
 
+  getWorkdayFromIssue(body) {
+    return new Promise<any>((resolve) => {
+
+      const content = {
+        email: body.email,
+        date: body.date
+      };
+      gapi.client.timetrackerApi.report(content).execute((response: any) => {
+        if (response.error) {
+          console.log(response.response_code);
+          resolve(response.result);
+        } else {
+          console.log(response.result);
+          resolve(response.result);
+        }
+      });
+    });
+  }
+
   getReport(body) {
     return new Promise<any>((resolve) => {
 

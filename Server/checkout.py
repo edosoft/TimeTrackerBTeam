@@ -34,7 +34,7 @@ def check_out(user, current_date=None):
         time_difference = current_date - check_out_query.checkin[-1]
         check_out_minus_check_in = time_difference.seconds / 60
         #CAMBIAR LUEGO
-        if check_out_minus_check_in < 0:
+        if check_out_minus_check_in < 5:
             return CheckoutResponseMessage(response_code=300,
                                            text="You can't check out until 5 minutes have passed")
 
