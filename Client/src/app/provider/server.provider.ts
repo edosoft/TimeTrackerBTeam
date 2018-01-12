@@ -384,4 +384,20 @@ export class ServerProvider {
     });
   }
 
+  getListIPUser(selectedDate) {
+    return new Promise<any>((resolve) => {
+      const content = {
+        date: selectedDate
+      };
+      gapi.client.timetrackerApi.ip_userlist(content).execute((response: any) => {
+        if (response.error) {
+          resolve(response.result);
+        } else {
+          resolve(response.result);
+          // console.log(response.result);
+        }
+      });
+    });
+  }
+
 }

@@ -44,10 +44,11 @@
     <div *ngIf="isSetRole" class="container-personal-user">
         <div class="personal-user">
             <div class="close" (click)="backToListUser()"><i class="fa fa-times" aria-hidden="true"></i></div>
-            <p>{{user.name}}</p>
+            <h2>{{user.name}}</h2>
             <p>{{user.email}}</p>
             <p>{{userRole}}</p>
             <div class="form-roles">
+                <h4>Change Role</h4>
                 <p><i class="fa fa-info-circle" aria-hidden="true"></i> Select the roles you want to apply:</p>
                 <div class="select-roles">
                     <div><input type="checkbox" (click)="adminCheck()" [(ngModel)]="checkedAdmin">Administrator</div>
@@ -63,6 +64,18 @@
                         <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
                         <strong>Error!</strong> {{response_submit_message}}
                     </div>
+                </div>
+            </div>
+            <div class="check-ip">
+                <h4>Check IP</h4>
+                <p><i class="fa fa-info-circle" aria-hidden="true"></i> Select the day you want to check:</p>
+                <input type="date">
+                <button type="button" class="btn btn-primary" (click)="getCheckIP()">View</button>
+            </div>
+            <div class="list-checkIP">
+                <div *ngFor="let checkInIP of listIPCheckIn; let i = index;">
+                    <p>CheckIn {{i+1}}: {{checkInIP}}</p>
+                    <p>CheckOut {{i+1}}: {{listIPCheckOut[i]}}</p>
                 </div>
             </div>
         </div>

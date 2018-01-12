@@ -18,6 +18,12 @@ export class Report {
   total_days_worked: number;
 }
 
+export class IpReport {
+  name: string;
+  ipcheckin: string[];
+  ipcheckout: string[];
+}
+
 export class Workday {
   date: string;
   day_of_week: number;

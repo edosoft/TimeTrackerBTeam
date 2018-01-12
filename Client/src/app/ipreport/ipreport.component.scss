@@ -1,0 +1,57 @@
+@import '~sass/variables';
+@import '~sass/mixins';
+.container-ipreport {
+    .select-daily-date {
+        @include display-flex();
+        max-width: 1200px;
+        input {
+            max-width: 180px;
+        }
+    }
+    .invalid-date-mssg {
+        @include display-flex();
+        @include justify-content(center);
+        .mssg {
+            margin-top: 20px;
+            .close {
+                margin-left: 15px;
+            }
+        }
+    }
+    .container-list-users-ipreport {
+        margin-top: 25px;
+        .table-ipuserlist {
+            text-align: center;
+            max-width: 1200px;
+            thead {
+                tr {
+                    th {
+                        border: 1px solid #e9ecef;
+                    }
+                }
+            }
+            tbody {
+                tr {
+                    &:nth-child(2n) {
+                        background-color: #fff;
+                    }
+                    &:nth-child(2n + 1) {
+                        background-color: rgba(0, 0, 0, .05);
+                    }
+                    td {
+                        vertical-align: baseline;
+                        padding: 10px;
+                    }
+                }
+                .table-checks {
+                    tr {
+                        background-color: transparent;
+                        td {
+                            border: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

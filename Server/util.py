@@ -37,12 +37,18 @@ def current_date(report_type):
         week_calendar = str(year + '-W' + week) # Format: YYYY-WW
         return CurrentDateResponseMessage(response_code=200, text="Initial week for the calendar",
                                           date=week_calendar)
-    else: 
+    elif report_type is 1: 
         month = datetime.now()
         month = str(month.month)
         month_calendar = str(year + '-' + month) # Format: YYYY-MM
         return CurrentDateResponseMessage(response_code=200, text="Initial month for the calendar",
                                           date=month_calendar)
+    else:
+        date = datetime.now()
+        date = date.strftime("%Y-%m-%d")
+        return CurrentDateResponseMessage(response_code=200, text="Initial day for the calendar",
+                                          date=date)
+
 
 def create_mock_user():
     users = User.query()

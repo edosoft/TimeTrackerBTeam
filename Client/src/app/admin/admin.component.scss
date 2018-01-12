@@ -63,6 +63,9 @@
                 }
             }
             .form-roles {
+                padding: 15px;
+                border: 1px solid;
+                margin-bottom: 20px;
                 .select-roles {
                     margin-bottom: 15px;
                     display: block;
@@ -88,6 +91,13 @@
                     .alert {
                         margin-top: 16px;
                     }
+                }
+            }
+            .check-ip {
+                padding: 15px;
+                border: 1px solid;
+                input {
+                    margin-right: 25px;
                 }
             }
         }

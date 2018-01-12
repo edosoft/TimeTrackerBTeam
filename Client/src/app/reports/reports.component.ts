@@ -38,6 +38,7 @@ export class ReportsComponent {
     this.server.currentDate(this.reportType).then((response) => {
       this.selectedDate = response.date;
       this.getReport();
+      console.log(this.selectedDate);
     });
   }
 

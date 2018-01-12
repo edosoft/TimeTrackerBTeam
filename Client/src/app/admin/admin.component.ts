@@ -23,6 +23,12 @@ export class AdminComponent implements OnInit {
   response_submit_code: number;
   response_submit_message: string;
 
+
+  selectCheckIP: string;
+  invalidDate: boolean;
+  listIPCheckIn: string[];
+  listIPCheckOut: string[];
+
   constructor(private server: ServerProvider) { }
 
   ngOnInit() {
@@ -31,6 +37,7 @@ export class AdminComponent implements OnInit {
     this.server.getUserList().then((response) => {
       this.users = response.user_list;
     });
+    
   }
 
   setUserRole(user) {
@@ -118,6 +125,16 @@ export class AdminComponent implements OnInit {
         }
       }
     });
+  }
+
+  getCheckIP() {
+    this.listIPCheckIn = ['192.168.1.1', '192.168.1.2', '192.168.1.3'];
+    this.listIPCheckOut = [ '192.168.1.4', '192.168.1.6'];
+    if (this.selectCheckIP == ''){
+      this.invalidDate = true;
+    }else{
+      this.invalidDate = false;
+    }
   }
 
 }

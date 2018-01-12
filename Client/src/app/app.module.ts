@@ -10,9 +10,9 @@ import { CheckComponent } from './check/check.component';
 import { ReportsComponent } from './reports/reports.component';
 import { IssuesComponent } from './issues/issues.component';
 import { AdminComponent } from './admin/admin.component';
+import { IpreportComponent } from './ipreport/ipreport.component';
 
 import {Ng2Webstorage} from 'ngx-webstorage';
-import { IpreportComponent } from './ipreport/ipreport.component';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({

@@ -164,7 +164,7 @@ class MainPage(remote.Service):
         '''
         A function which returns the list of issues of all the users.
         '''
-        return admin.get_ip_by_date(request.selected_date)
+        return admin.get_ip_by_date(request.date)
 
     @endpoints.method(message_types.VoidMessage, RequestChangeRole, path='currentuser', http_method='POST', name='currentuser')
     def get_current_user(self, request):

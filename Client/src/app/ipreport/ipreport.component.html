@@ -1,3 +1,46 @@
-<p>
-  ipreport works!
-</p>
+<div class="container-ipreport">
+    <div class="select-daily-date">
+        <input [value]="selectedDate" [(ngModel)]="selectedDate" class="form-control" type="date" />
+        <div class="input-group-btn">
+            <button (click)="getIPList()" type="button" class="btn btn-primary">Get IP Report</button>
+        </div>
+    </div>
+    <div class="invalid-date-mssg">
+        <div *ngIf="invalidDate" class="mssg alert alert-warning alert-dismissable">
+            <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">×</a>
+            <strong>You inserted an invalid date. The Ip report showed corresponding to current date. </strong>
+        </div>
+    </div>
+    <div class="container-list-users-ipreport">
+        <table class="table table-ipuserlist">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>IP Check In</th>
+                    <th>IP Check Out</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let ipuser of ipUsers; let i = index">
+                    <td>{{ipuser.name}}</td>
+                    <td>
+                        <table class="table-checks">
+                            <tr *ngFor="let ipcheckin of ipuser.ip_checkin">
+                                <td>{{ipcheckin}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="table-checks">
+                            <tr *ngFor="let ipcheckout of ipuser.ip_checkout">
+                                <td>{{ipcheckout}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td><button type="button" class="btn btn-primary">View</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
