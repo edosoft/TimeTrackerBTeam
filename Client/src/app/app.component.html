@@ -42,6 +42,9 @@
                 <button (click)="issuesReport()" [ngClass]="{'link-active': location.pathname == '/issues'}">Issues</button>
               </li>
               <li class="nav-item" *ngIf="currentUserWorkday.admin == 1">
+                <button (click)="returnToIpReport()" [ngClass]="{'link-active': location.pathname == '/ipreport'}"> IP Report</button>
+              </li>
+              <li class="nav-item" *ngIf="currentUserWorkday.admin == 1">
                 <button (click)="returnToAdmin()" [ngClass]="{'link-active': location.pathname == '/admin'}">Admin</button>
               </li>
               <li class="nav-item logout-item desktop">
@@ -67,16 +70,19 @@
             <li class="nav-item">
               <button (click)="returnToCheck()" [ngClass]="{'link-active': location.pathname == '/check'}">Check</button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="currentUserWorkday.hrm == 1">
               <button (click)="weeklyReport()" [ngClass]="{'link-active': location.pathname == '/weeklyreport'}">Weekly Report</button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="currentUserWorkday.hrm == 1">
               <button (click)="monthlyReport()" [ngClass]="{'link-active': location.pathname == '/monthlyreport'}">Monthly Report</button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="currentUserWorkday.hrm == 1">
               <button (click)="issuesReport()" [ngClass]="{'link-active': location.pathname == '/issues'}">Issues</button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="currentUserWorkday.admin == 1">
+              <button (click)="returnToIpReport()" [ngClass]="{'link-active': location.pathname == '/ipreport'}"> IP Report</button>
+            </li>
+            <li class="nav-item" *ngIf="currentUserWorkday.admin == 1">
               <button (click)="returnToAdmin()" [ngClass]="{'link-active': location.pathname == '/admin'}">Admin</button>
             </li>
             <li class="nav-item logout-item desktop">
