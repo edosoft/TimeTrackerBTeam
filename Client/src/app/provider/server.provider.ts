@@ -23,12 +23,12 @@ export class ServerProvider {
     });
 
     this.store.observe('key')
-    .subscribe((value) => console.log('new value', value));
+      .subscribe((value) => console.log('new value', value));
 
     this.initGapi();
 
     const thatw = this;
-    this.nativeWindow.onbeforeunload = function ()  {
+    this.nativeWindow.onbeforeunload = function () {
       thatw.saveUser();
     };
   }
@@ -46,9 +46,9 @@ export class ServerProvider {
 
   public userWorkday: User;
 
-  get nativeWindow (): any {
+  get nativeWindow(): any {
     return getWindow();
-}
+  }
 
   saveUser() {
     this.store.store('savedUser', this.userWorkday);
@@ -57,7 +57,7 @@ export class ServerProvider {
   getReportType(): number {
     if (this.router.url == '/weeklyreport') {
       return 0;
-    }else if (this.router.url == '/monthlyreport') {
+    } else if (this.router.url == '/monthlyreport') {
       return 1;
     }
   }
@@ -84,15 +84,15 @@ export class ServerProvider {
   }
 
   public initGapi() {
-      gapi.load('client:auth2', async () => {
-        this.auth2 = gapi.auth2.init({
-          client_id: '368116371345-ott8mvobq0aqcd8dvpu40b5n2fdjgs8v.apps.googleusercontent.com',
-          cookiepolicy: 'single_host_origin',
-          scope: 'profile email'
-        });
-        const that = this;
-        gapi.client.load('timetrackerApi', 'v1', this.callback(that), this.url);
+    gapi.load('client:auth2', async () => {
+      this.auth2 = gapi.auth2.init({
+        client_id: '368116371345-ott8mvobq0aqcd8dvpu40b5n2fdjgs8v.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin',
+        scope: 'profile email'
       });
+      const that = this;
+      gapi.client.load('timetrackerApi', 'v1', this.callback(that), this.url);
+    });
   }
 
   public googleInit() {
@@ -103,7 +103,7 @@ export class ServerProvider {
   public callback(that) {
     console.log('gapi loaded');
     if (this.store.retrieve('savedUser') == undefined) {
-    that.googleInit();
+      that.googleInit();
     }
   }
 
@@ -362,6 +362,12 @@ export class ServerProvider {
           resolve(response.result);
         }
       });
+    });
+  }
+
+  returnToIpReport() {
+    this.zone.run(() => {
+      this.router.navigate(['/ipreport']);
     });
   }
 

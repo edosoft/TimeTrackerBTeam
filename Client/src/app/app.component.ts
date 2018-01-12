@@ -61,7 +61,9 @@ export class AppComponent implements DoCheck, OnInit {
   issuesReport() {
     this.server.issuesReport();
   }
-
+  returnToIpReport() {
+    this.server.returnToIpReport();
+  }
   returnToAdmin() {
     this.server.returnToAdmin();
   }

@@ -6,6 +6,7 @@ import { IssuesComponent } from '../issues/issues.component';
 import { ReportsComponent } from '../reports/reports.component';
 import { AdminComponent } from '../admin/admin.component';
 import { CanActivateViaUserWorkdayGuard, CanActivateViaHRMRole, CanActivateViaAdminRole, CanActivateLoginToCheck } from './guard.provider';
+import { IpreportComponent } from '../ipreport/ipreport.component';
 
 const appRoutes: Routes = [{
   path: '',
@@ -38,6 +39,12 @@ const appRoutes: Routes = [{
 }, {
   path: 'admin',
   component: AdminComponent,
+  canActivate: [
+    CanActivateViaUserWorkdayGuard, CanActivateViaAdminRole
+  ]
+}, {
+  path: 'ipreport',
+  component: IpreportComponent,
   canActivate: [
     CanActivateViaUserWorkdayGuard, CanActivateViaAdminRole
   ]

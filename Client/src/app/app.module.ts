@@ -12,6 +12,7 @@ import { IssuesComponent } from './issues/issues.component';
 import { AdminComponent } from './admin/admin.component';
 
 import {Ng2Webstorage} from 'ngx-webstorage';
+import { IpreportComponent } from './ipreport/ipreport.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {Ng2Webstorage} from 'ngx-webstorage';
     CheckComponent,
     ReportsComponent,
     IssuesComponent,
-    AdminComponent
+    AdminComponent,
+    IpreportComponent
   ],
   imports: [
     BrowserModule,
