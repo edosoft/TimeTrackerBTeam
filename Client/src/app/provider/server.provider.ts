@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -6,7 +6,6 @@ import { User } from '../provider/model';
 import { Router } from '@angular/router';
 import { SessionStorageService } from 'ngx-webstorage';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
-
 declare const gapi: any;
 
 
@@ -17,7 +16,7 @@ function getWindow(): any {
 @Injectable()
 export class ServerProvider {
 
-  constructor(private router: Router, private zone: NgZone, private store: SessionStorageService) {
+  constructor(private router: Router, private zone: NgZone, private store: SessionStorageService, private http: HttpClient) {
     this.sendLogin.subscribe((value) => {
       this.wrongAccount = value;
     });
@@ -31,12 +30,20 @@ export class ServerProvider {
     this.nativeWindow.onbeforeunload = function () {
       thatw.saveUser();
     };
+
+    this.http.get('http://ipinfo.io/json/').subscribe(data => {
+      const value: any = data;
+      console.log(value.ip);
+      this.ip = value.ip;
+    });
+
   }
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
   L = 'http://localhost:8080/_ah/api';
   P = 'https://timetrackerbteam.appspot.com/_ah/api/';
 
+  ip: string;
   url: string = this.L;
   logged = false;
   reportType: number;
@@ -256,8 +263,11 @@ export class ServerProvider {
   }
 
   checkIn() {
+    const content = {
+      ip: this.ip
+    };
     return new Promise<boolean>((resolve, reject) => {
-      gapi.client.timetrackerApi.checkin().execute((response: any) => {
+      gapi.client.timetrackerApi.checkin(content).execute((response: any) => {
         if (response.result.response_code === '400') {
           this.userWorkday.checkin = 'None';
           // console.log(JSON.stringify(response.result));
@@ -273,8 +283,11 @@ export class ServerProvider {
   }
 
   checkOut() {
+    const content = {
+      ip: this.ip
+    };
     return new Promise<boolean>((resolve, reject) => {
-      gapi.client.timetrackerApi.checkout().execute((response: any) => {
+      gapi.client.timetrackerApi.checkout(content).execute((response: any) => {
         if (response.result.response_code === '400') {
           this.userWorkday.checkout = 'None';
           resolve(false);

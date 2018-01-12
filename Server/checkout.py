@@ -3,7 +3,7 @@ from messages import CheckoutResponseMessage
 from models import Workday, Issue
 
 
-def check_out(user, current_date=None):
+def check_out(user, ip, current_date=None):
     """
     A function which updates the Workday with the checkout date and the total hours.
     If the checkout is made in a valid time, the system returns updates the Workday entity
@@ -46,7 +46,7 @@ def check_out(user, current_date=None):
         #lunch_time = now.replace(hour=15, minute=00, second=0, microsecond=0)
 
         check_out_query.checkout.append(now)
-
+        check_out_query.ip_checkout.append(ip)
         check_out_query.total = check_out_query.total + check_out_minus_check_in
 
         # Issue - Check out too soon

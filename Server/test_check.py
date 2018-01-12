@@ -43,7 +43,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = date.replace(hour=8, minute=30)
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date)
-        result = check_in(user, date)
+        result = check_in(user, "",  date)
         self.assertEqual(result.text, "Successful Check in")
         self.assertEqual(result.number,1)
 
@@ -51,7 +51,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = datetime.datetime.now().replace(hour=6)
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date)
-        result = check_in(user, date)
+        result = check_in(user, "",  date)
         self.assertEqual(result.text, "You can't check in before 7:30 am")
     
     def testcheckinlate(self):
@@ -59,7 +59,7 @@ class DatastoreTestCase(unittest.TestCase):
         date = date.replace(hour=10)
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date)
-        result = check_in(user, date)
+        result = check_in(user, "",  date)
         self.assertEqual(result.text, "Check in out of time")
 
     def test_checkin_double_no_checkout(self):
@@ -68,8 +68,8 @@ class DatastoreTestCase(unittest.TestCase):
         date_out = date.replace(hour=9)
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date)
-        check_in(user, date_in)
-        result = check_in(user, date_out)
+        check_in(user, "", date_in)
+        result = check_in(user, "", date_out)
         self.assertEqual(result.text, "You can't check in again without checking out before")
 
     def testmultiplecheckin(self):
@@ -79,22 +79,22 @@ class DatastoreTestCase(unittest.TestCase):
 
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
-        check_in(user, date_in)
-        check_out(user, date_out)
+        check_in(user, "", date_in)
+        check_out(user, "", date_out)
 
         new_date_in = date.replace(hour=11)
         new_date_out = date.replace(hour=12)
 
-        check_in(user, new_date_in)
-        check_out(user, new_date_out)
+        check_in(user, "", new_date_in)
+        check_out(user, "", new_date_out)
 
         new_new_date_in = date.replace(hour=15)
-        result_in = check_in(user, new_new_date_in)
+        result_in = check_in(user, "", new_new_date_in)
         self.assertEqual(result_in.text, "Successful Check in")
         self.assertEqual(result_in.number, 3, "Invalid count of check ins")
 
         new_new_date_out = date.replace(hour=16)
-        result_out = check_out(user, new_new_date_out)
+        result_out = check_out(user, "", new_new_date_out)
         self.assertEqual(result_out.text, "Successful Check out")
         self.assertEqual(result_out.number, 3, "Invalid count of check outs")
        
@@ -109,7 +109,7 @@ class DatastoreTestCase(unittest.TestCase):
         date_out = date.replace(hour=16)
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
-        result = check_out(user, date_out)
+        result = check_out(user, "", date_out)
         self.assertEqual(result.text, "You can't check out without checking in")
 
     def test_multiple_check_out_without_check_in(self):
@@ -119,10 +119,10 @@ class DatastoreTestCase(unittest.TestCase):
         date_out = date.replace(hour=16, minute=0)
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
-        check_in(user, date_in)
-        early_result = check_out(user, date)
+        check_in(user, "", date_in)
+        early_result = check_out(user, "", date)
         self.assertEqual(early_result.number, 1, "Wrong checkout number")
-        result = check_out(user, date_out)
+        result = check_out(user, "", date_out)
         self.assertEqual(result.text, "You can't check out without checking in")
 
     def testcheckoutok(self):
@@ -132,8 +132,8 @@ class DatastoreTestCase(unittest.TestCase):
         date_out = date.replace(hour=16)
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
-        check_in(user, date_in)
-        result = check_out(user, date_out)
+        check_in(user, "", date_in)
+        result = check_out(user, "", date_out)
         self.assertEqual(result.text, "Successful Check out")
 
     def testcheckoutearly(self):
@@ -142,8 +142,8 @@ class DatastoreTestCase(unittest.TestCase):
         date_out = date.replace(hour=9)
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
-        check_in(user, date_in)
-        result = check_out(user, date_out)
+        check_in(user, "", date_in)
+        result = check_out(user, "", date_out)
         self.assertEqual(result.text, "You checked out too early")
 
     def testcheckoutlate(self):
@@ -152,8 +152,8 @@ class DatastoreTestCase(unittest.TestCase):
         date_in = date.replace(hour=15)
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
-        check_in(user, date_in)
-        result = check_out(user, date)
+        check_in(user, "", date_in)
+        result = check_out(user, "", date)
         self.assertEqual(result.text, "Check out out of time")
 
     def test_check_out_when_check_in_soon(self):
@@ -163,9 +163,9 @@ class DatastoreTestCase(unittest.TestCase):
 
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
-        check_in(user, date_in)
+        check_in(user, "", date_in)
 
-        result = check_out(user, date_out)
+        result = check_out(user, "", date_out)
         self.assertEqual(result.text, "You can't check out until 5 minutes have passed")
 # [END   Check Out Tests]
 
@@ -176,11 +176,11 @@ class DatastoreTestCase(unittest.TestCase):
         date_out = date.replace(hour=16)
         user = User(email="maria.ramos@edosoft.es")
         log_in(user, date_in)
-        check_in(user, date_in)
-        check_out(user, date_out)
+        check_in(user, "", date_in)
+        check_out(user, "", date_out)
         log_in(user, date_in)
-        check_in(user, date_in)
-        check_out(user, date_out)
+        check_in(user, "", date_in)
+        check_out(user, "", date_out)
         result = log_in(user, date_in)
         self.assertEqual(result.text, "Returning Workday")
     

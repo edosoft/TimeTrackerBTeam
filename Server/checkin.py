@@ -4,7 +4,7 @@ from messages import CheckinResponseMessage
 from models import Workday, Issue
 
 
-def check_in(user, current_date=None):
+def check_in(user, ip, current_date=None):
     """
     A function which updates the Workday with the check in date. If the check in button
     is pressed in a valid time, the system updates the Workday entity with the date. If not,
@@ -36,6 +36,7 @@ def check_in(user, current_date=None):
                                           text="You can't check in after 19:00 pm")
         else:
             check_in_query.checkin.append(now)
+            check_in_query.ip_checkin.append(ip)
             check_in_query.put()
             # Ok
             if now < check_in_max:
@@ -72,6 +73,7 @@ def check_in(user, current_date=None):
         else:
             now = current_date                           
             check_in_query.checkin.append(now)
+            check_in_query.ip_checkin.append(ip)
             check_in_query.put()
             return CheckinResponseMessage(response_code=200,
                                             text="Successful Check in",

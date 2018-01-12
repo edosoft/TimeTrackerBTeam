@@ -18,6 +18,8 @@ class Workday(ndb.Model):
     date = ndb.DateProperty(auto_now_add=True)
     checkin = ndb.DateTimeProperty(repeated=True)
     checkout = ndb.DateTimeProperty(repeated=True)
+    ip_checkin = ndb.StringProperty(repeated=True)
+    ip_checkout = ndb.StringProperty(repeated=True)
     total = ndb.IntegerProperty()
 
 class Issue(ndb.Model):

@@ -39,7 +39,7 @@ class DatastoreTestCase(unittest.TestCase):
         fake_date = datetime.now().replace(hour=8, minute=0)
         fake_user = User(email="hrm@edosoft.es")
         log_in(fake_user, fake_date)
-        check_in(fake_user, fake_date)
+        check_in(fake_user, "", fake_date)
     
         automatic_checkout_helper()
 

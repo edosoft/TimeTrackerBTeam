@@ -2,11 +2,11 @@
 
 from protorpc import messages
 from protorpc import message_types
+
 class WorkdayMessage (messages.Message):
     date = messages.StringField(1)
     day_of_week = messages.IntegerField(2)
     total = messages.IntegerField(3)
-
 
 class RequestReport(messages.Message):
     date = messages.StringField(1, required=True)
@@ -113,3 +113,38 @@ class IssueResponseMessage (messages.Message):
     text = messages.StringField(3)
     total_unsolved = messages.IntegerField(4)
     total_unviewed = messages.IntegerField(5)
+
+class IpMessage(messages.Message):
+    ip = messages.StringField(1)
+
+# [START IP Tests]
+class IpDateRequest(messages.Message):
+    date = messages.StringField(1)
+
+class IPDateMessage(messages.Message):
+    name = messages.StringField(1) 
+    ip_checkin = messages.StringField(2, repeated=True)
+    ip_checkout = messages.StringField(3, repeated=True)
+
+class IPDateResponseMessage(messages.Message):
+    ip_report = messages.MessageField(IPDateMessage, 1, repeated=True)
+    response_code = messages.IntegerField(2, required=True)
+    text = messages.StringField(3, required=True)
+
+class IpUserRequest(messages.Message):
+    email = messages.StringField(1)
+    start_date = messages.StringField(2)
+    end_date = messages.StringField(3)
+
+class IPUserMessage(messages.Message):
+    date = messages.StringField(1)
+    ip_checkin = messages.StringField(2, repeated=True)
+    ip_checkout = messages.StringField(3, repeated=True)
+
+class IPUserResponseMessage(messages.Message):
+    ip_values = messages.MessageField(IPUserMessage, 1, repeated=True)
+    name = messages.StringField(4)
+    response_code = messages.IntegerField(2, required=True)
+    text = messages.StringField(3, required=True)
+# [END   IP Tests]
+

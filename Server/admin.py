@@ -1,8 +1,8 @@
-from models import User
+from models import User, Workday
 from messages import ChangeRoleResponseMessage, RequestChangeRole
 from messages import GetUserListResponseMessage, GetUserListMessage
-
-
+from messages import IPUserMessage, IPUserResponseMessage, IPDateResponseMessage, IPDateMessage
+from datetime import timedelta, datetime
 def create_user():
     user_query_create = User.query(User.email == "admin@edosoft.es").get()
     if user_query_create is None:
@@ -38,7 +38,7 @@ def get_user_list():
     if len(user_query.fetch()) < 1:
         return GetUserListResponseMessage(response_code=400, text="Error: Users not found")
     else:
-        all_users = User.query()
+        all_users = User.query().order(+User.name)
         result = []
 
         for user in all_users:
@@ -76,3 +76,80 @@ def change_role(user_email, hrm_value, admin_value, user):
     return ChangeRoleResponseMessage(response_code=400, 
                                             text="The values of roles are not correct.")
     
+def get_ip_by_user(user_email, start_date, end_date):
+    """
+    A function which returns the IPs of a selected user and date. It returns the list
+    of IPs, sorted by check in and checkout. 
+    Needs - The date and user
+    Returns - IPUserResponseMessage
+    """
+    first_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+    last_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+
+    requested_workdays = Workday.query(Workday.date >= first_date, Workday.date <= last_date)
+    user = User.query(User.email == user_email).get()
+    
+    if user is None:
+        return IPUserResponseMessage(response_code=400, text="User doesn't exist")
+     
+    else:
+        result = []
+        workdays_by_employee = requested_workdays.filter(
+                Workday.employee.email == user_email).order(+Workday.date)
+
+        for elem in workdays_by_employee:
+            workday_ip_checkin = elem.ip_checkin
+            workday_ip_checkout = elem.ip_checkout
+            workday_date = str(elem.date)
+            result.append(IPUserMessage(date=workday_date,
+                                        ip_checkin=workday_ip_checkin,
+                                        ip_checkout=workday_ip_checkout))
+        
+        #Create empty workdays if it's necessary.
+        complete_workdays = []
+        acc = 0
+        for day in perdelta(first_date, last_date):
+            query_find_day = workdays_by_employee.filter(Workday.date == day).get()
+            if query_find_day is None:
+                complete_workdays.append(IPUserMessage(date=str(day),
+                                                       ip_checkin=[],
+                                                       ip_checkout=[]))
+            else:
+                complete_workdays.append(result[acc])
+                acc += 1
+
+        result = complete_workdays
+        return IPUserResponseMessage(response_code=200, text="Returning IP by User",
+                                     ip_values=result, name=user.name)
+
+def get_ip_by_date(selected_date):
+    """
+    A function which returns all the IPs of a selected date. It returns the list
+    of IPs, sorted by check in and checkout. 
+    Needs - The date
+    Returns - IPUserResponseMessage
+    """
+
+    users = User.query()
+    result = []
+    for user in users:
+        email = user.email
+        raw_data_by_employee = get_ip_by_user(email, selected_date, selected_date)
+        data_employee = IPDateMessage()
+        data_employee.name = raw_data_by_employee.name
+        data_employee.ip_checkin = raw_data_by_employee.ip_values[0].ip_checkin
+        data_employee.ip_checkout = raw_data_by_employee.ip_values[0].ip_checkout
+        result.append(data_employee)
+
+    return IPDateResponseMessage(response_code=200, text="Returning IP by Date",
+                                 ip_report=result)
+
+
+
+def perdelta(start, end, delta=timedelta(days=1)):
+    curr = start
+    while curr <= end:
+        yield curr
+        curr += delta
+
+

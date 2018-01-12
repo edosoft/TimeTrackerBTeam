@@ -46,6 +46,8 @@ def log_in(user, current_date=None):
             work.employee = user_query
             work.checkin = []
             work.checkout = []
+            work.ip_checkin = []
+            work.ip_checkout = []
             work.total = 0
             work.put()
             return WorkdayResponseMessage(text="Creating Workday", email=work.employee.email,

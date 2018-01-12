@@ -13,6 +13,7 @@ import { AdminComponent } from './admin/admin.component';
 
 import {Ng2Webstorage} from 'ngx-webstorage';
 import { IpreportComponent } from './ipreport/ipreport.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { IpreportComponent } from './ipreport/ipreport.component';
     FormsModule,
     AppRoutingModule,
     NgbModule,
-    Ng2Webstorage
+    Ng2Webstorage,
+    HttpClientModule
   ],
   providers: [ServerProvider],
   bootstrap: [AppComponent]

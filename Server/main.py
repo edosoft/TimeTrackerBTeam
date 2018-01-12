@@ -21,8 +21,8 @@ from protorpc import remote
 from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
 from messages import RequestReport, ReportResponseMessage, WeekTotalMessage , IssueResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
 from messages import RequestChangeRole, ChangeRoleResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
-from messages import GetUserListResponseMessage, GetUserListMessage
-
+from messages import GetUserListResponseMessage, GetUserListMessage, IpMessage
+from messages import IpDateRequest, IpUserRequest, IPDateResponseMessage, IPUserResponseMessage
 from models import User, Workday
 
 
@@ -49,7 +49,7 @@ class MainPage(remote.Service):
         user = endpoints.get_current_user()
         return log_in(user)
 
-    @endpoints.method(message_types.VoidMessage, CheckinResponseMessage, path='checkin',
+    @endpoints.method(IpMessage, CheckinResponseMessage, path='checkin',
                       http_method='POST', name='checkin')
     def checkin(self, request):
         """
@@ -58,9 +58,9 @@ class MainPage(remote.Service):
         """
 
         user = endpoints.get_current_user()
-        return check_in(user)
+        return check_in(user, request.ip)
 
-    @endpoints.method(message_types.VoidMessage, CheckoutResponseMessage,
+    @endpoints.method(IpMessage, CheckoutResponseMessage,
                       path='checkout', http_method='POST', name='checkout')
     def checkout(self, request):
         """A function which updates the Workday with the checkout date and the total hours.
@@ -69,7 +69,7 @@ class MainPage(remote.Service):
         """
 
         user = endpoints.get_current_user()
-        return check_out(user)
+        return check_out(user, request.ip)
 
     @endpoints.method(message_types.VoidMessage, WeekTotalMessage,
                       path='weektotal', http_method='POST', name='weektotal')
@@ -151,6 +151,20 @@ class MainPage(remote.Service):
         A function which returns the list of issues of all the users.
         '''
         return get_user_with_issues()
+
+    @endpoints.method(IpUserRequest, IPUserResponseMessage, path='ip_user', http_method='POST', name='ip_user')
+    def get_ips_by_user(self, request):
+        '''
+        A function which returns the list of issues of all the users.
+        '''
+        return admin.get_ip_by_user(request.user_email, request.start_date, request.end_date)
+
+    @endpoints.method(IpDateRequest, IPDateResponseMessage, path='ip_userlist', http_method='POST', name='ip_userlist')
+    def get_ips_by_date(self, request):
+        '''
+        A function which returns the list of issues of all the users.
+        '''
+        return admin.get_ip_by_date(request.selected_date)
 
     @endpoints.method(message_types.VoidMessage, RequestChangeRole, path='currentuser', http_method='POST', name='currentuser')
     def get_current_user(self, request):

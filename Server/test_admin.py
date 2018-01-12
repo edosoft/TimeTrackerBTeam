@@ -4,12 +4,14 @@ from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
 import unittest
+from datetime import datetime
 
 from messages import GetUserListMessage, GetUserListResponseMessage
 from messages import RequestChangeRole, ChangeRoleResponseMessage
-from models import User
+from messages import IPUserResponseMessage, IPUserMessage, IPDateResponseMessage
+from models import User, Workday
 
-from admin import get_user_list, change_role
+from admin import get_user_list, change_role, get_user_list, get_ip_by_user, get_ip_by_date
 
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
@@ -35,7 +37,7 @@ class DatastoreTestCase(unittest.TestCase):
         self.testbed.deactivate()
     # [END datastore_example_teardown]
 
-# [START Report Tests]
+# [START UserList Tests]
     def test_get_empty_user_list(self):
         result = get_user_list()
         self.assertEqual(result.text, "Error: Users not found")
@@ -48,10 +50,10 @@ class DatastoreTestCase(unittest.TestCase):
         auth2.put()
 
         result = get_user_list()
-        self.assertEqual(result.user_list[0].email, "hrm@edosoft.es", "Invalid user found")
-        self.assertEqual(result.user_list[0].name, "Helena Heras", "Invalid user found")
-        self.assertEqual(result.user_list[0].hrm, 1, "Invalid user found")
-        self.assertEqual(result.user_list[0].admin, 0, "Invalid user found")
+        self.assertEqual(result.user_list[1].email, "hrm@edosoft.es", "Invalid user found")
+        self.assertEqual(result.user_list[1].name, "Helena Heras", "Invalid user found")
+        self.assertEqual(result.user_list[1].hrm, 1, "Invalid user found")
+        self.assertEqual(result.user_list[1].admin, 0, "Invalid user found")
         self.assertEqual(len(result.user_list), 2, "Wrong size")
 
     def test_change_role_ok(self):
@@ -77,8 +79,60 @@ class DatastoreTestCase(unittest.TestCase):
         self.assertEqual(q2.admin, 1, "Not changed")
         self.assertEqual(result2.text, "You can not change your admin role.")
 
-# [END   Report Tests]
+# [END   UserList Tests]
 
+# [START IP Tests]
+    def test_get_empty_ip_by_user_no_user(self):
+        date_start = "2018-11-5"
+        date_end = "2018-11-6"
+        result = get_ip_by_user("cuentaprueba@edosoft.es", date_start, date_end)
+        self.assertEqual(result.text, "User doesn't exist")
+        self.assertEqual(type(result), IPUserResponseMessage)
+
+    def test_get_empty_ip_by_user_no_data(self):
+        user = User(email="user@edosoft.es")
+        user.put()
+        date_start = "2018-11-5"
+        date_end = "2018-11-6"
+        result = get_ip_by_user("user@edosoft.es", date_start, date_end)
+        self.assertEqual(result.response_code, 200)
+        self.assertEqual(result.ip_values[0].ip_checkin, [])
+        self.assertEqual(type(result), IPUserResponseMessage)
+
+    def test_get_ip_by_user_correct(self):
+        user = User(email="user@edosoft.es", name="Antonio")
+        user.put()
+
+        for x in range(1, 8):
+            date = datetime.now().replace(day = x)
+            work = Workday(employee=user,date=date, ip_checkin=[str(x), str(x+1)], ip_checkout=[str(x), str(x+1)])
+            work.put()
+
+        date_start = str(datetime.now().replace(day=1).date())
+        date_end = str(datetime.now().replace(day=7).date())
+        result = get_ip_by_user("user@edosoft.es", date_start, date_end)
+
+        self.assertEqual(result.response_code, 200)
+        self.assertEqual(result.ip_values[0].ip_checkin, ['1', '2'])
+        self.assertEqual(type(result), IPUserResponseMessage)
+
+    def test_get_ip_by_date_correct(self):
+        user = User(email="user@edosoft.es", name="Antonio")
+        user.put()
+
+        for x in range(1, 8):
+            date = datetime.now().replace(day = x)
+            work = Workday(employee=user,date=date, ip_checkin=[str(x), str(x+1)], ip_checkout=[str(x), str(x+1)])
+            work.put()
+
+        date_start = str(datetime.now().replace(day=1).date())
+        result = get_ip_by_date(date_start)
+
+        self.assertEqual(result.response_code, 200)
+        self.assertEqual(result.ip_report[0].ip_checkin, ['1', '2'])
+        self.assertEqual(type(result), IPDateResponseMessage)
+
+# [END   IP Tests]
 
 if __name__ == '__main__':
     unittest.main()
