@@ -88,10 +88,10 @@ def get_ip_by_user(user_email, start_date, end_date):
 
     requested_workdays = Workday.query(Workday.date >= first_date, Workday.date <= last_date)
     user = User.query(User.email == user_email).get()
-    
     if user is None:
         return IPUserResponseMessage(response_code=400, text="User doesn't exist")
-     
+    elif first_date != last_date and len(requested_workdays.fetch()) < 1:
+        return IPUserResponseMessage(response_code=400, text='There are no records in the selected date')
     else:
         result = []
         workdays_by_employee = requested_workdays.filter(
@@ -132,6 +132,12 @@ def get_ip_by_date(selected_date):
 
     users = User.query()
     result = []
+
+    first_date = datetime.strptime(selected_date, "%Y-%m-%d").date()
+    requested_workdays = Workday.query(Workday.date == first_date).fetch()
+    if len(requested_workdays) < 1:
+        return IPDateResponseMessage(response_code=400, text='There are no records in the selected date')        
+
     for user in users:
         email = user.email
         raw_data_by_employee = get_ip_by_user(email, selected_date, selected_date)

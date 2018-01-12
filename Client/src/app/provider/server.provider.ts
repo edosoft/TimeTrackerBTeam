@@ -30,13 +30,6 @@ export class ServerProvider {
     this.nativeWindow.onbeforeunload = function () {
       thatw.saveUser();
     };
-
-    this.http.get('http://ipinfo.io/json/').subscribe(data => {
-      const value: any = data;
-      console.log(value.ip);
-      this.ip = value.ip;
-    });
-
   }
 
   // Para seleccionar la url en local this.L y para trabajar sobre produccion con this.P
@@ -115,20 +108,21 @@ export class ServerProvider {
   }
 
   public attachGSuite(element) {
-    // gapi.client.load('timetrackerApi', 'v1', this.callback, this.url);
     this.auth2.attachClickHandler(element, {},
       (googleUser) => {
         const profile = googleUser.getBasicProfile();
         this.userWorkday = new User();
-        this.logIn();
+        this.logIn({
+          name: profile.getName()
+        });
       }, (error) => {
         alert(JSON.stringify(error, undefined, 2));
       });
   }
 
   // Check that userWorkday exists in datastore
-  logIn() {
-    gapi.client.timetrackerApi.login().execute((response: any) => {
+  logIn(body) {
+    gapi.client.timetrackerApi.login(body).execute((response: any) => {
       if (response.result.response_code === '400') {
         this.setAccountWrong();
         console.log('Invalid user detected.');
@@ -262,8 +256,22 @@ export class ServerProvider {
     // this.storage.clear(); //clear all the managed storage items
   }
 
-  checkIn() {
-    const content = {
+  getIp() {
+    this.http.get('http://ipinfo.io/json/').subscribe(data => {
+      const value: any = data;
+      console.log(value.ip);
+      this.ip = value.ip;
+    });
+  }
+
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+  async checkIn() {
+    this.getIp();
+    await this.delay(400);
+      const content = {
       ip: this.ip
     };
     return new Promise<boolean>((resolve, reject) => {
@@ -282,7 +290,9 @@ export class ServerProvider {
     });
   }
 
-  checkOut() {
+  async checkOut() {
+    this.getIp();
+    await this.delay(400);
     const content = {
       ip: this.ip
     };

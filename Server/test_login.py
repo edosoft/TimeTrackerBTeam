@@ -5,7 +5,7 @@ import unittest
 import datetime
 import admin
 
-from messages import WorkdayResponseMessage
+from messages import WorkdayResponseMessage, LoginRequest
 from models import User, Workday
 from login import log_in
 # [END imports]
@@ -34,31 +34,31 @@ class DatastoreTestCase(unittest.TestCase):
     def test_workday_no_user(self):
         date = datetime.datetime.now()
         date = date.replace(hour=7, minute=31)
-        result = log_in(None, date)
+        result = log_in(None, "", date)
         self.assertEqual(result.text, "Error: Invalid Data")
 
     def test_workday_user(self):
         date = datetime.datetime.now()
         date = date.replace(hour=7, minute=31)
         test = User(email="admin@edosoft.es")
-        result = log_in(test, date)
+        result = log_in(test, "", date)
         self.assertEqual(result.text, "Creating Workday")
 
     def test_workday_returning_user(self):
         date = datetime.datetime.now()
         date = date.replace(hour=7, minute=31)
         test = User(email="admin@edosoft.es")
-        log_in(test, date)
-        result = log_in(test, date)
+        log_in(test, "", date)
+        result = log_in(test, "", date)
         self.assertEqual(result.text, "Returning Workday")
         self.assertEqual(len(Workday.query().fetch(2)), 1)
 
     def test_workday_multiple_user(self):
         date = datetime.datetime.now()
         test = User(email="admin@edosoft.es")
-        log_in(test, date)
+        log_in(test, "", date)
         date = date.replace(hour=7, minute=31)
-        result = log_in(test, date)
+        result = log_in(test, "", date)
         self.assertEqual(result.text, "Returning Workday")
         self.assertEqual(len(Workday.query().fetch(2)), 1)
 # [END   Workday Tests]
@@ -66,14 +66,20 @@ class DatastoreTestCase(unittest.TestCase):
 # [START User Tests]
     def test_user(self):
         date = datetime.datetime.now()
-        result = log_in(self.user, date)
+        result = log_in(self.user, "", date)
         self.assertEqual(result.text, "Creating Workday")
 
     def test_returning_user(self):
         date = datetime.datetime.now()
-        log_in(self.user, date)
-        result = log_in(self.user, date)
+        log_in(self.user, "", date)
+        result = log_in(self.user, "", date)
         self.assertEqual(result.text, "Returning Workday")
+
+    def test_name_user(self):
+        us = User(email="a@edosoft.es")
+        result = log_in(us, "Juan", self.date)
+        self.assertEqual(result.text, "Creating Workday")
+        self.assertEqual(Workday.query().get().employee.name, "Juan")
 # [END   User Tests]
 
 

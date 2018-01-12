@@ -18,7 +18,7 @@ from tasks import automatic_checkout_helper
 from protorpc import message_types
 from protorpc import remote
 
-from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
+from messages import LoginRequest, WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
 from messages import RequestReport, ReportResponseMessage, WeekTotalMessage , IssueResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
 from messages import RequestChangeRole, ChangeRoleResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
 from messages import GetUserListResponseMessage, GetUserListMessage, IpMessage
@@ -32,7 +32,7 @@ from models import User, Workday
                scopes=[endpoints.EMAIL_SCOPE])
 class MainPage(remote.Service):
 
-    @endpoints.method(message_types.VoidMessage, WorkdayResponseMessage, path='login',
+    @endpoints.method(LoginRequest, WorkdayResponseMessage, path='login',
                       http_method='POST', name='login')
     def login(self, request):
         """
@@ -47,7 +47,7 @@ class MainPage(remote.Service):
         #    util.create_mock_user()
         
         user = endpoints.get_current_user()
-        return log_in(user)
+        return log_in(user, request.name)
 
     @endpoints.method(IpMessage, CheckinResponseMessage, path='checkin',
                       http_method='POST', name='checkin')
@@ -141,9 +141,6 @@ class MainPage(remote.Service):
         """
 
         return get_report(request.date, request.report_type)
-
-
-
 
     @endpoints.method(message_types.VoidMessage, IssueResponseMessage, path='issues', http_method='POST', name='issues')
     def issues(self, request):

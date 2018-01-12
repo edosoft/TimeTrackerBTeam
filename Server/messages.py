@@ -3,6 +3,9 @@
 from protorpc import messages
 from protorpc import message_types
 
+class LoginRequest(messages.Message):
+    name = messages.StringField(1)
+
 class WorkdayMessage (messages.Message):
     date = messages.StringField(1)
     day_of_week = messages.IntegerField(2)

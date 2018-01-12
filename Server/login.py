@@ -2,9 +2,9 @@ import datetime
 
 from messages import WorkdayResponseMessage
 from models import User, Workday
+from time import sleep
 
-
-def log_in(user, current_date=None):
+def log_in(user, name, current_date=None):
     """
     A function which validates the login. It creates a new User if it doesn't exist in the DB,
     and new Workday entities if the valid user hasn't logged in that day. If it's a returning user,
@@ -28,22 +28,25 @@ def log_in(user, current_date=None):
             email = user.email()
         else:
             email = user.email
-        
 
-
-        user_query = User.query(User.email == email).get()
-
+        employee = User.query(User.email == email).get()
         # If the user doesn't exist, it inserts it to the database.
-        if user_query is None:
-            return WorkdayResponseMessage(text="Error: Invalid user", response_code=400)
-
+        if employee is None:
+            user = User()
+            user.name = name
+            user.email = email
+            user.hrm = 0
+            user.admin = 0
+            user.put()
+            employee = user
+            
         workday_query = Workday.query(Workday.employee == User(email=email),
                                       Workday.date == current_date).get()
 
         # If there is no workday, a new one is created and added to the DB.
         if workday_query is None:
             work = Workday()
-            work.employee = user_query
+            work.employee = employee
             work.checkin = []
             work.checkout = []
             work.ip_checkin = []
@@ -60,7 +63,7 @@ def log_in(user, current_date=None):
         # Ok - Returning existent
         else:
             work = workday_query
-            work.employee = user_query
+            work.employee = employee
             strcin = []
             strcout = []
             for cin in work.checkin:

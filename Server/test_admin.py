@@ -95,8 +95,8 @@ class DatastoreTestCase(unittest.TestCase):
         date_start = "2018-11-5"
         date_end = "2018-11-6"
         result = get_ip_by_user("user@edosoft.es", date_start, date_end)
-        self.assertEqual(result.response_code, 200)
-        self.assertEqual(result.ip_values[0].ip_checkin, [])
+        self.assertEqual(result.response_code, 400)
+        self.assertEqual(result.text, 'There are no records in the selected date')
         self.assertEqual(type(result), IPUserResponseMessage)
 
     def test_get_ip_by_user_correct(self):
@@ -130,6 +130,13 @@ class DatastoreTestCase(unittest.TestCase):
 
         self.assertEqual(result.response_code, 200)
         self.assertEqual(result.ip_report[0].ip_checkin, ['1', '2'])
+        self.assertEqual(type(result), IPDateResponseMessage)
+
+    def test_get_ip_by_date_incorrect(self):
+        date_start = str(datetime.now().replace(day=1).date())
+        result = get_ip_by_date(date_start)
+
+        self.assertEqual(result.response_code, 400)
         self.assertEqual(type(result), IPDateResponseMessage)
 
 # [END   IP Tests]
