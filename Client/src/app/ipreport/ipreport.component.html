@@ -8,15 +8,15 @@
   <div class="invalid-date-mssg">
     <div *ngIf="invalidDate" class="mssg alert alert-warning alert-dismissable">
       <a class="close" data-dismiss="alert" aria-label="close" (click)="closeInvalidDate()">×</a>
-      <strong>You inserted an invalid date. The IP report showed corresponding to current date.</strong>
+      <strong>You inserted an invalid date.</strong>
     </div>
     <div *ngIf="noRecordsFound" class="mssg alert alert-warning alert-dismissable">
       <a class="close" data-dismiss="alert" aria-label="close" (click)="closeNoRecordsFound()">×</a>
-      <strong>No records found in the selected date.The IP report showed corresponding to current date.</strong>
+      <strong>No records found in the selected date.</strong>
     </div>
   </div>
   <div class="container-list-users-ipreport">
-    <table class="table table-ipuserlist">
+    <table class="table table-ipuserlist" *ngIf="!noTable">
       <thead class="thead-dark">
         <tr>
           <th>Nombre</th>

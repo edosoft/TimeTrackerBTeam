@@ -15,6 +15,7 @@ export class IpreportComponent implements OnInit {
   selectedDate: string;
   invalidDate: boolean;
   noRecordsFound: boolean;
+  noTable: boolean;
 
   constructor(private server: ServerProvider) { }
 
@@ -29,13 +30,14 @@ export class IpreportComponent implements OnInit {
   getIPList(selectedDate) {
     if (this.selectedDate == '') {
       this.invalidDate = true;
-      this.selectedDate = this.server.getUserWorkday().date;
+      this.noTable = true;
     } else {
       this.server.getListIPUser(this.selectedDate).then((response) => {
         if (response.response_code == 400) {
           this.noRecordsFound = true;
-          this.selectedDate = this.server.getUserWorkday().date;
+          this.noTable = true;
         } else {
+          this.noTable = false;
           this.noRecordsFound = false;
           this.ipUsers = response.ip_report;
         }
