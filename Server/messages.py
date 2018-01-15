@@ -128,6 +128,7 @@ class IPDateMessage(messages.Message):
     name = messages.StringField(1) 
     ip_checkin = messages.StringField(2, repeated=True)
     ip_checkout = messages.StringField(3, repeated=True)
+    email = messages.StringField(4)
 
 class IPDateResponseMessage(messages.Message):
     ip_report = messages.MessageField(IPDateMessage, 1, repeated=True)

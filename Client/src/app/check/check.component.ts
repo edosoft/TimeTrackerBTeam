@@ -51,7 +51,6 @@ export class CheckComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('Check onInit');
     this.date = this.datePipe.transform(new Date(), 'EEEE, MMMM d, y');
     this.currentUserWorkday = this.server.getUserWorkday();
     this.currentHour = +(this.datePipe.transform(new Date(), 'HH'));

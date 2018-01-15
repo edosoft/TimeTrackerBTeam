@@ -127,7 +127,6 @@ class DatastoreTestCase(unittest.TestCase):
 
         date_start = str(datetime.now().replace(day=1).date())
         result = get_ip_by_date(date_start)
-
         self.assertEqual(result.response_code, 200)
         self.assertEqual(result.ip_report[0].ip_checkin, ['1', '2'])
         self.assertEqual(type(result), IPDateResponseMessage)

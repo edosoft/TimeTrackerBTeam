@@ -143,6 +143,7 @@ def get_ip_by_date(selected_date):
         raw_data_by_employee = get_ip_by_user(email, selected_date, selected_date)
         data_employee = IPDateMessage()
         data_employee.name = raw_data_by_employee.name
+        data_employee.email = email
         data_employee.ip_checkin = raw_data_by_employee.ip_values[0].ip_checkin
         data_employee.ip_checkout = raw_data_by_employee.ip_values[0].ip_checkout
         result.append(data_employee)
