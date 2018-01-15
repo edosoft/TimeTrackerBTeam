@@ -66,18 +66,6 @@
                     </div>
                 </div>
             </div>
-            <div class="check-ip">
-                <h4>Check IP</h4>
-                <p><i class="fa fa-info-circle" aria-hidden="true"></i> Select the day you want to check:</p>
-                <input type="date">
-                <button type="button" class="btn btn-primary" (click)="getCheckIP()">View</button>
-            </div>
-            <div class="list-checkIP">
-                <div *ngFor="let checkInIP of listIPCheckIn; let i = index;">
-                    <p>CheckIn {{i+1}}: {{checkInIP}}</p>
-                    <p>CheckOut {{i+1}}: {{listIPCheckOut[i]}}</p>
-                </div>
-            </div>
         </div>
     </div>
     <!-- .container-personal-user -->

@@ -154,7 +154,7 @@ class MainPage(remote.Service):
         '''
         A function which returns the list of issues of all the users.
         '''
-        return admin.get_ip_by_user(request.user_email, request.start_date, request.end_date)
+        return admin.get_ip_by_user(request.email, request.start_date, request.end_date)
 
     @endpoints.method(IpDateRequest, IPDateResponseMessage, path='ip_userlist', http_method='POST', name='ip_userlist')
     def get_ips_by_date(self, request):

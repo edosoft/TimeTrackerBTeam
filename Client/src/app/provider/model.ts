@@ -20,6 +20,7 @@ export class Report {
 
 export class IpReport {
   name: string;
+  email: string;
   ipcheckin: string[];
   ipcheckout: string[];
 }

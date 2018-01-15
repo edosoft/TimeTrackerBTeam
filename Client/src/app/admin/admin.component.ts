@@ -126,15 +126,4 @@ export class AdminComponent implements OnInit {
       }
     });
   }
-
-  getCheckIP() {
-    this.listIPCheckIn = ['192.168.1.1', '192.168.1.2', '192.168.1.3'];
-    this.listIPCheckOut = [ '192.168.1.4', '192.168.1.6'];
-    if (this.selectCheckIP == ''){
-      this.invalidDate = true;
-    }else{
-      this.invalidDate = false;
-    }
-  }
-
 }

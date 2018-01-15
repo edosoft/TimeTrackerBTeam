@@ -250,7 +250,6 @@ export class ServerProvider {
     console.log('reload page');
     this.clearItem();
   }
-
   clearItem() {
     this.store.clear();
     // this.storage.clear(); //clear all the managed storage items
@@ -404,7 +403,23 @@ export class ServerProvider {
           resolve(response.result);
         } else {
           resolve(response.result);
-          // console.log(response.result);
+        }
+      });
+    });
+  }
+
+  getIPByUser(email, startDate, endDate) {
+    return new Promise<any>((resolve) => {
+      const content = {
+        email: email,
+        start_date: startDate,
+        end_date: endDate
+      };
+      gapi.client.timetrackerApi.ip_user(content).execute((response: any) => {
+        if (response.error) {
+          resolve(response.result);
+        } else {
+          resolve(response.result);
         }
       });
     });

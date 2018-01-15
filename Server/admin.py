@@ -76,7 +76,7 @@ def change_role(user_email, hrm_value, admin_value, user):
     return ChangeRoleResponseMessage(response_code=400, 
                                             text="The values of roles are not correct.")
     
-def get_ip_by_user(user_email, start_date, end_date):
+def get_ip_by_user(email, start_date, end_date):
     """
     A function which returns the IPs of a selected user and date. It returns the list
     of IPs, sorted by check in and checkout. 
@@ -87,7 +87,7 @@ def get_ip_by_user(user_email, start_date, end_date):
     last_date = datetime.strptime(end_date, "%Y-%m-%d").date()
 
     requested_workdays = Workday.query(Workday.date >= first_date, Workday.date <= last_date)
-    user = User.query(User.email == user_email).get()
+    user = User.query(User.email == email).get()
     if user is None:
         return IPUserResponseMessage(response_code=400, text="User doesn't exist")
     elif first_date != last_date and len(requested_workdays.fetch()) < 1:
@@ -95,7 +95,7 @@ def get_ip_by_user(user_email, start_date, end_date):
     else:
         result = []
         workdays_by_employee = requested_workdays.filter(
-                Workday.employee.email == user_email).order(+Workday.date)
+                Workday.employee.email == email).order(+Workday.date)
 
         for elem in workdays_by_employee:
             workday_ip_checkin = elem.ip_checkin
@@ -112,8 +112,8 @@ def get_ip_by_user(user_email, start_date, end_date):
             query_find_day = workdays_by_employee.filter(Workday.date == day).get()
             if query_find_day is None:
                 complete_workdays.append(IPUserMessage(date=str(day),
-                                                       ip_checkin=[],
-                                                       ip_checkout=[]))
+                                                       ip_checkin=['-'],
+                                                       ip_checkout=['-']))
             else:
                 complete_workdays.append(result[acc])
                 acc += 1

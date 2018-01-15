@@ -1,52 +1,109 @@
 <div class="container-ipreport">
-  <div class="select-daily-date">
-    <input [value]="selectedDate" [(ngModel)]="selectedDate" class="form-control" type="date" />
-    <div class="input-group-btn">
-      <button (click)="getIPList()" type="button" class="btn btn-primary">Get IP Report</button>
-    </div>
-  </div>
-  <div class="invalid-date-mssg">
-    <div *ngIf="invalidDate" class="mssg alert alert-warning alert-dismissable">
-      <a class="close" data-dismiss="alert" aria-label="close" (click)="closeInvalidDate()">×</a>
-      <strong>You inserted an invalid date.</strong>
-    </div>
-    <div *ngIf="noRecordsFound" class="mssg alert alert-warning alert-dismissable">
-      <a class="close" data-dismiss="alert" aria-label="close" (click)="closeNoRecordsFound()">×</a>
-      <strong>No records found in the selected date.</strong>
-    </div>
-  </div>
-  <div class="container-list-users-ipreport">
-    <table class="table table-ipuserlist" *ngIf="!noTable">
-      <thead class="thead-dark">
-        <tr>
-          <th>Nombre</th>
-          <th>IP Check In</th>
-          <th>IP Check Out</th>
-          <th>#</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let ipuser of ipUsers; let i = index">
-          <td>{{ipuser.name}}</td>
-          <td>
-            <table class="table-checks">
-              <tr *ngFor="let ipcheckin of ipuser.ip_checkin">
-                <td>{{ipcheckin}}</td>
-              </tr>
+    <div *ngIf="isResportIPUsersList" class="container-users-list">
+        <div class="select-daily-date">
+            <input [value]="selectedDate" [(ngModel)]="selectedDate" class="form-control" type="date" />
+            <div class="input-group-btn">
+                <button (click)="getIPList()" type="button" class="btn btn-primary">Get IP Report</button>
+            </div>
+        </div>
+        <div class="invalid-date-mssg">
+            <div *ngIf="invalidDate" class="mssg alert alert-danger alert-dismissable">
+                <a class="close" data-dismiss="alert" aria-label="close" (click)="closeInvalidDate()">×</a>
+                <strong>You inserted an invalid date.</strong>
+            </div>
+            <div *ngIf="noRecordsFound" class="mssg alert alert-danger alert-dismissable">
+                <a class="close" data-dismiss="alert" aria-label="close" (click)="closeNoRecordsFound()">×</a>
+                <strong>No records found in the selected date.</strong>
+            </div>
+        </div>
+        <div class="container-table-users-ipreport">
+            <table class="table table-ipuserlist" *ngIf="!noTable">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>IP Check In</th>
+                        <th>IP Check Out</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ipuser of ipUsers; let i = index">
+                        <td>{{ipuser.name}}</td>
+                        <td>
+                            <table class="table-checks">
+                                <tr *ngFor="let ipcheckin of ipuser.ip_checkin">
+                                    <td>{{ipcheckin}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table class="table-checks">
+                                <tr *ngFor="let ipcheckout of ipuser.ip_checkout">
+                                    <td>{{ipcheckout}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" (click)="setPersonalReportIP(ipuser)">View</button>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
-          </td>
-          <td>
-            <table class="table-checks">
-              <tr *ngFor="let ipcheckout of ipuser.ip_checkout">
-                <td>{{ipcheckout}}</td>
-              </tr>
-            </table>
-          </td>
-          <td>
-            <button type="button" class="btn btn-primary">View</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        </div>
+    </div>
+    <!-- .container-users-list -->
+    <div *ngIf="isPersonalIP" class="ipreport-personal">
+        <div class="personal-user">
+            <div class="close" (click)="backToReportIPUsersList()"><i class="fa fa-times" aria-hidden="true"></i></div>
+            <h2>{{ipUser.name}}</h2>
+            <div class="check-ip">
+                <p><i class="fa fa-info-circle" aria-hidden="true"></i> Select the start and end dates to display the IP Report:</p>
+                <div class="input-start-end-dates">
+                    <input type="date" [(ngModel)]="startDate" [value]="startDate" class="form-control">
+                    <input type="date" [(ngModel)]="endDate" [value]="endDate" class="form-control">
+                    <button type="button" class="btn btn-primary" (click)="getCheckIP(ipUser)">View</button>
+                </div>
+            </div>
+            <div class="invalid-date-mssg">
+                <div *ngIf="invalidDate" class="mssg alert alert-danger alert-dismissable">
+                    <a class="close" data-dismiss="alert" aria-label="close" (click)="closeInvalidDate()">×</a>
+                    <strong>You inserted an invalid date range.</strong>
+                </div>
+                <div *ngIf="noRecordsFound" class="mssg alert alert-danger alert-dismissable">
+                    <a class="close" data-dismiss="alert" aria-label="close" (click)="closeNoRecordsFound()">×</a>
+                    <strong>No records found in the selected date.</strong>
+                </div>
+            </div>
+            <div class="list-checkIP">
+                <table *ngIf="!noTable" class="table table-ip-personaluser">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Date</th>
+                            <th>IP Check In</th>
+                            <th>IP Check Out</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let infoUser of ipInfoByUser; let i = index;">
+                            <td>{{infoUser.date}}</td>
+                            <td>
+                                <table class="table-checks">
+                                    <tr *ngFor="let checkin of ipInfoByUser[i].ip_checkin">
+                                        <td>{{checkin}}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <table class="table-checks">
+                                    <tr *ngFor="let checkout of ipInfoByUser[i].ip_checkout">
+                                        <td>{{checkout}}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
