@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 from protorpc import messages
-from protorpc import message_types
+
+
 class WorkdayMessage (messages.Message):
     date = messages.StringField(1)
     day_of_week = messages.IntegerField(2)
@@ -29,10 +30,11 @@ class ReportResponseMessage(messages.Message):
 
 
 class GetUserListMessage(messages.Message):
-    email = messages.StringField(1, required = True)
-    name = messages.StringField(2, required = True)
-    hrm = messages.IntegerField(3, required = True)
-    admin = messages.IntegerField(4, required = True)
+    email = messages.StringField(1, required=True)
+    name = messages.StringField(2, required=True)
+    hrm = messages.IntegerField(3, required=True)
+    admin = messages.IntegerField(4, required=True)
+
 
 class GetUserListResponseMessage(messages.Message):
     user_list = messages.MessageField(GetUserListMessage, 1, repeated=True)
@@ -44,6 +46,7 @@ class RequestChangeRole(messages.Message):
     user_email = messages.StringField(1, required=True)
     hrm_value = messages.IntegerField(2, required=True)
     admin_value = messages.IntegerField(3, required=True)
+
 
 class ChangeRoleResponseMessage(messages.Message):
     response_code = messages.IntegerField(1, required=True)
@@ -59,6 +62,7 @@ class CurrentDateResponseMessage(messages.Message):
     text = messages.StringField(3, required=True)
     date = messages.StringField(4, required=True)
 
+
 class WorkdayResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
     email = messages.StringField(3)
@@ -69,7 +73,8 @@ class WorkdayResponseMessage(messages.Message):
     text = messages.StringField(1)
     name = messages.StringField(8)
     hrm = messages.IntegerField(9)
-    admin = messages.IntegerField(10)   
+    admin = messages.IntegerField(10)
+
 
 class CheckinResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
@@ -108,7 +113,8 @@ class IssuesPerEmployeeMessage(messages.Message):
 
 
 class IssueResponseMessage (messages.Message):
-    issues_per_employee = messages.MessageField(IssuesPerEmployeeMessage, 1, repeated=True)
+    issues_per_employee = messages.MessageField(
+        IssuesPerEmployeeMessage, 1, repeated=True)
     response_code = messages.IntegerField(2)
     text = messages.StringField(3)
     total_unsolved = messages.IntegerField(4)
@@ -125,3 +131,15 @@ class WorkdayIssueResponseMessage (messages.Message):
     response_code = messages.IntegerField(1)
     workday = messages.MessageField(WorkdayIssueMessage, 2)
     text = messages.StringField(3)
+
+
+class IssueCorrectionMessage(messages.Message):
+    email = messages.StringField(1)
+    date = messages.StringField(2)
+    issue_type = messages.StringField(3)
+    correction = messages.StringField(4)
+
+
+class IssueCorrectionResponseMessage(messages.Message):
+    response_code = messages.IntegerField(1)
+    text = messages.StringField(2)

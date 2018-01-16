@@ -8,7 +8,7 @@ from login import log_in
 from checkin import check_in
 from checkout import check_out
 from reports import get_report
-from issues import get_user_with_issues
+from issues import get_user_with_issues, correct_issue
 
 import util
 import admin
@@ -19,21 +19,23 @@ from protorpc import message_types
 from protorpc import remote
 
 from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
-from messages import RequestReport, ReportResponseMessage, WeekTotalMessage , IssueResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
-from messages import RequestChangeRole, ChangeRoleResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
-from messages import GetUserListResponseMessage, GetUserListMessage
+from messages import RequestReport, ReportResponseMessage, WeekTotalMessage, IssueResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
+from messages import RequestChangeRole, ChangeRoleResponseMessage
+from messages import GetUserListResponseMessage, IssueCorrectionResponseMessage, IssueCorrectionMessage
 
-from models import User, Workday
+from models import User
 
 
-# v1 will be deprecated by Aug-2018, but it can be used for educational purposes
+# v1 will be deprecated by Aug-2018, but it can be used for educational
+# purposes
 @endpoints.api(name='timetrackerApi', version='v1',
-               allowed_client_ids=["368116371345-ott8mvobq0aqcd8dvpu40b5n2fdjgs8v.apps.googleusercontent.com"],
+               allowed_client_ids=[
+                   "368116371345-ott8mvobq0aqcd8dvpu40b5n2fdjgs8v.apps.googleusercontent.com"],
                scopes=[endpoints.EMAIL_SCOPE])
 class MainPage(remote.Service):
 
-    @endpoints.method(message_types.VoidMessage, WorkdayResponseMessage, path='login',
-                      http_method='POST', name='login')
+    @endpoints.method(message_types.VoidMessage, WorkdayResponseMessage,
+                      path='login', http_method='POST', name='login')
     def login(self, request):
         """
         A function which validates the login. It creates a new Workday entity if the valid user hasn't logged in that day. If it's a returning user,
@@ -42,15 +44,15 @@ class MainPage(remote.Service):
         admin.create_user()
         sleep(0.5)
 
-        #workday_query = Workday.query(Workday.employee.email == "hrm@edosoft.es").get()
-        #if workday_query is None:
+        # workday_query = Workday.query(Workday.employee.email == "hrm@edosoft.es").get()
+        # if workday_query is None:
         #    util.create_mock_user()
-        
+
         user = endpoints.get_current_user()
         return log_in(user)
 
-    @endpoints.method(message_types.VoidMessage, CheckinResponseMessage, path='checkin',
-                      http_method='POST', name='checkin')
+    @endpoints.method(message_types.VoidMessage, CheckinResponseMessage,
+                      path='checkin', http_method='POST', name='checkin')
     def checkin(self, request):
         """
         A function which updates the Workday with the check in date. If the check in button
@@ -91,7 +93,7 @@ class MainPage(remote.Service):
         automatic_checkout_helper()
         return message_types.VoidMessage()
 
-    #UNUSED
+    # UNUSED
     @endpoints.method(message_types.VoidMessage, message_types.VoidMessage,
                       path='testprueba', http_method='GET', name='testprueba')
     def test_prueba(self, request):
@@ -101,12 +103,11 @@ class MainPage(remote.Service):
         print (datetime.datetime.now())
         return message_types.VoidMessage()
 
-
     @endpoints.method(RequestCurrentDate, CurrentDateResponseMessage,
                       path='date', http_method='POST', name='date')
     def date(self, request):
         """
-        A function which retuns the current week and the current month with the 
+        A function which retuns the current week and the current month with the
         appropiate format to use in calendar.
         """
         return util.current_date(request.report_type)
@@ -118,13 +119,13 @@ class MainPage(remote.Service):
         A function which updates the roles of an employee.
         """
         print(endpoints.get_current_user().email())
-        return admin.change_role(request.user_email, request.hrm_value, request.admin_value,endpoints.get_current_user().email())
+        return admin.change_role(request.user_email, request.hrm_value, request.admin_value, endpoints.get_current_user().email())
 
     @endpoints.method(message_types.VoidMessage, GetUserListResponseMessage,
-                        path='user_list', http_method='POST', name='user_list')
+                      path='user_list', http_method='POST', name='user_list')
     def user_list(self, request):
         """
-        A function which returns the list of users. This list returns the email, name, hrm value 
+        A function which returns the list of users. This list returns the email, name, hrm value
         and admin value of all the employees.
         """
 
@@ -134,25 +135,32 @@ class MainPage(remote.Service):
                       path='report', http_method='POST', name='report')
     def report(self, request):
         """
-        A function which returns the reports of a selected date. It returns the user, 
-        total hours per day and total hours in the range of selected dates. 
-        Depending on the type of report (Weekly or Monthly), it also adds the 
+        A function which returns the reports of a selected date. It returns the user,
+        total hours per day and total hours in the range of selected dates.
+        Depending on the type of report (Weekly or Monthly), it also adds the
         total count of days, in the latter case.
         """
 
         return get_report(request.date, request.report_type)
 
-
-
-
-    @endpoints.method(message_types.VoidMessage, IssueResponseMessage, path='issues', http_method='POST', name='issues')
+    @endpoints.method(message_types.VoidMessage, IssueResponseMessage,
+                      path='issues', http_method='POST', name='issues')
     def issues(self, request):
         '''
         A function which returns the list of issues of all the users.
         '''
         return get_user_with_issues()
 
-    @endpoints.method(message_types.VoidMessage, RequestChangeRole, path='currentuser', http_method='POST', name='currentuser')
+    @endpoints.method(IssueCorrectionMessage, IssueCorrectionResponseMessage,
+                      path='correct', http_method='POST', name='correct')
+    def correct_issue(self, request):
+        '''
+        A function which returns the list of issues of all the users.
+        '''
+        return correct_issue(request.email, request.date, request.issue_type, request.correction)
+
+    @endpoints.method(message_types.VoidMessage, RequestChangeRole,
+                      path='currentuser', http_method='POST', name='currentuser')
     def get_current_user(self, request):
         '''
         A function which returns the user HRM and admin value.
@@ -160,5 +168,6 @@ class MainPage(remote.Service):
         user = endpoints.get_current_user().email()
         user_data = User.query(User.email == user).get()
         return RequestChangeRole(user_email=user, hrm_value=user_data.hrm, admin_value=user_data.admin)
+
 
 app = endpoints.api_server([MainPage], restricted=False)
