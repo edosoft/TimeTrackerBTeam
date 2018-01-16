@@ -8,7 +8,6 @@ import { SessionStorageService } from 'ngx-webstorage';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 declare const gapi: any;
 
-
 function getWindow(): any {
   return window;
 }
@@ -26,9 +25,10 @@ export class ServerProvider {
 
     this.initGapi();
 
-    const thatw = this;
-    this.nativeWindow.onbeforeunload = function () {
-      thatw.saveUser();
+    this.nativeWindow.onbeforeunload = () => {
+      if (this.store.retrieve('savedUser') != undefined) {
+        this.saveUser();
+      }
     };
   }
 
@@ -37,7 +37,7 @@ export class ServerProvider {
   P = 'https://timetrackerbteam.appspot.com/_ah/api/';
 
   ip: string;
-  url: string = this.L;
+  url: string = this.P;
   logged = false;
   reportType: number;
   public wrongAccount = false;
@@ -64,6 +64,7 @@ export class ServerProvider {
 
   retrieveUser(): User {
     this.userWorkday = this.store.retrieve('savedUser');
+    // console.log(this.userWorkday);
     if (this.userWorkday != undefined) {
       this.logged = true;
       return this.userWorkday;
@@ -123,7 +124,7 @@ export class ServerProvider {
   // Check that userWorkday exists in datastore
   logIn(body) {
     gapi.client.timetrackerApi.login(body).execute((response: any) => {
-      if (response.result.response_code === '400') {
+      if (response.result.response_code == 400) {
         this.setAccountWrong();
         console.log('Invalid user detected.');
       } else {
@@ -195,10 +196,10 @@ export class ServerProvider {
     return new Promise<any>((resolve) => {
       gapi.client.timetrackerApi.issues().execute((response: any) => {
         if (response.error) {
-          console.log(response.response_code);
+          // console.log(response.response_code);
           resolve(response.result);
         } else {
-          console.log(response.result);
+          // console.log(response.result);
           resolve(response.result);
         }
       });
@@ -256,7 +257,7 @@ export class ServerProvider {
   }
 
   getIp() {
-    this.http.get('http://ipinfo.io/json/').subscribe(data => {
+    this.http.get('https://ipinfo.io/json/').subscribe(data => {
       const value: any = data;
       console.log(value.ip);
       this.ip = value.ip;
@@ -320,16 +321,6 @@ export class ServerProvider {
       });
     });
   }
-  /*
-    getUserPermission() {
-      return new Promise<boolean>((resolve, reject) => {
-        gapi.client.timetrackerApi.currentuser().execute((response: any) => {
-          this.userWorkday.admin = response.result.admin_value;
-          this.userWorkday.hrm = response.result.hrm_value;
-          resolve(true);
-        });
-      });
-    }*/
 
   returnDate(date) {
     let time;

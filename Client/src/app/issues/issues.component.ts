@@ -22,12 +22,12 @@ export class IssuesComponent implements OnInit {
   employeeView(row) {
     this.personalView = true;
     this.personalArray = row;
-    console.log(this.personalArray.issues);
+    // console.log(this.personalArray.issues);
   }
   changeView(issue) {
     this.changeViews = true;
     this.personalView = false;
-    console.log(issue);
+    // console.log(issue);
   }
   swapper() {
     if (this.changeViews == true) {

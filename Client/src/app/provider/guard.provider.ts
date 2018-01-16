@@ -40,13 +40,13 @@ delay(ms: number) {
 
 async canActivate() {
     if (this.server.retrieveUser() == undefined) {
-        console.log('Guard: User not found.');
+        console.log('Guard_Login: User not found.');
         return true;
     }else {
         // await this.server.getUserPermission();
         // The guard checks the value of the role level of the user. Depending on it,
         // the user won't be able to access.
-        console.log('Guard: User verified. Accessing...');
+        console.log('Guard_Login: User verified. Accessing...');
         await this.delay(1000);
         this.server.returnToCheck();
         return false;

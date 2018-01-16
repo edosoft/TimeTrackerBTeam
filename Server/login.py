@@ -13,16 +13,15 @@ def log_in(user, name, current_date=None):
     Returns - WorkdayResponseMessage.
     """
 
+    
     # Error - Logging without authenticating with Google
     if user is None:
         return WorkdayResponseMessage(text="Error: Invalid Data", response_code=400)
-
+    # Error - Logging without an Edosoft account
+    elif user.email().split('@')[1] != 'edosoft.es':
+        return WorkdayResponseMessage(text="Error: Invalid Domain", response_code=400)    
     else:
-        '''
-        verify_email = user.email().split('@')[1]
-        if (verify_email != 'edosoft.es'):
-            return WorkdayResponseMessage(text="Error: Invalid Domain", response_code=400)
-        '''
+        
         if current_date is None:
             current_date = datetime.datetime.now()
             email = user.email()
