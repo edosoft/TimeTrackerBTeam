@@ -84,8 +84,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let infoUser of ipInfoByUser; let i = index;">
-                            <td>{{infoUser.date}}</td>
+                        <tr *ngFor="let date of datesRange; let i = index;">
+                            <td>{{date}}</td>
                             <td>
                                 <table class="table-checks">
                                     <tr *ngFor="let checkin of ipInfoByUser[i].ip_checkin">

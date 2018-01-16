@@ -25,6 +25,14 @@ export class IpreportComponent implements OnInit {
   startDate: string;
   endDate: string;
 
+  singleDate: string;
+  dateYear: string;
+  dateMonth: string;
+  dateDay: string;
+  datesRange: string[];
+  date: string[];
+  customDate: string;
+
   constructor(private server: ServerProvider) { }
 
   ngOnInit() {
@@ -92,6 +100,16 @@ export class IpreportComponent implements OnInit {
           this.noTable = true;
         } else {
           this.ipInfoByUser = response.ip_values;
+          this.datesRange = [];
+          for (let i = 0; i < this.ipInfoByUser.length; i++) {
+            this.singleDate = this.ipInfoByUser[i].date;
+            this.date = this.singleDate.split('-');
+            this.dateYear = this.date[0];
+            this.dateMonth = this.date[1];
+            this.dateDay = this.date[2];
+            this.customDate = `${this.dateDay}-${this.dateMonth}-${this.dateYear}`;
+            this.datesRange.push(this.customDate);
+          }
         }
       });
     }
