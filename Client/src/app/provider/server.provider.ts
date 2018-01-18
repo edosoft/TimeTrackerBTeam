@@ -37,7 +37,7 @@ export class ServerProvider {
   P = 'https://timetrackerbteam.appspot.com/_ah/api/';
 
   ip: string;
-  url: string = this.P;
+  url: string = this.L;
   logged = false;
   reportType: number;
   public wrongAccount = false;

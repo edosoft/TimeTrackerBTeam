@@ -86,7 +86,7 @@
       <div><strong>{{personalArray.name}} has done a {{issueType}}</strong></div>
       <div *ngFor="let check of wissue">
         {{(check).split(' ')[1].split('.')[0]}}
-        <input class="checkInput" [value]="(check).split(' ')[1].split('.')[0]">
+        <input type="time" class="checkInput" [value]="(check).split(' ')[1].split('.')[0]">
       </div>
       <div class="form-roles">
           <p><i class="fa fa-info-circle" aria-hidden="true"></i> Change the Check's times and submit to save the changes</p>
