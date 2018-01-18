@@ -174,7 +174,6 @@ class MainPage(remote.Service):
         '''
         return admin.get_ip_by_date(request.date)
 
-    @endpoints.method(message_types.VoidMessage, RequestChangeRole, path='currentuser', http_method='POST', name='currentuser')
     @endpoints.method(IssueCorrectionMessage, IssueCorrectionResponseMessage,
                       path='correct', http_method='POST', name='correct')
     def correct_issue(self, request):

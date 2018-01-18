@@ -18,7 +18,7 @@
         <tbody>
           <tr *ngFor='let issuePerEmployee of issues_per_employee'>
             <td nowrap>
-              {{issuePerEmployee.name}}
+              {{issuePerEmployee.employee}}
             </td>
             <td>{{issuePerEmployee.total_unsolved_peremp}}</td>
             <td>{{issuePerEmployee.total_unviewed_peremp}}</td> 
@@ -37,7 +37,7 @@
         <tbody>
           <tr *ngFor='let issuePerEmployee of issues_per_employee'>
             <td nowrap>
-              {{issuePerEmployee.name}}
+              {{issuePerEmployee.employee}}
             </td>
             <td>{{issuePerEmployee.total_unsolved_peremp}}</td>
             <td><div class="btn btn-primary" (click)="employeeView(issuePerEmployee)">View All</div></td>
@@ -64,7 +64,7 @@
         </thead>
         <tbody>
           <tr *ngFor='let issue of personalArray.issues'>
-            <td nowrap>{{personalArray.name}}</td>
+            <td nowrap>{{personalArray.employee}}</td>
             <td>{{issue.issue_type}}</td>
             <td>{{(issue.date).split(" ", 1)[0]}}</td>
             <td><div class="btn btn-primary" (click)="getWissue(issue, personalArray.employee)">View</div></td>
