@@ -24,4 +24,4 @@ before_script:
 script:
 - echo "Script"
 after_success:
-- gcloud -q app deploy Server/app.yaml
+- gcloud -q app deploy Server/app.yaml Server/index.yaml Server/cron.yaml
