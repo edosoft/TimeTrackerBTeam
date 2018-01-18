@@ -31,7 +31,6 @@ export class IssuesComponent implements OnInit {
   }
   getList() {
     this.server.getUserWithIssues().then((response) => {
-      console.log(response);
       if (response.text == 'Returning Issues') {
         const array = [];
         for (let x = 0; x < response.issues_per_employee.length; x++) {
@@ -40,7 +39,6 @@ export class IssuesComponent implements OnInit {
           }
         }
         this.issues_per_employee = array;
-        console.log(this.issues_per_employee);
         if (response.total_unsolved > 0) {
           this.startingIssues = true;
           this.changeViews = false;
@@ -56,7 +54,6 @@ export class IssuesComponent implements OnInit {
   }
   getList2() {
     this.server.getUserWithIssues().then((response) => {
-    console.log(response);
     if (response.text == 'Returning Issues') {
       const array = [];
       for (let x = 0; x < response.issues_per_employee.length; x++) {
@@ -72,12 +69,10 @@ export class IssuesComponent implements OnInit {
   employeeView(row) {
     this.personalView = true;
     this.personalArray = row;
-    // console.log(this.personalArray.issues);
   }
   changeView(issue) {
     this.changeViews = true;
     this.personalView = false;
-    // console.log(issue);
   }
 
   swapper() {
@@ -101,7 +96,6 @@ export class IssuesComponent implements OnInit {
         issue_type: this.issueType
       };
       this.server.getWorkdayFromIssue(content).then((response) => {
-        this.getList2();
         if (this.issueType == 'Late Check In') {
           this.wissue = response.workday.checkin;
         } else {
