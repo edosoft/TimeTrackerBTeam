@@ -13,3 +13,4 @@ def automatic_checkout_helper():
         if len(workday.checkin) is not len(workday.checkout):
             workday.checkout.append(datetime.datetime.now())
             workday.put()
+            # TODO we have to call the issues here 

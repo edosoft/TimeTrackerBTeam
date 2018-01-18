@@ -32,10 +32,11 @@ class ReportResponseMessage(messages.Message):
 
 
 class GetUserListMessage(messages.Message):
-    email = messages.StringField(1, required = True)
-    name = messages.StringField(2, required = True)
-    hrm = messages.IntegerField(3, required = True)
-    admin = messages.IntegerField(4, required = True)
+    email = messages.StringField(1, required=True)
+    name = messages.StringField(2, required=True)
+    hrm = messages.IntegerField(3, required=True)
+    admin = messages.IntegerField(4, required=True)
+
 
 class GetUserListResponseMessage(messages.Message):
     user_list = messages.MessageField(GetUserListMessage, 1, repeated=True)
@@ -47,6 +48,7 @@ class RequestChangeRole(messages.Message):
     user_email = messages.StringField(1, required=True)
     hrm_value = messages.IntegerField(2, required=True)
     admin_value = messages.IntegerField(3, required=True)
+
 
 class ChangeRoleResponseMessage(messages.Message):
     response_code = messages.IntegerField(1, required=True)
@@ -62,6 +64,7 @@ class CurrentDateResponseMessage(messages.Message):
     text = messages.StringField(3, required=True)
     date = messages.StringField(4, required=True)
 
+
 class WorkdayResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
     email = messages.StringField(3)
@@ -72,7 +75,8 @@ class WorkdayResponseMessage(messages.Message):
     text = messages.StringField(1)
     name = messages.StringField(8)
     hrm = messages.IntegerField(9)
-    admin = messages.IntegerField(10)   
+    admin = messages.IntegerField(10)
+
 
 class CheckinResponseMessage(messages.Message):
     response_code = messages.IntegerField(2)
@@ -105,13 +109,15 @@ class IssueMessage(messages.Message):
 
 class IssuesPerEmployeeMessage(messages.Message):
     employee = messages.StringField(1)
+    name = messages.StringField(5)
     issues = messages.MessageField(IssueMessage, 2, repeated=True)
     total_unsolved_peremp = messages.IntegerField(3)
     total_unviewed_peremp = messages.IntegerField(4)
 
 
 class IssueResponseMessage (messages.Message):
-    issues_per_employee = messages.MessageField(IssuesPerEmployeeMessage, 1, repeated=True)
+    issues_per_employee = messages.MessageField(
+        IssuesPerEmployeeMessage, 1, repeated=True)
     response_code = messages.IntegerField(2)
     text = messages.StringField(3)
     total_unsolved = messages.IntegerField(4)
@@ -152,3 +158,32 @@ class IPUserResponseMessage(messages.Message):
     text = messages.StringField(3, required=True)
 # [END   IP Tests]
 
+
+class WorkdayIssueMessage(messages.Message):
+    employee = messages.MessageField(GetUserListMessage, 1)
+    checkin = messages.StringField(2, repeated=True)
+    checkout = messages.StringField(3, repeated=True)
+
+
+class WorkdayIssueResponseMessage (messages.Message):
+    response_code = messages.IntegerField(1)
+    workday = messages.MessageField(WorkdayIssueMessage, 2)
+    text = messages.StringField(3)
+
+
+class IssueCorrectionMessage(messages.Message):
+    email = messages.StringField(1)
+    date = messages.StringField(2)
+    issue_type = messages.StringField(3)
+    correction = messages.StringField(4, repeated=True)
+
+
+class IssueCorrectionResponseMessage(messages.Message):
+    response_code = messages.IntegerField(1)
+    text = messages.StringField(2)
+
+
+class WorkdayIssueRequestMessage (messages.Message):
+    date = messages.StringField(1)
+    email = messages.StringField(2)
+    issue_type = messages.StringField(3)

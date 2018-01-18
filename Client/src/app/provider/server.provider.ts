@@ -196,11 +196,41 @@ export class ServerProvider {
     return new Promise<any>((resolve) => {
       gapi.client.timetrackerApi.issues().execute((response: any) => {
         if (response.error) {
-          // console.log(response.response_code);
           resolve(response.result);
         } else {
-          // console.log(response.result);
           resolve(response.result);
+        }
+      });
+    });
+  }
+
+  getWorkdayFromIssue(body) {
+    return new Promise<any>((resolve) => {
+      const content = {
+        date: body.date,
+        email: body.email,
+        issue_type: body.issue_type
+      };
+      gapi.client.timetrackerApi.wissue(content).execute((response: any) => {
+        if (response.response_code == 400) {
+          console.log(response.response_code);
+          resolve(response.text);
+        } else {
+          resolve(response.result);
+          console.log(response);
+        }
+      });
+    });
+  }
+  correctIssue(body){
+    return new Promise<any>((resolve) => {
+      gapi.client.timetrackerApi.correct(body).execute((response: any) => {
+        if (response.response_code == 400) {
+          console.log(response.response_code);
+          resolve(response.text);
+        } else {
+          resolve(response.result);
+          console.log(response);
         }
       });
     });

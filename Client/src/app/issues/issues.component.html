@@ -1,22 +1,46 @@
-<div *ngIf="!personalView" class="container">
+
+<div *ngIf="noIssues && !changeViews" class="mssg alert alert-danger alert-dismissable">
+  <strong>There are no Issues.</strong>
+</div>
+<div *ngIf="startingIssues && !personalView && !changeViews && !noIssues" class="container">
   <div class="row">
     <div class="col-md-12">
       <div class="list-log-checks">
-      <table class="table table-bordered table-striped table-desktop">
+      <table class="desktop table table-bordered table-striped">
         <thead class="thead-dark">
           <tr class="header-row">
             <th>Name</th>
             <th>Unsolved</th>
             <th>Unviewed</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor='let row of issues_per_employee' (click)="employeeView(row)">
+          <tr *ngFor='let issuePerEmployee of issues_per_employee'>
             <td nowrap>
-              {{(row.employee.split("@", 1)[0]).replace(".", " ")}}
+              {{issuePerEmployee.name}}
             </td>
-            <td>{{row.total_unsolved_peremp}}</td>
-            <td>{{row.total_unviewed_peremp}}</td>
+            <td>{{issuePerEmployee.total_unsolved_peremp}}</td>
+            <td>{{issuePerEmployee.total_unviewed_peremp}}</td> 
+            <td><div class="btn btn-primary" (click)="employeeView(issuePerEmployee)">View All</div></td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="mobile table table-bordered table-striped">
+        <thead class="thead-dark">
+          <tr class="header-row">
+            <th>Name</th>
+            <th>Unsolved</th>
+            <th>View</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let issuePerEmployee of issues_per_employee'>
+            <td nowrap>
+              {{issuePerEmployee.name}}
+            </td>
+            <td>{{issuePerEmployee.total_unsolved_peremp}}</td>
+            <td><div class="btn btn-primary" (click)="employeeView(issuePerEmployee)">View All</div></td>
           </tr>
         </tbody>
       </table>
@@ -25,58 +49,50 @@
 </div>
 </div>
 
-<div *ngIf="personalView && !changeViews" class="container">
+<div *ngIf="personalView && !changeViews && !noIssues" class="container">
   <div class="row">
     <div class="col-md-12">
       <div class="list-log-checks">
-          <div class="btn btn-primary" (click)="swapper()"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></div>
       <table class="table table-bordered table-striped table-desktop">
         <thead class="thead-dark">
           <tr class="header-row">
             <th>Name</th>
             <th>Issue Type</th>
             <th>Issue Date</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor='let issues of personalArray.issues'>
-            <td nowrap>{{(personalArray.employee.split("@", 1)[0]).replace(".", " ")}}</td>
-            <td>{{issues.issue_type}}</td>
-            <td>{{(issues.date).split(" ", 1)[0]}}</td>
+          <tr *ngFor='let issue of personalArray.issues'>
+            <td nowrap>{{personalArray.name}}</td>
+            <td>{{issue.issue_type}}</td>
+            <td>{{(issue.date).split(" ", 1)[0]}}</td>
+            <td><div class="btn btn-primary" (click)="getWissue(issue, personalArray.employee)">View</div></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-</div>
-</div>
-<!-- 
-<div *ngIf="chageViews" class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="list-log-checks">
-            <div class="btn btn-primary" (click)="swapper()"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></div>
-        <table class="table table-bordered table-striped table-desktop">
-          <thead class="thead-dark">
-            <tr class="header-row">
-              <th>Name</th>
-              <th>Issue date</th>
-              <th>Issue Type</th>
-              <th>Issue </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor='let row of issues'>
-              <td (click)="employeeView(row)" data-toggle="modal" data-target="#themodal" nowrap>
-                  {{(personalArray.employee.split("@", 1)[0]).replace(".", " ")}}
-              </td>
-              <td>{{issue.date}}</td>
-              <td>{{issue.issue_type}}</td>
-              <td>{{issue.date}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <div class="submit-roles">
+      <div class="btn btn-primary" (click)="swapper()">Back</div>
   </div>
-  </div> -->
+ 
+</div>
+</div>
+
+<div *ngIf="changeViews && !noIssues" class="container-personal-user">
+  <div class="personal-user">
+      <div class="close" (click)="swapper()"><i class="fa fa-times" aria-hidden="true"></i></div>
+      <div><strong>{{personalArray.name}} has done a {{issueType}}</strong></div>
+      <div *ngFor="let check of wissue">
+        {{(check).split(' ')[1].split('.')[0]}}
+        <input class="checkInput" [value]="(check).split(' ')[1].split('.')[0]">
+      </div>
+      <div class="form-roles">
+          <p><i class="fa fa-info-circle" aria-hidden="true"></i> Change the Check's times and submit to save the changes</p>
+          <div class="submit-roles">
+              <button type="button" class="btn btn-primary" (click)="sendCheckTimes()">Edit</button>
+          </div>
+      </div>
+  </div>
+</div>

@@ -26,6 +26,7 @@ class Issue(ndb.Model):
     """ Model to represent an issue of an employee."""
     employee = ndb.StructuredProperty(User)
     date = ndb.DateTimeProperty()
+    created = ndb.DateProperty()
     issue_type = ndb.StringProperty()
     non_viewed = ndb.IntegerProperty()
     non_solved = ndb.IntegerProperty()

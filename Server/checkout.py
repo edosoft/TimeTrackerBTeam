@@ -34,7 +34,7 @@ def check_out(user, ip, current_date=None):
         time_difference = current_date - check_out_query.checkin[-1]
         check_out_minus_check_in = time_difference.seconds / 60
         #CAMBIAR LUEGO
-        if check_out_minus_check_in < 5:
+        if check_out_minus_check_in < 0:
             return CheckoutResponseMessage(response_code=300,
                                            text="You can't check out until 5 minutes have passed")
 
@@ -52,13 +52,21 @@ def check_out(user, ip, current_date=None):
         # Issue - Check out too soon
         if now < check_out_min:
             check_out_query.put()
-            issue = Issue()    
-            issue.employee = check_out_query.employee
-            issue.date = check_out_query.checkout[-1]
-            issue.issue_type = "Early Check Out"
-            issue.non_viewed = 1
-            issue.non_solved = 1
-            issue.put()
+            issue = Issue.query(Issue.issue_type == "Early Check Out", Issue.employee == check_out_query.employee, Issue.created == current_date.date()).get() 
+            if issue is None:
+                issue = Issue()    
+                issue.employee = check_out_query.employee
+                issue.date = check_out_query.checkout[-1]
+                issue.issue_type = "Early Check Out"
+                issue.created = current_date.date()
+                issue.non_viewed = 1
+                issue.non_solved = 1
+                issue.put()
+                
+            else:
+                issue.date = check_out_query.checkout[-1]
+                issue.put()
+
             return CheckoutResponseMessage(response_code=200,
                                            text="You checked out too early",
                                            checkout=str(check_out_query.checkout[-1]),
