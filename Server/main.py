@@ -8,7 +8,7 @@ from login import log_in
 from checkin import check_in
 from checkout import check_out
 from reports import get_report
-from issues import get_user_with_issues, correct_issue
+from issues import get_user_with_issues, get_workday_from_issues, correct_issue
 
 import util
 import admin
@@ -19,9 +19,9 @@ from protorpc import message_types
 from protorpc import remote
 
 from messages import WorkdayResponseMessage, CheckinResponseMessage, CheckoutResponseMessage
-from messages import RequestReport, ReportResponseMessage, WeekTotalMessage, IssueResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
-from messages import RequestChangeRole, ChangeRoleResponseMessage
-from messages import GetUserListResponseMessage, IssueCorrectionResponseMessage, IssueCorrectionMessage
+from messages import RequestReport, ReportResponseMessage, WeekTotalMessage , IssueResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
+from messages import RequestChangeRole, ChangeRoleResponseMessage, RequestCurrentDate, CurrentDateResponseMessage
+from messages import GetUserListResponseMessage, GetUserListMessage, WorkdayIssueResponseMessage, WorkdayIssueRequestMessage, IssueCorrectionResponseMessage, IssueCorrectionMessage
 
 from models import User
 
@@ -143,8 +143,17 @@ class MainPage(remote.Service):
 
         return get_report(request.date, request.report_type)
 
-    @endpoints.method(message_types.VoidMessage, IssueResponseMessage,
-                      path='issues', http_method='POST', name='issues')
+
+    @endpoints.method(WorkdayIssueRequestMessage ,WorkdayIssueResponseMessage,
+                      path='wissue', http_method='POST', name='wissue')
+    def wissue(self, request):
+        """
+        A function which returns a workday per issue
+        """
+
+        return get_workday_from_issues(request.email, request.date, request.issue_type)
+
+    @endpoints.method(message_types.VoidMessage, IssueResponseMessage, path='issues', http_method='POST', name='issues')
     def issues(self, request):
         '''
         A function which returns the list of issues of all the users.

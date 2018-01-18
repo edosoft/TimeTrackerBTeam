@@ -1,3 +1,4 @@
+from datetime import datetime
 from messages import GetUserListMessage, IssueResponseMessage, IssueMessage, IssuesPerEmployeeMessage, WorkdayIssueMessage, WorkdayIssueResponseMessage, IssueCorrectionResponseMessage
 from models import User, Workday, Issue
 
@@ -24,7 +25,8 @@ def get_user_with_issues():
         for user in request_users:
 
             new_employee = IssuesPerEmployeeMessage()
-            new_employee.employee = user.name
+            new_employee.employee = user.email
+            new_employee.name = user.name
             total_issues_nonviewed_peremp = []
             total_issues_nonsolved_peremp = []
 
@@ -37,12 +39,13 @@ def get_user_with_issues():
                 new_issue.date = str(issue.date)
                 new_issue.issue_type = issue.issue_type
                 new_issue.non_viewed = issue.non_viewed
-                new_issue.non_solved = issue.non_viewed
+                new_issue.non_solved = issue.non_solved
                 total_issues_nonsolved.append(issue.non_solved)
                 total_issues_nonviewed.append(issue.non_viewed)
                 total_issues_nonsolved_peremp.append(issue.non_solved)
                 total_issues_nonviewed_peremp.append(issue.non_viewed)
-                new_employee.issues.append(new_issue)
+                if new_issue.non_solved == 1:
+                    new_employee.issues.append(new_issue)
 
             new_employee.total_unsolved_peremp = sum(
                 total_issues_nonsolved_peremp)
@@ -61,11 +64,12 @@ def get_user_with_issues():
                                     total_unviewed=total_unviewed)
 
 
-def get_workday_from_issues(email, date):
+def get_workday_from_issues(email, date, issue_type):
+    date = datetime.strptime(date, "%Y-%m-%d").date()
     user = User.query(User.email == email).get()
     if user is not None:
         wissue = Issue.query(
-            Issue.employee == user, Issue.created == date).get()
+            Issue.employee == user, Issue.created == date, Issue.issue_type == issue_type).get()
         if wissue is not None:
             wissue.non_viewed = 0
             wissue.put()
@@ -98,6 +102,7 @@ def correct_issue(email, date, issue_type, correction):
     corrected = False
     user = User.query(User.email == email).get()
     if user is not None:
+        date = datetime.strptime(date, "%Y-%m-%d").date()
         issue = Issue.query(
             Issue.employee == user, Issue.created == date, Issue.issue_type == issue_type).get()
         if issue is not None:
@@ -105,10 +110,15 @@ def correct_issue(email, date, issue_type, correction):
                 Workday.employee == user, Workday.date == date).get()
 
             if issue_type == 'Late Check In':
-                issue_workday.checkin = correction
+                for i in range(len(issue_workday.checkin)):
+                    corr = datetime.strptime(correction[i], '%H:%M:%S')
+                    issue_workday.checkin[i] = issue_workday.checkin[i].replace(hour=corr.hour, minute=corr.minute, second=corr.second)
+                
                 corrected = True
             if issue_type == 'Early Check Out' or issue_type == 'Automatic Check Out':
-                issue_workday.checkout = correction
+                for i in range(len(issue_workday.checkout)):
+                    corr = datetime.strptime(correction[i], '%H:%M:%S')
+                    issue_workday.checkout[i] = issue_workday.checkout[i].replace(hour=corr.hour, minute=corr.minute, second=corr.second)
                 corrected = True
 
             if corrected is True:

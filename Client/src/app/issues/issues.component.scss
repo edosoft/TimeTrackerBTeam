@@ -1,5 +1,11 @@
 @import '~sass/variables';
 @import '~sass/mixins';
+.mssg {
+    text-align: center;
+    width: 400px;
+    margin: 0px auto;
+    max-width: 100%;
+}
 .container {
     overflow-x: auto;
     margin: 20px auto;
@@ -21,6 +27,33 @@
                 @media (min-width: 768px) {
                     display: none;
                 }
+            }
+        }
+    }
+}
+.submit-roles{
+    width: 100%;
+    margin-top: 25px;
+}
+.container-personal-user {
+    @include display-flex();
+    @include justify-content(center);
+    text-align: center;
+    .personal-user {
+        position: relative;
+        border-radius: 3px;
+        box-shadow: 0 5px 6px rgba(0, 0, 0, 0.14);
+        background-color: #fff;
+        padding: 30px;
+        width: 600px;
+        max-width: 100%;
+        .close {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            margin: 7px 7px 0px 0px;
+            &:hover {
+                cursor: pointer;
             }
         }
     }

@@ -107,6 +107,7 @@ class IssueMessage(messages.Message):
 
 class IssuesPerEmployeeMessage(messages.Message):
     employee = messages.StringField(1)
+    name = messages.StringField(5)
     issues = messages.MessageField(IssueMessage, 2, repeated=True)
     total_unsolved_peremp = messages.IntegerField(3)
     total_unviewed_peremp = messages.IntegerField(4)
@@ -137,9 +138,15 @@ class IssueCorrectionMessage(messages.Message):
     email = messages.StringField(1)
     date = messages.StringField(2)
     issue_type = messages.StringField(3)
-    correction = messages.StringField(4)
+    correction = messages.StringField(4, repeated=True)
 
 
 class IssueCorrectionResponseMessage(messages.Message):
     response_code = messages.IntegerField(1)
     text = messages.StringField(2)
+
+
+class WorkdayIssueRequestMessage (messages.Message):
+    date = messages.StringField(1)
+    email = messages.StringField(2)
+    issue_type = messages.StringField(3)
